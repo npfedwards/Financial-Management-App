@@ -1,5 +1,5 @@
 <?php
-	include 'functions.php';
+	include_once 'functions.php';
 	checklogin();
 ?>
 <!DOCTYPE html>

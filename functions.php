@@ -6,6 +6,12 @@
 		$dbc = mysql_select_db(dbname) or die("Failed to connect");
 	}
 	
+	function closedb($conn){
+		if($conn!=NULL){
+			mysql_close($conn);	
+		}
+	}
+	
 	function loginform(){
 		echo	"<form action='dologin.php' method='post'>
 					<label for='email'>Email</label><input type='text' name='email' id='email'><br>
@@ -26,8 +32,10 @@
 	}
 	
 	function checklogin(){
+		opendb();
 		if(isset($loggedin)){
 			if($loggedin!=1){
+				global $loggedin;
 				$user=mysql_real_escape_string($_COOKIE['user']);
 				$sessionkey=mysql_real_escape_string($_COOKIE['sessionkey']);
 				$time=time();
@@ -38,7 +46,7 @@
 					$row=mysql_fetch_assoc($result);
 					$sid=$row['SessionID'];
 					$time=$time+3600;
-					$query="UPDATE sessions SET SessionTimeout='$time' WHERE SessionID='$sid' LIMIT 0,1";
+					$query="UPDATE sessions SET SessionTimeout='$time' WHERE SessionID='$sid'";
 					mysql_query($query) or die(mysql_error());
 					setcookie("user", $userid, $time);
 					setcookie("sessionkey", $sessionkey, $time);
@@ -46,8 +54,25 @@
 				}
 			}
 		}else{
-			$loggedin=0;	
+			global $loggedin;
+			$user=mysql_real_escape_string($_COOKIE['user']);
+			$sessionkey=mysql_real_escape_string($_COOKIE['sessionkey']);
+			$time=time();
+			$ip=$_SERVER['REMOTE_ADDR'];
+			$query="SELECT * FROM sessions WHERE UserID='$user' AND SessionKey='$sessionkey' AND IP='$ip' AND SessionTimeout>'$time'";
+			$result=mysql_query($query) or die(mysql_error()."a");
+			if(mysql_num_rows($result)==1){
+				$row=mysql_fetch_assoc($result);
+				$sid=$row['SessionID'];
+				$time=$time+3600;
+				$query="UPDATE sessions SET SessionTimeout='$time' WHERE SessionID='$sid'";
+				mysql_query($query) or die(mysql_error());
+				setcookie("user", $userid, $time);
+				setcookie("sessionkey", $sessionkey, $time);
+				$loggedin=1;	
+			}	
 		}
+		closedb($conn);
 	}
 	
 	function paymentForm(){

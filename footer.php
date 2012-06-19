@@ -1,5 +1,5 @@
 	<?php
-    	mysql_close($conn);
+		closedb($conn);
 	?>
 	</body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-	include 'functions.php';
+	include_once 'functions.php';
 	opendb();
 	$email=mysql_real_escape_string(htmlentities($_POST['email']));
 	$pass=mysql_real_escape_string(htmlentities($_POST['password']));
@@ -14,12 +14,12 @@
 		if($salted==$row['Password']){
 			$userid=$row['UserID'];
 			//Login
-			$sesskey=sha1(mtrand());
+			$sesskey=sha1(mt_rand());
 			$query="SELECT * FROM sessions WHERE SessionKey='$sesskey'";
 			$result=mysql_query($query) or die(mysql_error());
 			
 			while(mysql_num_rows($result)>1){
-				$sesskey=sha1(mtrand());
+				$sesskey=sha1(mt_rand());
 				$query="SELECT * FROM sessions WHERE SessionKey='$sesskey'";
 				$result=mysql_query($query) or die(mysql_error());
 			}
@@ -37,6 +37,6 @@
 		}
 	}
 	
-	mysql_close($conn);
+	closedb($conn);
 	include 'index.php';
 ?>
