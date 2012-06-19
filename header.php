@@ -6,6 +6,7 @@
 <html>
 	<head>
     	<title>Financial Management App</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
     	<script src='js/jquery.min.js'></script>
    	</head>
 	<body>

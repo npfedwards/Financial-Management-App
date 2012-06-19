@@ -104,8 +104,36 @@
 		$query="SELECT * FROM payments WHERE UserID='$user' ORDER BY Timestamp ASC Limit 0,".$display;
 		$result=mysql_query($query) or die(mysql_error());
 		
+		echo 	"<table>
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>To/From</th>
+							<th>Description</th>
+							<th>In</th>
+							<th>Out</th>
+							<th>Type</th>
+						</tr>
+					</thead>
+					<tbody>";
+		
 		while($row=mysql_fetch_assoc($result)){
-			echo $row['PaymentName']." ".$row['PaymentDesc']." ".$row['PaymentAmount']." ".$row['PaymentType']."<br>";	
+			$amount=$row['PaymentAmount'];
+			if($amount<0){
+				$amount="</td><td><span class='red'>".$amount*(-1)."</span>";
+			}else{
+				$amount=$amount."</td><td>";
+			}
+			echo 	"<tr>
+						<td>".date("d/m/y", $row['Timestamp'])."</td>
+						<td>".$row['PaymentName']."</td>
+						<td>".$row['PaymentDesc']."</td>
+						<td>".$amount."</td>
+						<td>".$row['PaymentType']."</td>
+					</tr>";	
 		}
+		
+		echo		"</tbody>
+				</table>";
 	}
 ?>
