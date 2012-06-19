@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 19, 2012 at 11:31 AM
+-- Generation Time: Jun 19, 2012 at 02:48 PM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -69,15 +69,16 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS `user` (
+CREATE TABLE IF NOT EXISTS `users` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,
-  `Username` varchar(20) NOT NULL,
+  `Email` varchar(100) NOT NULL,
   `Password` varchar(64) NOT NULL,
   `Salt` varchar(16) NOT NULL,
   `Validated` tinyint(1) NOT NULL,
+  `ValidatedTimeout` int(11) NOT NULL,
   `PrefCurrency` varchar(10) NOT NULL,
   PRIMARY KEY (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
