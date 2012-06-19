@@ -36,7 +36,7 @@
 		if(isset($loggedin)){
 			if($loggedin!=1){
 				global $loggedin;
-				$user=mysql_real_escape_string($_COOKIE['user']);
+				$user=mysql_real_escape_string($_COOKIE['userid']);
 				$sessionkey=mysql_real_escape_string($_COOKIE['sessionkey']);
 				$time=time();
 				$ip=$_SERVER['REMOTE_ADDR'];
@@ -48,14 +48,14 @@
 					$time=$time+3600;
 					$query="UPDATE sessions SET SessionTimeout='$time' WHERE SessionID='$sid'";
 					mysql_query($query) or die(mysql_error());
-					setcookie("user", $userid, $time);
+					setcookie("userid", $user, $time);
 					setcookie("sessionkey", $sessionkey, $time);
 					$loggedin=1;	
 				}
 			}
 		}else{
 			global $loggedin;
-			$user=mysql_real_escape_string($_COOKIE['user']);
+			$user=mysql_real_escape_string($_COOKIE['userid']);
 			$sessionkey=mysql_real_escape_string($_COOKIE['sessionkey']);
 			$time=time();
 			$ip=$_SERVER['REMOTE_ADDR'];
@@ -67,7 +67,7 @@
 				$time=$time+3600;
 				$query="UPDATE sessions SET SessionTimeout='$time' WHERE SessionID='$sid'";
 				mysql_query($query) or die(mysql_error());
-				setcookie("user", $userid, $time);
+				setcookie("userid", $user, $time);
 				setcookie("sessionkey", $sessionkey, $time);
 				$loggedin=1;	
 			}	

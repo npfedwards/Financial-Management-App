@@ -31,7 +31,7 @@
 			$query="INSERT INTO sessions (SessionKey, UserID, SessionTimeout, IP) VALUES ('$sesskey', '$userid', '$time', '$ip')";
 			mysql_query($query) or die(mysql_error());
 			
-			setcookie("user", $userid, $time);
+			setcookie("userid", $userid, $time);
 			setcookie("sessionkey", $sesskey, $time);
 			$loggedin=1;
 		}
