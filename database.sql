@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 19, 2012 at 02:48 PM
+-- Generation Time: Jun 19, 2012 at 05:38 PM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -64,7 +64,14 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `SessionTimeout` int(11) NOT NULL,
   `IP` varchar(40) NOT NULL,
   PRIMARY KEY (`SessionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`SessionID`, `SessionKey`, `UserID`, `SessionTimeout`, `IP`) VALUES
+(1, 'f3d7a17c5821160f620c2555107e8ab6c71e226e', 6, 1340123558, '::1');
 
 -- --------------------------------------------------------
 
@@ -78,10 +85,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   `Password` varchar(64) NOT NULL,
   `Salt` varchar(16) NOT NULL,
   `Validated` tinyint(1) NOT NULL,
+  `ValidationKey` varchar(64) NOT NULL,
   `ValidatedTimeout` int(11) NOT NULL,
   `PrefCurrency` varchar(10) NOT NULL,
   PRIMARY KEY (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
