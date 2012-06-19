@@ -20,8 +20,12 @@
 				</form>";	
 	}
 
+	function sendvalidationkey($email, $key, $UserID){
+		mail($email, "Your validation key", "http://example.com/validate.php?k=" . $key . "&id=" . $UserID, "from: noreply@example.com");
+	}
+
 	function generatesalt($max = 16){
-        $characterList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*?";
+        $characterList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%*&?";
         $i = 0;
         $salt = "";
         while ($i < $max) {
