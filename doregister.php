@@ -7,7 +7,7 @@
 	$repeatpass=mysql_real_escape_string(htmlentities($_POST['repeatpassword']));
 	$msg = NULL;
 
-	if(strlen($pass)>5){
+	if(strlen($pass)<5){
 		$msg = $msg . "Your passsword is too short! ";
 	}
 
@@ -19,7 +19,7 @@
 		$msg = $msg . "One of the fields is empty! ";
 	}
 
-	if($msg!=NULL){
+	if($msg==NULL){
 		$query="SELECT * FROM users WHERE Email='$email'";
 		$result = mysql_query($query) or die(mysql_error());
 
@@ -27,9 +27,13 @@
 			$time = time() + 604800;
 			$salt = generatesalt();
 			$hash = sha1($pass . $salt);
-			$query="INSERT INTO users (Email, Password, Salt, ValidatedTimeout) VALUES ('$email', '$hash', '$salt', '$time')";
+			$validationkey = sha1(generatesalt(64));
+			$query="INSERT INTO users (Email, Password, Salt, ValidatedTimeout, ValidationKey) VALUES ('$email', '$hash', '$salt', '$time', '$validationkey')";
+			//insrt
 			mysql_query($query) or die(mysql_error());
-			echo "Success!";
+			$UserID = mysql_insert_id();
+			sendvalidationkey($email, $validationkey, $UserID);
+			$msg = $msg . "Success";
 			}else{
 				$msg = $msg . "You've already registered with that email! ";
 			}
