@@ -132,8 +132,20 @@
 						<td>".$row['PaymentType']."</td>
 					</tr>";	
 		}
+		$query="SELECT * FROM payments WHERE UserID='$user'";
+		$result=mysql_query($query) or die(mysql_error());
+		$total=0;
 		
-		echo		"</tbody>
+		while($row=mysql_fetch_assoc($result)){
+			$total=$total+$row['PaymentAmount'];
+		}
+		if($total<0){
+			$total="<span class='red'>".$total."</span>";
+		}
+		
+		
+		echo		"<tr><td colspan='2'</td><td>Balance</td><td>".$total."</td><tr></tbody>
 				</table>";
+	
 	}
 ?>

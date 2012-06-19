@@ -12,7 +12,7 @@
 		$row=mysql_fetch_assoc($result);
 		$salted=sha1($pass.$row['Salt']);
 		if($salted==$row['Password']){
-			$userid=$row['UserID'];
+			$user=$row['UserID'];
 			//Login
 			$sesskey=sha1(mt_rand());
 			$query="SELECT * FROM sessions WHERE SessionKey='$sesskey'";
@@ -28,10 +28,10 @@
 			
 			$ip=$_SERVER['REMOTE_ADDR'];
 			
-			$query="INSERT INTO sessions (SessionKey, UserID, SessionTimeout, IP) VALUES ('$sesskey', '$userid', '$time', '$ip')";
+			$query="INSERT INTO sessions (SessionKey, UserID, SessionTimeout, IP) VALUES ('$sesskey', '$user', '$time', '$ip')";
 			mysql_query($query) or die(mysql_error());
 			
-			setcookie("userid", $userid, $time);
+			setcookie("userid", $user, $time);
 			setcookie("sessionkey", $sesskey, $time);
 			$loggedin=1;
 		}
