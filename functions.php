@@ -13,6 +13,17 @@
 					<input type='submit' value='Login'>
 				</form>";	
 	}
+
+	function generatesalt($max = 16){
+        $characterList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*?";
+        $i = 0;
+        $salt = "";
+        while ($i < $length) {
+            $salt .= $characterList{mt_rand(0, (strlen($characterList) - 1))};
+            $i++;
+        }
+        return $salt;
+	}
 	
 	function checklogin(){
 		if(isset($loggedin)){
