@@ -7,7 +7,7 @@
 	$repeatpass=mysql_real_escape_string(htmlentities($_POST['repeatpassword']));
 	$msg = NULL;
 
-	if(strlen($pass)<5){
+	if(strlen($pass)<6){
 		$msg = $msg . "Your passsword is too short! ";
 	}
 
