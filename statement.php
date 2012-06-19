@@ -1,1 +1,4 @@
-Boom!
+<?php
+	paymentForm();
+	statement(10);
+?>

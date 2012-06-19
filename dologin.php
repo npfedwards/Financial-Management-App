@@ -4,9 +4,9 @@
 	$email=mysql_real_escape_string(htmlentities($_POST['email']));
 	$pass=mysql_real_escape_string(htmlentities($_POST['password']));
 	
-	$msg='Your email or password were incorrect';
+	$msg='Your email or password were incorrect or your account is not yet validated';
 	
-	$query="SELECT * FROM users WHERE Email='$email'";
+	$query="SELECT * FROM users WHERE Email='$email' AND Validated='1'";
 	$result=mysql_query($query) or die(mysql_error());
 	if(mysql_num_rows($result)==1){
 		$row=mysql_fetch_assoc($result);
