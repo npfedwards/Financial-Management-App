@@ -1,3 +1,7 @@
+<?php
+	include 'functions.php';
+	checklogin();
+?>
 <!DOCTYPE html>
 <html>
 	<head>
