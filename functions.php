@@ -77,10 +77,17 @@
 	
 	function paymentForm(){
 		echo 	"<form action='addpayment.php' method='post'>
-					<label for='from'><input type='text' name='from' id='from'>
-					<label for='to'><input type='text' name='to' id='to'>
-					<label for='type'><input type='text' name='type' id='type'>
-					<label for='amount'><input type='number' name='amount' id='amount'>
+					<label for='from'>From</label><input type='text' name='from' id='from'>
+					<label for='to'>To</label><input type='text' name='to' id='to'>
+					<label for='type'>Type</label>
+					<select name='type' id='type'>
+						<option>Cheque</option>
+						<option>Card</option>
+						<option>Cash</option>
+						<option>Transfer</option>
+					</select>
+					<label for='amount'>Amount</label><input type='number' step='0.01' name='amount' id='amount'>
+					<input type='submit' value='Add Payment'>
 				</form>";	
 	}
 	

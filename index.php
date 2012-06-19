@@ -5,6 +5,7 @@
 		include 'statement.php';	
 	}else{
 		loginform();
+		echo $msg;
 	}
 	
 	include 'footer.php';
