@@ -5,13 +5,14 @@
 	
 	$getorgive=mysql_real_escape_string(htmlentities($_POST['getorgive']));
 	$otherparty=mysql_real_escape_string(htmlentities($_POST['otherparty']));
+	$desc=mysql_real_escape_string(htmlentities($_POST['desc']));
 	$type=mysql_real_escape_string(htmlentities($_POST['type']));
 	$amount=mysql_real_escape_string(htmlentities($_POST['amount']));
 	$amount=$getorgive*$amount;
 	
-	if($amount!=NULL && $otherparty !=NULL){
+	if($amount!=NULL && $otherparty !=NULL && $desc != NULL){
 		
-		$query="INSERT INTO payments (UserID, Timestamp, PaymentName, PaymentAmount, PaymentType) VALUES ('$user', '".time()."', '$otherparty', '$amount', '$type')";
+		$query="INSERT INTO payments (UserID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType) VALUES ('$user', '".time()."', '$otherparty', '$desc', '$amount', '$type')";
 		mysql_query($query) or die(mysql_error());
 	}else{
 		

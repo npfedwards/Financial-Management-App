@@ -87,6 +87,7 @@
 						<option value='1'>Receive From</option>
 					</select>
 					<input type='text' name='otherparty' id='otherparty'>
+					<label for='desc'>Description</label><input type='text' name='desc' id='desc'>
 					<label for='type'>Type</label>
 					<select name='type' id='type'>
 						<option>Cheque</option>
@@ -99,6 +100,12 @@
 				</form>";	
 	}
 	
-	function statement($display){	
+	function statement($display, $user){
+		$query="SELECT * FROM payments WHERE UserID='$user' ORDER BY Timestamp ASC Limit 0,".$display;
+		$result=mysql_query($query) or die(mysql_error());
+		
+		while($row=mysql_fetch_assoc($result)){
+			echo $row['PaymentName']." ".$row['PaymentDesc']." ".$row['PaymentAmount']." ".$row['PaymentType']."<br>";	
+		}
 	}
 ?>

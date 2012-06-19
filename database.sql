@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.5
+-- version 3.2.4
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 19, 2012 at 02:48 PM
--- Server version: 5.5.16
--- PHP Version: 5.3.8
+-- Generation Time: Jun 19, 2012 at 03:28 PM
+-- Server version: 5.1.44
+-- PHP Version: 5.3.1
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -33,6 +32,11 @@ CREATE TABLE IF NOT EXISTS `labels` (
   PRIMARY KEY (`LabelID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `labels`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -44,12 +48,18 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `UserID` int(11) NOT NULL,
   `Timestamp` int(11) NOT NULL,
   `PaymentName` varchar(100) NOT NULL,
+  `PaymentDesc` varchar(200) NOT NULL,
   `PaymentAmount` float NOT NULL,
   `PaymentType` varchar(100) NOT NULL,
   `LabelID` int(11) NOT NULL,
   `Reconciled` tinyint(1) NOT NULL,
   PRIMARY KEY (`PaymentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `payments`
+--
+
 
 -- --------------------------------------------------------
 
@@ -65,6 +75,11 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `IP` varchar(40) NOT NULL,
   PRIMARY KEY (`SessionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `sessions`
+--
+
 
 -- --------------------------------------------------------
 
@@ -83,6 +98,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+--
+-- Dumping data for table `users`
+--
+
