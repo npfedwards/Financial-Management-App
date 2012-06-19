@@ -32,6 +32,7 @@
 	}
 	
 	function checklogin(){
+		global $user, $sessionkey;
 		opendb();
 		if(isset($loggedin)){
 			if($loggedin!=1){
@@ -77,8 +78,11 @@
 	
 	function paymentForm(){
 		echo 	"<form action='addpayment.php' method='post'>
-					<label for='from'>From</label><input type='text' name='from' id='from'>
-					<label for='to'>To</label><input type='text' name='to' id='to'>
+					<select name='getorgive' id='getorgive'>
+						<option value='-1'>Pay</option>
+						<option value='1'>Receive From</option>
+					</select>
+					<input type='text' name='otherparty' id='otherparty'>
 					<label for='type'>Type</label>
 					<select name='type' id='type'>
 						<option>Cheque</option>
