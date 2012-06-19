@@ -18,7 +18,7 @@
         $characterList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*?";
         $i = 0;
         $salt = "";
-        while ($i < $length) {
+        while ($i < $max) {
             $salt .= $characterList{mt_rand(0, (strlen($characterList) - 1))};
             $i++;
         }
