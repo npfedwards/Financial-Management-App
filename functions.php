@@ -49,4 +49,16 @@
 			$loggedin=0;	
 		}
 	}
+	
+	function paymentForm(){
+		echo 	"<form action='addpayment.php' method='post'>
+					<label for='from'><input type='text' name='from' id='from'>
+					<label for='to'><input type='text' name='to' id='to'>
+					<label for='type'><input type='text' name='type' id='type'>
+					<label for='amount'><input type='number' name='amount' id='amount'>
+				</form>";	
+	}
+	
+	function statement($display){	
+	}
 ?>
