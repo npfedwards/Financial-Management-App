@@ -10,7 +10,8 @@
 		if($email!=NULL&&$pass!=NULL&&$repeatpass!=NULL){
 			$time = time() + 604800;
 			$salt = generatesalt();
-			$query="INSERT INTO users (Email, Password, Salt, ValidatedTimeout) VALUES ('$email', '$pass', '$salt', '$time')";
+			$hash = sha1($pass . $salt);
+			$query="INSERT INTO users (Email, Password, Salt, ValidatedTimeout) VALUES ('$email', '$hash', '$salt', '$time')";
 			mysql_query($query) or die(mysql_error());
 			echo "Success!";
 		}else{
