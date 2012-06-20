@@ -34,6 +34,7 @@
 			setcookie("userid", $user, $time);
 			setcookie("sessionkey", $sesskey, $time);
 			$loggedin=1;
+			$msg=NULL;
 		}
 	}
 	

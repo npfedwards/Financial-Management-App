@@ -146,7 +146,7 @@
 		}
 		
 		
-		echo		"<tr><td colspan='2'</td><td>Balance</td><td>".$total."</td><tr></tbody>
+		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance'>".$total."</td><tr></tbody>
 				</table><div id='responsetext'></div>";
 	
 	}
