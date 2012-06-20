@@ -113,6 +113,7 @@
 							<th>In</th>
 							<th>Out</th>
 							<th>Type</th>
+							<th>Operations</th>
 						</tr>
 					</thead>
 					<tbody>";
@@ -124,12 +125,13 @@
 			}else{
 				$amount=$amount."</td><td>";
 			}
-			echo 	"<tr>
+			echo 	"<tr id='payment".$row['PaymentID']."'>
 						<td>".date("d/m/y", $row['Timestamp'])."</td>
 						<td>".$row['PaymentName']."</td>
 						<td>".$row['PaymentDesc']."</td>
 						<td>".$amount."</td>
 						<td>".$row['PaymentType']."</td>
+						<td><button onclick=\"confirmDelete('".$row['PaymentID']."')\">Delete</button></td>
 					</tr>";	
 		}
 		$query="SELECT * FROM payments WHERE UserID='$user'";
@@ -145,7 +147,7 @@
 		
 		
 		echo		"<tr><td colspan='2'</td><td>Balance</td><td>".$total."</td><tr></tbody>
-				</table>";
+				</table><div id='responsetext'></div>";
 	
 	}
 ?>
