@@ -14,8 +14,9 @@
 		
 		$query="INSERT INTO payments (UserID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType) VALUES ('$user', '".time()."', '$otherparty', '$desc', '$amount', '$type')";
 		mysql_query($query) or die(mysql_error());
+		$msg="Added!";
 	}else{
-		
+		$msg="All fields are required and the amount must be a number!";
 	}
 	
 	closedb($conn);
