@@ -16,7 +16,7 @@
 		echo	"<form action='dologin.php' method='post'>
 					<label for='email'>Email</label><input type='text' name='email' id='email'><br>
 					<label for='password'>Password</label><input type='password' name='password' id='password'><br>
-					<input type='submit' value='Login'>
+					<input type='submit' value='Login'> or <a href='register.php'>Register</a>
 				</form>";	
 	}
 
