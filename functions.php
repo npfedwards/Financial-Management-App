@@ -131,7 +131,10 @@
 						<td>".$row['PaymentDesc']."</td>
 						<td>".$amount."</td>
 						<td>".$row['PaymentType']."</td>
-						<td><button onclick=\"confirmDelete('".$row['PaymentID']."')\">Delete</button></td>
+						<td>
+							<button onclick=\"confirmDelete('".$row['PaymentID']."')\">Delete</button>
+							<button onclick=\"editForm('".$row['PaymentID']."')\">Edit</button>
+						</td>
 					</tr>";	
 		}
 		$query="SELECT * FROM payments WHERE UserID='$user'";
