@@ -10,28 +10,28 @@
 	
 	$amount=$row['PaymentAmount'];
 	if($amount<0){
-		$amount="<input type='number' step='0.01' name='in'></td><td><span class='red'><input type='number' step='0.01' name='out' value='".$amount*(-1)."'></span>";
+		$amount="<input type='number' step='0.01' name='in' id='in".$row['PaymentID']."'></td><td><span class='red'><input type='number' step='0.01' name='out' id='out".$row['PaymentID']."' value='".$amount*(-1)."'></span>";
 	}else{
-		$amount="<input type='number' step='0.01' name='in' value='".$amount."'></td><td><span class='red'><input type='number' step='0.01' name='out'></span>";
+		$amount="<input type='number' step='0.01' name='in' id='in".$row['PaymentID']."' value='".$amount."'></td><td><span class='red'><input type='number' step='0.01' name='out' id='out".$row['PaymentID']."'></span>";
 	}
 	
 	echo "<td>".date("d/m/y", $row['Timestamp'])."</td>
-		  <td><input type='text' name='otherparty' value='".$row['PaymentName']."'></td>
-		  <td><input type='text' name='otherparty' value='".$row['PaymentDesc']."'></td>
+		  <td><input type='text' name='otherparty' id='otherparty".$row['PaymentID']."' value='".$row['PaymentName']."'></td>
+		  <td><input type='text' name='desc' id='desc".$row['PaymentID']."' value='".$row['PaymentDesc']."'></td>
 		  <td>".$amount."</td>
 		  <td>
-		  	<select name='type'>
+		  	<select name='type' id='type".$row['PaymentID']."'>
 				<option";
-			  	if($row['PaymentType']=="Cheque"){ echo "selected='selected'";}
+			  	if($row['PaymentType']=="Cheque"){ echo " selected='selected'";}
 	echo		">Cheque</option>
 				<option";
-				if($row['PaymentType']=="Card"){ echo "selected='selected'";}
+				if($row['PaymentType']=="Card"){ echo " selected='selected'";}
 	echo		">Card</option>
 				<option";
-				if($row['PaymentType']=="Cash"){ echo "selected='selected'";}
+				if($row['PaymentType']=="Cash"){ echo " selected='selected'";}
 	echo		">Cash</option>
 				<option";
-				if($row['PaymentType']=="Transfer"){ echo "selected='selected'";}
+				if($row['PaymentType']=="Transfer"){ echo " selected='selected'";}
 	echo		">Transfer</option>
 			</select>
 		  </td>
