@@ -9,10 +9,15 @@
 	$type=mysql_real_escape_string(htmlentities($_POST['type']));
 	$amount=mysql_real_escape_string(htmlentities($_POST['amount']));
 	$amount=$getorgive*$amount;
+	$d=mysql_real_escape_string(htmlentities($_POST['day']));
+	$m=mysql_real_escape_string(htmlentities($_POST['month']));
+	$y=mysql_real_escape_string(htmlentities($_POST['year']));
+	
+	$time=strtotime($m."/".$d."/".$y);
 	
 	if($amount!=NULL && $otherparty !=NULL && $desc != NULL){
 		
-		$query="INSERT INTO payments (UserID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType) VALUES ('$user', '".time()."', '$otherparty', '$desc', '$amount', '$type')";
+		$query="INSERT INTO payments (UserID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType) VALUES ('$user', '$time', '$otherparty', '$desc', '$amount', '$type')";
 		mysql_query($query) or die(mysql_error());
 		$msg="Added!";
 	}else{
