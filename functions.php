@@ -138,14 +138,19 @@
 				</form>";	
 	}
 	
-	function statement($display, $user){
-		$query="SELECT * FROM payments WHERE UserID='$user' ORDER BY Timestamp ASC Limit 0,".$display;
+	function statement($display, $user, $order = 0){
+		if ($order!=1) {
+			$query="SELECT * FROM payments WHERE UserID='$user' ORDER BY Timestamp ASC Limit 0,".$display;
+		} else {
+			$query="SELECT * FROM payments WHERE UserID='$user' ORDER BY Timestamp DESC Limit 0,".$display;
+		}
+
 		$result=mysql_query($query) or die(mysql_error());
 		
 		echo 	"<table>
 					<thead>
 						<tr>
-							<th>Date</th>
+							<th>Date <a href='index.php?order=1'>&uarr;</a><a href='index.php?order=0'>&darr;</a></th>
 							<th>To/From</th>
 							<th>Description</th>
 							<th>In</th>
