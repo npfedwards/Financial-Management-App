@@ -86,6 +86,40 @@
 	
 	function paymentForm(){
 		echo 	"<form action='addpayment.php' method='post'>
+					On <select name='day'>";
+				$i=0;
+				while($i<31){
+					$i++;
+					echo "<option value='".$i."'";
+					if($i==date("j")){
+						echo " selected='selected'";
+					}
+					echo ">".$i.date("S", strtotime("01/".$i."/2000"))."</option>";
+				}
+					
+		echo		"</select><select name='month'>";
+				$i=0;
+				while($i<12){
+					$i++;
+					echo "<option value='".$i."'";
+					if($i==date("n")){
+						echo " selected='selected'";
+					}
+					echo ">".date("M", strtotime($i."/01/2000"))."</option>";
+				}
+					
+		echo		"</select><select name='year'>";
+				$i=2009;
+				while($i<date("Y")+2){
+					$i++;
+					echo "<option value='".$i."'";
+					if($i==date("Y")){
+						echo " selected='selected'";
+					}
+					echo ">".$i."</option>";
+				}
+					
+		echo		"</select>
 					<select name='getorgive' id='getorgive'>
 						<option value='-1'>Pay</option>
 						<option value='1'>Receive From</option>

@@ -15,7 +15,40 @@
 		$amount="<input type='number' step='0.01' name='in' id='in".$row['PaymentID']."' value='".$amount."'></td><td><span class='red'><input type='number' step='0.01' name='out' id='out".$row['PaymentID']."'></span>";
 	}
 	
-	echo "<td>".date("d/m/y", $row['Timestamp'])."</td>
+	echo "<td><select name='day' id='day".$row['PaymentID']."'>";
+				$i=0;
+				while($i<31){
+					$i++;
+					echo "<option value='".$i."'";
+					if($i==date("j",$row['Timestamp'])){
+						echo " selected='selected'";
+					}
+					echo ">".$i.date("S", strtotime("01/".$i."/2000"))."</option>";
+				}
+					
+		echo		"</select><select name='month' id='month".$row['PaymentID']."'>";
+				$i=0;
+				while($i<12){
+					$i++;
+					echo "<option value='".$i."'";
+					if($i==date("n",$row['Timestamp'])){
+						echo " selected='selected'";
+					}
+					echo ">".date("M", strtotime($i."/01/2000"))."</option>";
+				}
+					
+		echo		"</select><select name='year' id='year".$row['PaymentID']."'>";
+				$i=2009;
+				while($i<date("Y")+2){
+					$i++;
+					echo "<option value='".$i."'";
+					if($i==date("Y",$row['Timestamp'])){
+						echo " selected='selected'";
+					}
+					echo ">".$i."</option>";
+				}
+					
+		echo		"</select></td>
 		  <td><input type='text' name='otherparty' id='otherparty".$row['PaymentID']."' value='".$row['PaymentName']."'></td>
 		  <td><input type='text' name='desc' id='desc".$row['PaymentID']."' value='".$row['PaymentDesc']."'></td>
 		  <td>".$amount."</td>
