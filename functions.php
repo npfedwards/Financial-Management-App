@@ -41,7 +41,9 @@
 		if(isset($loggedin)){
 			if($loggedin!=1){
 				global $loggedin;
-				$user=mysql_real_escape_string($_COOKIE['userid']);
+				if(!isset($user)){
+					$user=mysql_real_escape_string($_COOKIE['userid']);
+				}
 				$sessionkey=mysql_real_escape_string($_COOKIE['sessionkey']);
 				$time=time();
 				$ip=$_SERVER['REMOTE_ADDR'];
@@ -60,7 +62,9 @@
 			}
 		}else{
 			global $loggedin;
-			$user=mysql_real_escape_string($_COOKIE['userid']);
+			if(!isset($user)){
+				$user=mysql_real_escape_string($_COOKIE['userid']);
+			}
 			$sessionkey=mysql_real_escape_string($_COOKIE['sessionkey']);
 			$time=time();
 			$ip=$_SERVER['REMOTE_ADDR'];
