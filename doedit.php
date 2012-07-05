@@ -8,6 +8,11 @@
 	$desc=mysql_real_escape_string(htmlentities($_GET['d']));
 	$amount=mysql_real_escape_string(htmlentities($_GET['a']));
 	$type=mysql_real_escape_string(htmlentities($_GET['t']));
+	$d=mysql_real_escape_string(htmlentities($_GET['day']));
+	$m=mysql_real_escape_string(htmlentities($_GET['month']));
+	$y=mysql_real_escape_string(htmlentities($_GET['year']));
+
+	$time=strtotime($m."/".$d."/".$y);
 	
 	$query="UPDATE payments SET ";
 	if($otherparty!=NULL){
@@ -20,9 +25,9 @@
 		$query=$query."PaymentAmount='$amount', ";
 	}
 	if($type!=NULL){
-		$query=$query."PaymentType='$type' ";
+		$query=$query."PaymentType='$type', ";
 	}
-	$query=$query."WHERE UserID='$user' AND PaymentID='$id'";
+	$query=$query." Timestamp='$time' WHERE UserID='$user' AND PaymentID='$id'";
 	mysql_query($query) or die(mysql_error());
 	
 	$query="SELECT * FROM payments WHERE UserID='$user' AND PaymentID='$id'";

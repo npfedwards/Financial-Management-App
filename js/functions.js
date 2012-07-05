@@ -52,6 +52,9 @@ function doEdit(id){
 	var income=document.getElementById("in"+id).value;
 	var out=document.getElementById("out"+id).value;
 	var type=document.getElementById("type"+id).value;
+	var day=document.getElementById("day"+id).value;
+	var month=document.getElementById("month"+id).value;
+	var year=document.getElementById("year"+id).value;
 	
 	var amount=income-out;
 	
@@ -71,7 +74,7 @@ function doEdit(id){
 		}
 	}
 	
-	xmlhttp.open("GET","doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type,true);
+	xmlhttp.open("GET","doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year,true);
 	xmlhttp.send();
 }
 
