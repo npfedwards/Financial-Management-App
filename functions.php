@@ -135,11 +135,17 @@
 					</select>
 					<label for='amount'>Amount</label><input type='number' step='0.01' name='amount' id='amount'>
 					<input type='submit' value='Add Payment'>
-				</form>";	
+				</form>
+				<a href='index.php?order=1'>Newest at the top </a><a href='index.php?order=0'>Oldest at the top</a>";	
 	}
 	
-	function statement($display, $user){
-		$query="SELECT * FROM payments WHERE UserID='$user' ORDER BY Timestamp ASC Limit 0,".$display;
+	function statement($display, $user, $order = 0){
+		if ($order!=1) {
+			$query="SELECT * FROM payments WHERE UserID='$user' ORDER BY Timestamp ASC Limit 0,".$display;
+		} else {
+			$query="SELECT * FROM payments WHERE UserID='$user' ORDER BY Timestamp DESC Limit 0,".$display;
+		}
+
 		$result=mysql_query($query) or die(mysql_error());
 		
 		echo 	"<table>
