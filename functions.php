@@ -135,8 +135,7 @@
 					</select>
 					<label for='amount'>Amount</label><input type='number' step='0.01' name='amount' id='amount'>
 					<input type='submit' value='Add Payment'>
-				</form>
-				<a href='index.php?order=1'>Newest at the top </a><a href='index.php?order=0'>Oldest at the top</a>";	
+				</form>";	
 	}
 	
 	function statement($display, $user, $order = 0){
@@ -151,7 +150,7 @@
 		echo 	"<table>
 					<thead>
 						<tr>
-							<th>Date</th>
+							<th>Date <a href='index.php?order=1'>&uarr;</a><a href='index.php?order=0'>&darr;</a></th>
 							<th>To/From</th>
 							<th>Description</th>
 							<th>In</th>
