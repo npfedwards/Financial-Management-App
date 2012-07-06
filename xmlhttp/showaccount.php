@@ -5,7 +5,7 @@
 	
 	$account=sanitise('account');
 	checkAccount($user,$account,0);
-	statement(10,$user,0, $account);
+	statement(20,$user,1, $account);
 	
 	closedb($conn);
 ?>

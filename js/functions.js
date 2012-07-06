@@ -159,6 +159,7 @@ function addPayment(){
 	var month=document.getElementById("month").value;
 	var year=document.getElementById("year").value;
 	var account=document.getElementById("account").value;
+	var accsel=document.getElementById("accsel").value;
 	
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
@@ -176,7 +177,7 @@ function addPayment(){
 			document.getElementById("desc").value="";
 		}
 	}
-	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive,true);
+	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive+"&accsel="+accsel,true);
 	xmlhttp.send();	
 }
 
