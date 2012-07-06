@@ -173,6 +173,26 @@ function addPayment(){
 			document.getElementById("statementhold").innerHTML=xmlhttp.responseText;
 		}
 	}
-	xmlhttp.open("GET","addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive,true);
+	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive,true);
 	xmlhttp.send();	
+}
+
+function showAccount(sel){
+	var account=sel.value;
+	
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+			document.getElementById("statementhold").innerHTML=xmlhttp.responseText;
+		}
+	}
+	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account,true);
+	xmlhttp.send();
 }
