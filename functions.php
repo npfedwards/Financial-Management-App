@@ -188,11 +188,13 @@
 			$total=$total+$row['PaymentAmount'];
 		}
 		if($total<0){
-			$total="<span class='red'>".$total."</span>";
+			$total="<span class='red'>".forcedecimals($total)."</span>";
+		}else{
+			$total=forcedecimals($total);	
 		}
 		
 		
-		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance'>".forcedecimals($total)."</td><tr></tbody>
+		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance'>".$total."</td><tr></tbody>
 				</table><div id='responsetext'></div>";
 	
 	}
