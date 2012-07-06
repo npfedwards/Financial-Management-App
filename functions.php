@@ -84,7 +84,7 @@
 		closedb($conn);
 	}
 	
-	function paymentForm(){
+	function paymentForm($user){
 		echo 	"<form action='addpayment.php' method='post'>
 					On <select name='day'>";
 				$i=0;
@@ -134,15 +134,23 @@
 						<option>Transfer</option>
 					</select>
 					<label for='amount'>Amount</label><input type='number' step='0.01' name='amount' id='amount'>
+					<select name='account'>";
+					$query="SELECT * FROM accounts WHERE UserID='$user'";
+					$result=mysql_query($query) or die(mysql_error());
+					
+					while($row=mysql_fetch_assoc($result)){
+						echo "<option value='".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
+					}
+		echo		"</select>
 					<input type='submit' value='Add Payment'>
 				</form>";	
 	}
 	
 	function statement($display, $user, $order = 0){
 		if ($order!=1) {
-			$query="SELECT * FROM payments WHERE UserID='$user' ORDER BY Timestamp ASC Limit 0,".$display;
+			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ORDER BY Timestamp ASC Limit 0,".$display;
 		} else {
-			$query="SELECT * FROM payments WHERE UserID='$user' ORDER BY Timestamp DESC Limit 0,".$display;
+			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ORDER BY Timestamp DESC Limit 0,".$display;
 		}
 
 		$result=mysql_query($query) or die(mysql_error());
@@ -156,6 +164,7 @@
 							<th>In</th>
 							<th>Out</th>
 							<th>Type</th>
+							<th>Account</th>
 							<th>Operations</th>
 						</tr>
 					</thead>
@@ -170,10 +179,11 @@
 			}
 			echo 	"<tr id='payment".$row['PaymentID']."'>
 						<td>".date("d/m/y", $row['Timestamp'])."</td>
-						<td>".$row['PaymentName']."</td>
-						<td>".$row['PaymentDesc']."</td>
+						<td>".stripslashes($row['PaymentName'])."</td>
+						<td>".stripslashes($row['PaymentDesc'])."</td>
 						<td class='align_right'>".$amount."</td>
 						<td>".$row['PaymentType']."</td>
+						<td>".$row['AccountName']."</td>
 						<td>
 							<button onclick=\"confirmDelete('".$row['PaymentID']."')\">Delete</button>
 							<button onclick=\"editForm('".$row['PaymentID']."')\">Edit</button>
@@ -188,11 +198,13 @@
 			$total=$total+$row['PaymentAmount'];
 		}
 		if($total<0){
-			$total="<span class='red'>".$total."</span>";
+			$total="<span class='red'>".forcedecimals($total)."</span>";
+		}else{
+			$total=forcedecimals($total);	
 		}
 		
 		
-		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance'>".forcedecimals($total)."</td><tr></tbody>
+		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance'>".$total."</td><tr></tbody>
 				</table><div id='responsetext'></div>";
 	
 	}
@@ -202,6 +214,30 @@
 		syntax: number_format(<number>,<decimalplaces>,<decimalpointsymbol>,<thousandseparator>)
 		*/
 		return number_format($number, $decplaces, $decpoint, $thousandseparator);
+	}
+	
+	function checkAccount($user, $account){
+		$query="SELECT * FROM accounts WHERE UserID='$user' AND AccountID='$account'";
+		$result=mysql_query($query) or die(mysql_error());
+		if(mysql_num_rows($result)!=1){ // Check if the account is not connected to this user
+			$query="SELECT * FROM accounts WHERE UserID='$user' LIMIT 0,1"; //This needs to at some point just select the default
+			$result=mysql_query($query) or die(mysql_error());
+			$row=mysql_fetch_assoc($result);
+			$account=$row['AccountID'];
+		}
+		return $account;	
+	}
+	
+	function accountList($user){
+		$query="SELECT * FROM accounts WHERE UserID='$user' ORDER BY AccountName ASC";
+		$result=mysql_query($query) or die(mysql_error());
+		while($row=mysql_fetch_assoc($result)){
+			echo stripslashes($row['AccountName'])."<br>";	
+		}
+	}
+	
+	function accountForm(){
+		echo "<input type='text' name='account' id='account' placeholder='Account Name' onkeypress=\"addAccountEnter(event)\"><button onclick=\"addAccount()\">Add Account</button>";
 	}
 
 

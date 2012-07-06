@@ -13,6 +13,8 @@
 	<body>
    		<?php
         	if($loggedin==1){
-				echo "<a href='logout.php'>Log Out</a>";	
+				echo 	"<a href='logout.php'>Log Out</a>
+						<a href='index.php'>Statement</a>
+						<a href='accounts.php'>Account</a>";	
 			}
 		?>

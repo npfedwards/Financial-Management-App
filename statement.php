@@ -1,5 +1,5 @@
 <?php
-	paymentForm();
+	paymentForm($user);
 	echo $msg;
 	echo "<br>";
 	if (isset($_GET['order'])) {

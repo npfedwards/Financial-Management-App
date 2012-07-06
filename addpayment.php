@@ -12,12 +12,14 @@
 	$d=mysql_real_escape_string(htmlentities($_POST['day']));
 	$m=mysql_real_escape_string(htmlentities($_POST['month']));
 	$y=mysql_real_escape_string(htmlentities($_POST['year']));
+	$account=mysql_real_escape_string(htmlentities($_POST['account']));
 	
 	$time=strtotime($m."/".$d."/".$y);
 	
 	if($amount!=NULL && $otherparty !=NULL && $desc != NULL){
+		$account=checkAccount($user, $account);
 		
-		$query="INSERT INTO payments (UserID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType) VALUES ('$user', '$time', '$otherparty', '$desc', '$amount', '$type')";
+		$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type')";
 		mysql_query($query) or die(mysql_error());
 		$msg="Added!";
 	}else{

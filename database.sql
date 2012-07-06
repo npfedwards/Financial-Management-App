@@ -3,21 +3,33 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 19, 2012 at 03:28 PM
+-- Generation Time: Jul 06, 2012 at 08:22 AM
 -- Server version: 5.1.44
 -- PHP Version: 5.3.1
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
 --
 -- Database: `money`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounts`
+--
+
+CREATE TABLE IF NOT EXISTS `accounts` (
+  `AccountID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserID` int(11) NOT NULL,
+  `AccountName` varchar(100) NOT NULL,
+  PRIMARY KEY (`AccountID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `accounts`
+--
+
 
 -- --------------------------------------------------------
 
@@ -46,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `labels` (
 CREATE TABLE IF NOT EXISTS `payments` (
   `PaymentID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
+  `AccountID` int(11) NOT NULL,
   `Timestamp` int(11) NOT NULL,
   `PaymentName` varchar(100) NOT NULL,
   `PaymentDesc` varchar(200) NOT NULL,
@@ -54,12 +67,11 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `LabelID` int(11) NOT NULL,
   `Reconciled` tinyint(1) NOT NULL,
   PRIMARY KEY (`PaymentID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
 -- Dumping data for table `payments`
 --
-
 
 -- --------------------------------------------------------
 
@@ -74,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `SessionTimeout` int(11) NOT NULL,
   `IP` varchar(40) NOT NULL,
   PRIMARY KEY (`SessionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
 
 --
 -- Dumping data for table `sessions`
@@ -93,11 +105,10 @@ CREATE TABLE IF NOT EXISTS `users` (
   `Password` varchar(64) NOT NULL,
   `Salt` varchar(16) NOT NULL,
   `Validated` tinyint(1) NOT NULL,
-  `ValidationKey` varchar(64) NOT NULL,
   `ValidatedTimeout` int(11) NOT NULL,
   `PrefCurrency` varchar(10) NOT NULL,
   PRIMARY KEY (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `users`

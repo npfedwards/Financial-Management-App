@@ -32,6 +32,8 @@
 			//insrt
 			mysql_query($query) or die(mysql_error());
 			$UserID = mysql_insert_id();
+			$query="INSERT INTO accounts (UserID, AccountName) VALUES ('$UserID', 'Current')";
+			mysql_query($query) or die(mysql_error());
 			sendvalidationkey($email, $validationkey, $UserID);
 			$msg = $msg . "Success";
 			}else{
