@@ -3,8 +3,8 @@
 	checklogin();
 	opendb();
 	
-	$currency=mysql_real_escape_string(htmlentities($_GET['currency']));
-	$user=mysql_real_escape_string(htmlentities($_GET['id']));
+	$currency=sanitise($_GET['currency']);
+	
 	if($currency==pound){
 		$currency='&pound;';
 	} elseif ($currency==dollar){
@@ -13,12 +13,11 @@
 		$currency='&euro;';
 	}
 
-	//need to change query:
 	if(isset($currency)){
 		$query="UPDATE users SET PrefCurrency='$currency' WHERE UserID='$user'";
 		mysql_query($query) or die(mysql_error());
 	
-		echo "Sucess!!";
+		echo "Success!!";
 	}
 	
 	closedb($conn);

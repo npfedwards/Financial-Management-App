@@ -254,7 +254,7 @@
 	
 	function accountForm(){
 		echo "<input type='text' name='account' id='account' placeholder='Account Name' onkeypress=\"addAccountEnter(event)\"><button onclick=\"addAccount()\">Add Account</button><br>";
-		echo "Preffered Currency<select name='prefcurrency' id='currency'><option value='pound'>&pound;</option><option value='dollar'>&dollar;</option><option value='euro'>&euro;</option></select><button onclick/\"updateCurrency()\">Update</button>";
+		echo "Preffered Currency<select name='prefcurrency' id='currency'><option value='pound'>&pound;</option><option value='dollar'>&dollar;</option><option value='euro'>&euro;</option></select><button onclick=\"updateCurrency()\">Update</button>";
 	}
 
 	function sanitise($fetch, $g='g'){
