@@ -121,8 +121,7 @@ function addAccount(){
 }
 
 function updateCurrency(){
-	var e=document.getElementById("currency").value;
-	var currency=e.options[e.selectedIndex].value;
+	var currency=document.getElementById("currency").value;
 	
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();

@@ -3,15 +3,7 @@
 	checklogin();
 	opendb();
 	
-	$currency=sanitise($_GET['currency']);
-	
-	if($currency==pound){
-		$currency='&pound;';
-	} elseif ($currency==dollar){
-		$currency='&dollar;';
-	} elseif ($currency==euro){
-		$currency='&euro;';
-	}
+	$currency='&'.sanitise('currency').';';
 
 	if(isset($currency)){
 		$query="UPDATE users SET PrefCurrency='$currency' WHERE UserID='$user'";
