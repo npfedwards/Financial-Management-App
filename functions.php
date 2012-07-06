@@ -146,19 +146,23 @@
 				</div>";	
 	}
 	
-	function statement($display, $user, $order = 0, $account = 0){
+	function statement($display, $user, $order = 1, $account = 0, $offset = 0){
 		if($account!=0){
 			$account="AND payments.AccountID='".$account."' ";
 		}else{
 			$account=NULL;	
 		}
-		if ($order!=1) {
-			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ".$account."ORDER BY Timestamp ASC Limit 0,".$display;
-		} else {
-			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ".$account."ORDER BY Timestamp DESC Limit 0,".$display;
-		}
-
+	
+		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ".$account."ORDER BY Timestamp DESC Limit ".$offset.",".$display;
 		$result=mysql_query($query) or die(mysql_error());
+		if($order!=0){
+			while($row=mysql_fetch_assoc($result)){
+				$paymentids=" OR PaymentID='".$row['PaymentID']."'".$paymentids;
+			}
+			$paymentids="WHERE".substr($paymentids, 3);
+			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." ORDER BY Timestamp ASC";
+			$result=mysql_query($query) or die(mysql_error());
+		}
 		
 		echo 	"<table>
 					<thead>
