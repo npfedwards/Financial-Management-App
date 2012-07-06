@@ -142,3 +142,37 @@ function checkEnter(e) {
 		return false;	
 	}
 }
+
+function addPaymentEnter(e){
+	if(checkEnter(e)){
+		addPayment();	
+	}
+}
+
+function addPayment(){
+	var otherparty=document.getElementById("otherparty").value;
+	var desc=document.getElementById("desc").value;
+	var getorgive=document.getElementById("getorgive").value;
+	var amount=document.getElementById("amount").value;
+	var type=document.getElementById("type").value;
+	var day=document.getElementById("day").value;
+	var month=document.getElementById("month").value;
+	var year=document.getElementById("year").value;
+	var account=document.getElementById("account").value;
+	
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+			document.getElementById("statementhold").innerHTML=xmlhttp.responseText;
+		}
+	}
+	xmlhttp.open("GET","addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive,true);
+	xmlhttp.send();	
+}

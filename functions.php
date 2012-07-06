@@ -85,8 +85,8 @@
 	}
 	
 	function paymentForm($user){
-		echo 	"<form action='addpayment.php' method='post'>
-					On <select name='day'>";
+		echo 	"<div id='paymentform'>
+				On <select name='day' id='day'>";
 				$i=0;
 				while($i<31){
 					$i++;
@@ -97,7 +97,7 @@
 					echo ">".$i.date("S", strtotime("01/".$i."/2000"))."</option>";
 				}
 					
-		echo		"</select><select name='month'>";
+		echo		"</select><select name='month' id='month'>";
 				$i=0;
 				while($i<12){
 					$i++;
@@ -108,7 +108,7 @@
 					echo ">".date("M", strtotime($i."/01/2000"))."</option>";
 				}
 					
-		echo		"</select><select name='year'>";
+		echo		"</select><select name='year' id='year'>";
 				$i=2009;
 				while($i<date("Y")+2){
 					$i++;
@@ -133,8 +133,8 @@
 						<option>Cash</option>
 						<option>Transfer</option>
 					</select>
-					<label for='amount'>Amount</label><input type='number' step='0.01' name='amount' id='amount'>
-					<select name='account'>";
+					<label for='amount'>Amount</label><input type='number' step='0.01' name='amount' id='amount' onkeypress=\"addPaymentEnter(event)\">
+					<select name='account' id='account'>";
 					$query="SELECT * FROM accounts WHERE UserID='$user'";
 					$result=mysql_query($query) or die(mysql_error());
 					
@@ -142,8 +142,8 @@
 						echo "<option value='".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
 					}
 		echo		"</select>
-					<input type='submit' value='Add Payment'>
-				</form>";	
+					<button onclick=\"addPayment()\">Add Payment</button>
+				</div>";	
 	}
 	
 	function statement($display, $user, $order = 0){
@@ -238,6 +238,16 @@
 	
 	function accountForm(){
 		echo "<input type='text' name='account' id='account' placeholder='Account Name' onkeypress=\"addAccountEnter(event)\"><button onclick=\"addAccount()\">Add Account</button>";
+	}
+	
+	function sanitise($fetch, $g='g'){
+		opendb();
+		if($g=='g'){
+			return mysql_real_escape_string(htmlentities($_GET[$fetch]));
+		}elseif($g=='p'){
+			return mysql_real_escape_string(htmlentities($_POST[$fetch]));
+		}
+		closedb($conn);
 	}
 
 
