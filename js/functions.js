@@ -120,6 +120,28 @@ function addAccount(){
 	xmlhttp.send();
 }
 
+function updateCurrency(){
+	var e=document.getElementById("currency").value;
+	var currency=e.options[e.selectedIndex].value;
+	
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+			document.getElementById('currencycontainer').innerHTML=xmlhttp.responseText;
+		}
+	}
+	
+	xmlhttp.open("GET","xmlhttp/updatecurrency.php?currency="+currency,true);
+	xmlhttp.send();
+}
+
 function addAccountEnter(e){
 	if(checkEnter(e)){
 		addAccount();	
