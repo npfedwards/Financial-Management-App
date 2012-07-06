@@ -165,6 +165,12 @@
 			$result=mysql_query($query) or die(mysql_error());
 		}
 		
+		$query="SELECT * FROM users WHERE UserID='$user'";
+		$currencyresult=mysql_query($query) or die(mysql_error());
+		$currencyarray=mysql_fetch_array($currencyresult);
+		$currencysymbol=$currencyarray['PrefCurrency'];
+
+
 		echo 	"<table>
 					<thead>
 						<tr>
@@ -180,12 +186,13 @@
 					</thead>
 					<tbody>";
 		
+
 		while($row=mysql_fetch_assoc($result)){
 			$amount=$row['PaymentAmount'];
 			if($amount<0){
-				$amount="</td><td class='align_right'><span class='red'>".forcedecimals($amount*(-1))."</span>";
+				$amount="</td><td class='align_right'><span class='red'>".$currencysymbol.forcedecimals($amount*(-1))."</span>";
 			}else{
-				$amount=forcedecimals($amount)."</td><td>";
+				$amount=$currencysymbol.forcedecimals($amount)."</td><td>";
 			}
 			echo 	"<tr id='payment".$row['PaymentID']."'>
 						<td>".date("d/m/y", $row['Timestamp'])."</td>
@@ -214,7 +221,7 @@
 		}
 		
 		
-		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance'>".$total."</td><tr></tbody>
+		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance'>".$currencysymbol.$total."</td><tr></tbody>
 				</table><div id='responsetext'></div>";
 	
 	}
@@ -253,9 +260,10 @@
 	}
 	
 	function accountForm(){
-		echo "<input type='text' name='account' id='account' placeholder='Account Name' onkeypress=\"addAccountEnter(event)\"><button onclick=\"addAccount()\">Add Account</button>";
+		echo "<input type='text' name='account' id='account' placeholder='Account Name' onkeypress=\"addAccountEnter(event)\"><button onclick=\"addAccount()\">Add Account</button><br>";
+		echo "Preffered Currency<select name='prefcurrency' id='currency'><option value='pound'>&pound;</option><option value='dollar'>&dollar;</option><option value='euro'>&euro;</option></select><button onclick=\"updateCurrency()\">Update</button>";
 	}
-	
+
 	function sanitise($fetch, $g='g'){
 		opendb();
 		if($g=='g'){
