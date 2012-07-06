@@ -5,6 +5,8 @@
 	$email=mysql_real_escape_string(htmlentities($_POST['email']));
 	$pass=mysql_real_escape_string(htmlentities($_POST['password']));
 	$repeatpass=mysql_real_escape_string(htmlentities($_POST['repeatpassword']));
+	$prefcurrency=mysql_real_escape_string(htmlentities($_POST['prefcurrency']));
+	
 	$msg = NULL;
 
 	if(strlen($pass)<6){
@@ -28,7 +30,7 @@
 			$salt = generatesalt();
 			$hash = sha1($pass . $salt);
 			$validationkey = sha1(generatesalt(64));
-			$query="INSERT INTO users (Email, Password, Salt, ValidatedTimeout, ValidationKey) VALUES ('$email', '$hash', '$salt', '$time', '$validationkey')";
+			$query="INSERT INTO users (Email, Password, Salt, ValidatedTimeout, ValidationKey, PrefCurrency) VALUES ('$email', '$hash', '$salt', '$time', '$validationkey', '$prefcurrency')";
 			//insrt
 			mysql_query($query) or die(mysql_error());
 			$UserID = mysql_insert_id();
