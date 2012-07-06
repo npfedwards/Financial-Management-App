@@ -164,15 +164,15 @@
 		while($row=mysql_fetch_assoc($result)){
 			$amount=$row['PaymentAmount'];
 			if($amount<0){
-				$amount="</td><td><span class='red'>".$amount*(-1)."</span>";
+				$amount="</td><td class='align_right'><span class='red'>".forcedecimals($amount*(-1))."</span>";
 			}else{
-				$amount=$amount."</td><td>";
+				$amount=forcedecimals($amount)."</td><td>";
 			}
 			echo 	"<tr id='payment".$row['PaymentID']."'>
 						<td>".date("d/m/y", $row['Timestamp'])."</td>
 						<td>".$row['PaymentName']."</td>
 						<td>".$row['PaymentDesc']."</td>
-						<td>".$amount."</td>
+						<td class='align_right'>".$amount."</td>
 						<td>".$row['PaymentType']."</td>
 						<td>
 							<button onclick=\"confirmDelete('".$row['PaymentID']."')\">Delete</button>
@@ -192,8 +192,17 @@
 		}
 		
 		
-		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance'>".$total."</td><tr></tbody>
+		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance'>".forcedecimals($total)."</td><tr></tbody>
 				</table><div id='responsetext'></div>";
 	
 	}
+
+	function forcedecimals($number, $decplaces=2, $decpoint='.', $thousandseparator=''){
+		/*
+		syntax: number_format(<number>,<decimalplaces>,<decimalpointsymbol>,<thousandseparator>)
+		*/
+		return number_format($number, $decplaces, $decpoint, $thousandseparator);
+	}
+
+
 ?>
