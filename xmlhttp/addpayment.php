@@ -27,7 +27,7 @@
 		$msg="All fields are required and the amount must be a number!";
 	}
 	
-	statement(10,$user); //Needs to keep ordering?
+	statement(20,$user); //Needs to keep ordering?
 	
 	closedb($conn);
 ?>
