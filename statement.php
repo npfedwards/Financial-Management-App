@@ -7,5 +7,7 @@
 	} else {
 		$order=0;
 	}
+	echo "<div id='statementhold'>";
 	statement(10, $user, $order);
+	echo "</div>";
 ?>

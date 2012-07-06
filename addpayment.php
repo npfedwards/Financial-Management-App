@@ -3,16 +3,17 @@
 	checklogin();
 	opendb();
 	
-	$getorgive=mysql_real_escape_string(htmlentities($_POST['getorgive']));
-	$otherparty=mysql_real_escape_string(htmlentities($_POST['otherparty']));
-	$desc=mysql_real_escape_string(htmlentities($_POST['desc']));
-	$type=mysql_real_escape_string(htmlentities($_POST['type']));
-	$amount=mysql_real_escape_string(htmlentities($_POST['amount']));
+	$getorgive=sanitise('getorgive'); //sanitise assumes $_GET
+	$otherparty=sanitise('o');
+	$desc=sanitise('d');
+	$type=sanitise('t');
+	$amount=sanitise('a');
 	$amount=$getorgive*$amount;
-	$d=mysql_real_escape_string(htmlentities($_POST['day']));
-	$m=mysql_real_escape_string(htmlentities($_POST['month']));
-	$y=mysql_real_escape_string(htmlentities($_POST['year']));
-	$account=mysql_real_escape_string(htmlentities($_POST['account']));
+	$d=sanitise('day');
+	$m=sanitise('month');
+	$y=sanitise('year');
+	$account=sanitise('account');
+	
 	
 	$time=strtotime($m."/".$d."/".$y);
 	
@@ -26,6 +27,7 @@
 		$msg="All fields are required and the amount must be a number!";
 	}
 	
+	statement(10,$user); //Needs to keep ordering?
+	
 	closedb($conn);
-	include 'index.php';
 ?>
