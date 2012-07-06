@@ -221,7 +221,7 @@
 		return number_format($number, $decplaces, $decpoint, $thousandseparator);
 	}
 	
-	function checkAccount($user, $account, $default){
+	function checkAccount($user, $account, $default=NULL){
 		$query="SELECT * FROM accounts WHERE UserID='$user' AND AccountID='$account'";
 		$result=mysql_query($query) or die(mysql_error());
 		if(mysql_num_rows($result)!=1){ // Check if the account is not connected to this user

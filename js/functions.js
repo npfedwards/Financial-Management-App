@@ -22,7 +22,7 @@ function ajaxDelete(id){
 		}
 	}
 	
-	xmlhttp.open("GET","delete.php?id="+id,true);
+	xmlhttp.open("GET","xmlhttp/delete.php?id="+id,true);
 	xmlhttp.send();
 }
 
@@ -42,7 +42,7 @@ function editForm(id){
 		}
 	}
 	
-	xmlhttp.open("GET","editform.php?id="+id,true);
+	xmlhttp.open("GET","xmlhttp/editform.php?id="+id,true);
 	xmlhttp.send();
 }
 
@@ -75,7 +75,7 @@ function doEdit(id){
 		}
 	}
 	
-	xmlhttp.open("GET","doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account,true);
+	xmlhttp.open("GET","xmlhttp/doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account,true);
 	xmlhttp.send();
 }
 
@@ -94,7 +94,7 @@ function updateTotal(){
 		}
 	}
 	
-	xmlhttp.open("GET","updatetotal.php",true);
+	xmlhttp.open("GET","xmlhttp/updatetotal.php",true);
 	xmlhttp.send();	
 }
 
@@ -171,6 +171,9 @@ function addPayment(){
 		if (xmlhttp.readyState==4 && xmlhttp.status==200){
 			//Response Text or fade out etc.
 			document.getElementById("statementhold").innerHTML=xmlhttp.responseText;
+			document.getElementById("otherparty").value="";
+			document.getElementById("amount").value="";
+			document.getElementById("desc").value="";
 		}
 	}
 	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive,true);
