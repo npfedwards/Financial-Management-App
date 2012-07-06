@@ -13,7 +13,8 @@
 	$m=sanitise('month');
 	$y=sanitise('year');
 	$account=sanitise('account');
-	
+	$accsel=sanitise('accsel');
+	$accsel=checkAccount($user,$accsel,0);
 	
 	$time=strtotime($m."/".$d."/".$y);
 	
@@ -27,7 +28,7 @@
 		$msg="All fields are required and the amount must be a number!";
 	}
 	
-	statement(20,$user); //Needs to keep ordering?
+	statement(20,$user,1,$accsel); //Needs to keep ordering?
 	
 	closedb($conn);
 ?>

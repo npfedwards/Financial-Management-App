@@ -150,12 +150,13 @@
 		if($account!=0){
 			$account="AND payments.AccountID='".$account."' ";
 		}else{
-			$account=NULL;	
+			$account="";	
 		}
 	
 		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ".$account."ORDER BY Timestamp DESC Limit ".$offset.",".$display;
 		$result=mysql_query($query) or die(mysql_error());
-		if($order!=0){
+		
+		if($order!=0){ //PLEASE PLEASE find a nicer way to do this!
 			while($row=mysql_fetch_assoc($result)){
 				$paymentids=" OR PaymentID='".$row['PaymentID']."'".$paymentids;
 			}
@@ -233,16 +234,18 @@
 	}
 	
 	function checkAccount($user, $account, $default=NULL){
-		$query="SELECT * FROM accounts WHERE UserID='$user' AND AccountID='$account'";
-		$result=mysql_query($query) or die(mysql_error());
-		if(mysql_num_rows($result)!=1){ // Check if the account is not connected to this user
-			if($default==NULL){
-				$query="SELECT * FROM accounts WHERE UserID='$user' LIMIT 0,1"; //This needs to at some point just select the default
-				$result=mysql_query($query) or die(mysql_error());
-				$row=mysql_fetch_assoc($result);
-				$account=$row['AccountID'];
-			}else{
-				$account=$default;	
+		if($account!=0){
+			$query="SELECT * FROM accounts WHERE UserID='$user' AND AccountID='$account'";
+			$result=mysql_query($query) or die(mysql_error());
+			if(mysql_num_rows($result)!=1){ // Check if the account is not connected to this user
+				if($default==NULL){
+					$query="SELECT * FROM accounts WHERE UserID='$user' LIMIT 0,1"; //This needs to at some point just select the default
+					$result=mysql_query($query) or die(mysql_error());
+					$row=mysql_fetch_assoc($result);
+					$account=$row['AccountID'];
+				}else{
+					$account=$default;	
+				}
 			}
 		}
 		return $account;	
@@ -274,7 +277,7 @@
 	function accountPicker($user){
 		$query="SELECT * FROM accounts WHERE UserID='$user' ORDER BY AccountName ASC";
 		$result=mysql_query($query) or die(mysql_error());
-		echo "Account: <select onchange=\"showAccount(this)\">
+		echo "Account: <select onchange=\"showAccount(this)\" id='accsel'>
 				<option value='0'>All</option>";
 		while($row=mysql_fetch_assoc($result)){
 			echo "<option value='".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
