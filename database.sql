@@ -105,10 +105,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   `Password` varchar(64) NOT NULL,
   `Salt` varchar(16) NOT NULL,
   `Validated` tinyint(1) NOT NULL,
+  `ValidationKey` varchar(64) NOT NULL,
   `ValidatedTimeout` int(11) NOT NULL,
   `PrefCurrency` varchar(10) NOT NULL,
   PRIMARY KEY (`UserID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `users`
