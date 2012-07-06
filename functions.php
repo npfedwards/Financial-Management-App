@@ -146,11 +146,16 @@
 				</div>";	
 	}
 	
-	function statement($display, $user, $order = 0){
+	function statement($display, $user, $order = 0, $account = 0){
+		if($account!=0){
+			$account="AND payments.AccountID='".$account."' ";
+		}else{
+			$account=NULL;	
+		}
 		if ($order!=1) {
-			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ORDER BY Timestamp ASC Limit 0,".$display;
+			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ".$account."ORDER BY Timestamp ASC Limit 0,".$display;
 		} else {
-			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ORDER BY Timestamp DESC Limit 0,".$display;
+			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ".$account."ORDER BY Timestamp DESC Limit 0,".$display;
 		}
 
 		$result=mysql_query($query) or die(mysql_error());
@@ -190,7 +195,7 @@
 						</td>
 					</tr>";	
 		}
-		$query="SELECT * FROM payments WHERE UserID='$user'";
+		$query="SELECT * FROM payments WHERE UserID='$user' ".$account;
 		$result=mysql_query($query) or die(mysql_error());
 		$total=0;
 		
@@ -216,14 +221,18 @@
 		return number_format($number, $decplaces, $decpoint, $thousandseparator);
 	}
 	
-	function checkAccount($user, $account){
+	function checkAccount($user, $account, $default){
 		$query="SELECT * FROM accounts WHERE UserID='$user' AND AccountID='$account'";
 		$result=mysql_query($query) or die(mysql_error());
 		if(mysql_num_rows($result)!=1){ // Check if the account is not connected to this user
-			$query="SELECT * FROM accounts WHERE UserID='$user' LIMIT 0,1"; //This needs to at some point just select the default
-			$result=mysql_query($query) or die(mysql_error());
-			$row=mysql_fetch_assoc($result);
-			$account=$row['AccountID'];
+			if($default==NULL){
+				$query="SELECT * FROM accounts WHERE UserID='$user' LIMIT 0,1"; //This needs to at some point just select the default
+				$result=mysql_query($query) or die(mysql_error());
+				$row=mysql_fetch_assoc($result);
+				$account=$row['AccountID'];
+			}else{
+				$account=$default;	
+			}
 		}
 		return $account;	
 	}
@@ -249,6 +258,16 @@
 		}
 		closedb($conn);
 	}
-
+	
+	function accountPicker($user){
+		$query="SELECT * FROM accounts WHERE UserID='$user' ORDER BY AccountName ASC";
+		$result=mysql_query($query) or die(mysql_error());
+		echo "Account: <select onchange=\"showAccount(this)\">
+				<option value='0'>All</option>";
+		while($row=mysql_fetch_assoc($result)){
+			echo "<option value='".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
+		}
+		echo "</select>";
+	}
 
 ?>
