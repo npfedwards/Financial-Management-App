@@ -227,6 +227,18 @@
 		}
 		return $account;	
 	}
+	
+	function accountList($user){
+		$query="SELECT * FROM accounts WHERE UserID='$user' ORDER BY AccountName ASC";
+		$result=mysql_query($query) or die(mysql_error());
+		while($row=mysql_fetch_assoc($result)){
+			echo stripslashes($row['AccountName'])."<br>";	
+		}
+	}
+	
+	function accountForm(){
+		echo "<input type='text' name='account' id='account' placeholder='Account Name' onkeypress=\"addAccountEnter(event)\"><button onclick=\"addAccount()\">Add Account</button>";
+	}
 
 
 ?>

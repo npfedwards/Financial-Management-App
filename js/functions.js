@@ -97,3 +97,48 @@ function updateTotal(){
 	xmlhttp.open("GET","updatetotal.php",true);
 	xmlhttp.send();	
 }
+
+function addAccount(){
+	var account=document.getElementById("account").value;
+	
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+			document.getElementById('accounts').innerHTML=xmlhttp.responseText;
+			document.getElementById("account").value="";
+		}
+	}
+	
+	xmlhttp.open("GET","xmlhttp/addaccount.php?account="+account,true);
+	xmlhttp.send();
+}
+
+function addAccountEnter(e){
+	if(checkEnter(e)){
+		addAccount();	
+	}
+}
+
+function checkEnter(e) {
+    var charCode;
+    
+    if(e && e.which){
+        charCode = e.which;
+    }else if(window.event){
+        e = window.event;
+        charCode = e.keyCode;
+    }
+
+    if(charCode === 13) {
+        return true;
+    }else{
+		return false;	
+	}
+}
