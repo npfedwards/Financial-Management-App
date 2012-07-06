@@ -7,6 +7,7 @@
 	} else {
 		$order=0;
 	}
+	accountPicker($user);
 	echo "<div id='statementhold'>";
 	statement(10, $user, $order);
 	echo "</div>";
