@@ -11,7 +11,9 @@
 	$d=mysql_real_escape_string(htmlentities($_GET['day']));
 	$m=mysql_real_escape_string(htmlentities($_GET['month']));
 	$y=mysql_real_escape_string(htmlentities($_GET['year']));
-
+	$account=mysql_real_escape_string(htmlentities($_GET['account']));
+	$account=checkAccount($user, $account);
+	
 	$time=strtotime($m."/".$d."/".$y);
 	
 	$query="UPDATE payments SET ";
@@ -27,10 +29,10 @@
 	if($type!=NULL){
 		$query=$query."PaymentType='$type', ";
 	}
-	$query=$query." Timestamp='$time' WHERE UserID='$user' AND PaymentID='$id'";
+	$query=$query."AccountID='$account', Timestamp='$time' WHERE UserID='$user' AND PaymentID='$id'";
 	mysql_query($query) or die(mysql_error());
 	
-	$query="SELECT * FROM payments WHERE UserID='$user' AND PaymentID='$id'";
+	$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND PaymentID='$id'";
 	$result=mysql_query($query) or die(mysql_error());
 	$row=mysql_fetch_assoc($result);
 	
@@ -42,10 +44,11 @@
 	}
 	
 	echo "<td>".date("d/m/y", $row['Timestamp'])."</td>
-		  <td>".$row['PaymentName']."</td>
-		  <td>".$row['PaymentDesc']."</td>
+		  <td>".stripslashes($row['PaymentName'])."</td>
+		  <td>".stripslashes($row['PaymentDesc'])."</td>
 		  <td>".$amount."</td>
 		  <td>".$row['PaymentType']."</td>
+		  <td>".stripslashes($row['AccountName'])."</td>
 		  <td>
 			  <button onclick=\"confirmDelete('".$row['PaymentID']."')\">Delete</button>
 			  <button onclick=\"editForm('".$row['PaymentID']."')\">Edit</button>

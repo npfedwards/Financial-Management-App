@@ -215,6 +215,18 @@
 		*/
 		return number_format($number, $decplaces, $decpoint, $thousandseparator);
 	}
+	
+	function checkAccount($user, $account){
+		$query="SELECT * FROM accounts WHERE UserID='$user' AND AccountID='$account'";
+		$result=mysql_query($query) or die(mysql_error());
+		if(mysql_num_rows($result)!=1){ // Check if the account is not connected to this user
+			$query="SELECT * FROM accounts WHERE UserID='$user' LIMIT 0,1"; //This needs to at some point just select the default
+			$result=mysql_query($query) or die(mysql_error());
+			$row=mysql_fetch_assoc($result);
+			$account=$row['AccountID'];
+		}
+		return $account;	
+	}
 
 
 ?>

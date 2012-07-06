@@ -67,8 +67,19 @@
 				if($row['PaymentType']=="Transfer"){ echo " selected='selected'";}
 	echo		">Transfer</option>
 			</select>
-		  </td>
-		  <td>
+		  </td><td>
+		  	<select name='account' id='account".$row['PaymentID']."'>";
+		  $query="SELECT * FROM accounts WHERE UserID='$user'";
+		  $result2=mysql_query($query) or die(mysql_error());
+		  while($row2=mysql_fetch_assoc($result2)){
+				echo "<option value='".$row2['AccountID']."'";
+				if($row['AccountID']==$row2['AccountID']){
+					echo " selected='selected'";	
+				}
+				echo ">".stripslashes($row2['AccountName'])."</option>";
+		  }
+	echo  	"</select>
+		  </td><td>
 			  <button onclick=\"confirmDelete('".$row['PaymentID']."')\">Delete</button>
 			  <button onclick=\"doEdit('".$row['PaymentID']."')\">Confirm Edit</button>
 		  </td>";

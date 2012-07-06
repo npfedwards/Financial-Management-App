@@ -55,7 +55,8 @@ function doEdit(id){
 	var day=document.getElementById("day"+id).value;
 	var month=document.getElementById("month"+id).value;
 	var year=document.getElementById("year"+id).value;
-	
+	var account=document.getElementById("account"+id).value;
+
 	var amount=income-out;
 	
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -74,7 +75,7 @@ function doEdit(id){
 		}
 	}
 	
-	xmlhttp.open("GET","doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year,true);
+	xmlhttp.open("GET","doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account,true);
 	xmlhttp.send();
 }
 
