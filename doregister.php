@@ -30,17 +30,31 @@
 			$salt = generatesalt();
 			$hash = sha1($pass . $salt);
 			$validationkey = sha1(generatesalt(64));
-			$query="INSERT INTO users (Email, Password, Salt, ValidatedTimeout, ValidationKey, PrefCurrency) VALUES ('$email', '$hash', '$salt', '$time', '$validationkey', '$prefcurrency')";
+			$query="INSERT INTO users (Email, Password, Salt, ValidatedTimeout, ValidationKey, PrefCurrency) VALUES ('$email', '$hash', '$salt', '$time', '$validationkey', '&pound;')";
 			//insrt
 			mysql_query($query) or die(mysql_error());
 			$UserID = mysql_insert_id();
 			$query="INSERT INTO accounts (UserID, AccountName) VALUES ('$UserID', 'Current')";
 			mysql_query($query) or die(mysql_error());
 			sendvalidationkey($email, $validationkey, $UserID);
-			$msg = $msg . "Success";
-			}else{
-				$msg = $msg . "You've already registered with that email! ";
+			$msg = $msg . "Success! Before you can use your account, you'll need to validate it - we've sent you an email with a link to do that. If you can't find it, check your spam folder or click here to send it again. ";
+		}elseif(mysql_num_rows($result)==1){
+			$row=mysql_fetch_array($result);
+
+			if($row['Validated']==0&&time()>$row['ValidatedTimeout']){
+				$time = time() + 604800;
+				$salt = generatesalt();
+				$hash = sha1($pass . $salt);
+				$validationkey = sha1(generatesalt(64));
+				$query="UPDATE users SET Password='$hash', Salt='$salt', ValidatedTimeout='$time', ValidationKey='$validationkey' WHERE Email='$email'";
+				//insrt
+				mysql_query($query) or die(mysql_error());
+				sendvalidationkey($email, $validationkey, $UserID);
+				$msg = $msg . "Successfully re-registered. Before you can use your account, you'll need to validate it - we've sent you an email with a link to do that. If you can't find it, check your spam folder or click here to send it again.";
+			} else {
+				$msg = $msg."You've already registered that email! Please validate it by clicking the link in the email you received. ";
 			}
+		}
 	}
 
 	echo $msg;
