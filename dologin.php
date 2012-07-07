@@ -24,7 +24,7 @@
 				$result=mysql_query($query) or die(mysql_error());
 			}
 			
-			$time=time()+3600;
+			$time=time()+86400;
 			
 			$ip=$_SERVER['REMOTE_ADDR'];
 			
