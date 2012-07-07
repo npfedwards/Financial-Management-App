@@ -179,6 +179,9 @@
 		}else{
 			$account="";	
 		}
+		
+		$currentpage=intval($offset/$display)+1;
+		pagination($user,$account,$display,$currentpage);
 	
 		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ".$account."ORDER BY Timestamp DESC Limit ".$offset.",".$display;
 		$result=mysql_query($query) or die(mysql_error());
@@ -318,6 +321,40 @@
 			echo "<option value='".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
 		}
 		echo "</select>";
+	}
+	
+	function pagination($user, $account, $perpage, $currentpage){
+		if($account!=0){
+			$account="AND payments.AccountID='".$account."' ";
+		}else{
+			$account="";	
+		}
+		$query="SELECT * FROM payments WHERE UserID='$user' ".$account;
+		$result=mysql_query($query) or die(mysql_error());
+		$numrows=mysql_num_rows($result);
+		
+		$pages=ceil($numrows/$perpage);
+		$i=0;
+		echo "Page <select onchange=\"showPage(this)\" id='page'>";
+		while($i<$pages){
+			$offset=$i*$perpage;
+			$i++;
+			echo "<option value='".$offset."'";
+			if($currentpage==$i){
+				echo " selected='selected'";	
+			}
+			echo ">".$i."</option>";	
+		}
+		echo "</select>";
+	}
+	
+	function numperpage(){
+		echo 	"Per Page <select onchange=\"numPerPage(this)\" id='numperpage'>
+					<option>10</option>
+					<option selected='selected'>20</option>
+					<option>50</option>
+					<option>100</option>
+				</select>";
 	}
 
 ?>
