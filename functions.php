@@ -331,10 +331,10 @@
 		$numrows=mysql_num_rows($result);	
 	}
 	
-	function numperpage($user){
-		echo 	"<select onchange=\"numPerPage(this)\" id='numperpage'>
+	function numperpage(){
+		echo 	"Per Page <select onchange=\"numPerPage(this)\" id='numperpage'>
 					<option>10</option>
-					<option>25</option>
+					<option>20</option>
 					<option>50</option>
 					<option>100</option>
 				</select>";

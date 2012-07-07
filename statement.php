@@ -4,6 +4,7 @@
 	echo "<br>";
 	
 	accountPicker($user);
+	numperpage();
 	echo "<div id='statementhold'>";
 	statement(20, $user);
 	echo "</div>";
