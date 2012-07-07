@@ -239,7 +239,7 @@ function numPerPage(sel){
 	showStatement(account,order,perpage);
 }
 
-function showStatement(account, order, perpage){
+function showStatement(account, order, perpage, offset){
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
 	}else{// code for IE6, IE5
@@ -253,6 +253,19 @@ function showStatement(account, order, perpage){
 			document.getElementById("statementhold").innerHTML=xmlhttp.responseText;
 		}
 	}
-	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account+"&order="+order+"&perpage="+perpage,true);
+	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account+"&order="+order+"&perpage="+perpage+"&offset="+offset,true);
 	xmlhttp.send();	
+}
+
+function showPage(sel){
+	var account=document.getElementById("accsel").value;
+	var order=document.getElementById("datesort0").checked;
+	if(order===true){
+		order=0;	
+	}else{
+		order=1;	
+	}
+	var perpage=document.getElementById("numperpage").value;
+	var offset=sel.value;
+	showStatement(account,order,perpage, offset);
 }

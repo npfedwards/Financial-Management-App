@@ -11,8 +11,9 @@
 		if($perpage==0){
 			$perpage=20;
 		}
+		$offset=intval(sanitise('offset'));
 		checkAccount($user,$account,0);
-		statement($perpage,$user,$order, $account);
+		statement($perpage,$user,$order, $account, $offset);
 	}else{
 		loginform();
 	}
