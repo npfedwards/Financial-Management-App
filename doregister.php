@@ -30,7 +30,7 @@
 			$salt = generatesalt();
 			$hash = sha1($pass . $salt);
 			$validationkey = sha1(generatesalt(64));
-			$query="INSERT INTO users (Email, Password, Salt, ValidatedTimeout, ValidationKey, PrefCurrency) VALUES ('$email', '$hash', '$salt', '$time', '$validationkey', '$prefcurrency')";
+			$query="INSERT INTO users (Email, Password, Salt, ValidatedTimeout, ValidationKey, PrefCurrency) VALUES ('$email', '$hash', '$salt', '$time', '$validationkey', '&pound;')";
 			//insrt
 			mysql_query($query) or die(mysql_error());
 			$UserID = mysql_insert_id();
