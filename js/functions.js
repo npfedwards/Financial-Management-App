@@ -216,28 +216,30 @@ function showAccount(sel){
 	}else{
 		order=1;	
 	}
-	
-	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}else{// code for IE6, IE5
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	
-	
-	xmlhttp.onreadystatechange=function(){
-		if (xmlhttp.readyState==4 && xmlhttp.status==200){
-			//Response Text or fade out etc.
-			document.getElementById("statementhold").innerHTML=xmlhttp.responseText;
-		}
-	}
-	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account+"&order="+order,true);
-	xmlhttp.send();
+	var perpage=document.getElementById("numperpage").value;
+	showStatement(account,order,perpage);
 }
 
 function orderStatement(radio, field){
 	var order=radio.value;
 	var account=document.getElementById("accsel").value;
-	
+	var perpage=document.getElementById("numperpage").value;
+	showStatement(account,order,perpage);
+}
+
+function numPerPage(sel){
+	var account=document.getElementById("accsel").value;
+	var order=document.getElementById("datesort0").checked;
+	if(order===true){
+		order=0;	
+	}else{
+		order=1;	
+	}
+	var perpage=sel.value;
+	showStatement(account,order,perpage);
+}
+
+function showStatement(account, order, perpage, offset){
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
 	}else{// code for IE6, IE5
@@ -251,6 +253,19 @@ function orderStatement(radio, field){
 			document.getElementById("statementhold").innerHTML=xmlhttp.responseText;
 		}
 	}
-	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account+"&order="+order+"&field="+field,true);
-	xmlhttp.send();
+	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account+"&order="+order+"&perpage="+perpage+"&offset="+offset,true);
+	xmlhttp.send();	
+}
+
+function showPage(sel){
+	var account=document.getElementById("accsel").value;
+	var order=document.getElementById("datesort0").checked;
+	if(order===true){
+		order=0;	
+	}else{
+		order=1;	
+	}
+	var perpage=document.getElementById("numperpage").value;
+	var offset=sel.value;
+	showStatement(account,order,perpage, offset);
 }
