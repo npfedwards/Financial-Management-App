@@ -159,6 +159,8 @@
 						<option>Card</option>
 						<option>Cash</option>
 						<option>Transfer</option>
+						<option>Direct Debit</option>
+						<option>Standing Order</option>
 					</select>
 					<label for='amount'>Amount</label><input type='number' step='0.01' name='amount' id='amount' onkeypress=\"addPaymentEnter(event)\">
 					<select name='account' id='account'>";
