@@ -156,7 +156,7 @@
 		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ".$account."ORDER BY Timestamp DESC Limit ".$offset.",".$display;
 		$result=mysql_query($query) or die(mysql_error());
 		
-		if($order!=0){ //PLEASE PLEASE find a nicer way to do this!
+		if($order!=0 && mysql_num_rows($result)!=0){ //PLEASE PLEASE find a nicer way to do this!
 			while($row=mysql_fetch_assoc($result)){
 				$paymentids=" OR PaymentID='".$row['PaymentID']."'".$paymentids;
 			}
@@ -174,7 +174,15 @@
 		echo 	"<table>
 					<thead>
 						<tr>
-							<th>Date <a href='index.php?order=1'>&uarr;</a><a href='index.php?order=0'>&darr;</a></th>
+							<th>Date <input type='radio' name='datesort' value='1' id='datesort1' onchange=\"orderStatement(this, 'date')\"";
+							if($order==1){
+								echo " checked='checked'";	
+							}
+		echo				">&uarr;<input type='radio' name='datesort' value='0' id='datesort0' onchange=\"orderStatement(this, 'date')\"";
+							if($order==0){
+								echo " checked='checked'";	
+							}
+		echo				">&darr;</th>
 							<th>To/From</th>
 							<th>Description</th>
 							<th>In</th>

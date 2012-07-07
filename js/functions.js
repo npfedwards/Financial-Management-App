@@ -181,6 +181,12 @@ function addPayment(){
 	var year=document.getElementById("year").value;
 	var account=document.getElementById("account").value;
 	var accsel=document.getElementById("accsel").value;
+	var order=document.getElementById("datesort0").checked;
+	if(order===true){
+		order=0;	
+	}else{
+		order=1;	
+	}
 	
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
@@ -198,12 +204,18 @@ function addPayment(){
 			document.getElementById("desc").value="";
 		}
 	}
-	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive+"&accsel="+accsel,true);
+	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive+"&accsel="+accsel+"&order="+order,true);
 	xmlhttp.send();	
 }
 
 function showAccount(sel){
 	var account=sel.value;
+	var order=document.getElementById("datesort0").checked;
+	if(order===true){
+		order=0;	
+	}else{
+		order=1;	
+	}
 	
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
@@ -218,6 +230,27 @@ function showAccount(sel){
 			document.getElementById("statementhold").innerHTML=xmlhttp.responseText;
 		}
 	}
-	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account,true);
+	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account+"&order="+order,true);
+	xmlhttp.send();
+}
+
+function orderStatement(radio, field){
+	var order=radio.value;
+	var account=document.getElementById("accsel").value;
+	
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+			document.getElementById("statementhold").innerHTML=xmlhttp.responseText;
+		}
+	}
+	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account+"&order="+order+"&field="+field,true);
 	xmlhttp.send();
 }
