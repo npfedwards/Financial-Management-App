@@ -9,7 +9,10 @@
 		accountList($user);
 		echo "</div>";
 		accountForm();
+		currencyPrefForm();
 		echo "<div id='currencycontainer'></div>";
+		changePasswordForm($user);
+		echo "<div id='changepasswordcontainer'></div>";
 	}else{
 		loginform();
 		echo $msg;
