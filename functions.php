@@ -52,7 +52,7 @@
 				if(mysql_num_rows($result)==1){
 					$row=mysql_fetch_assoc($result);
 					$sid=$row['SessionID'];
-					$time=$time+3600;
+					$time=$time+86400;
 					$query="UPDATE sessions SET SessionTimeout='$time' WHERE SessionID='$sid'";
 					mysql_query($query) or die(mysql_error());
 					setcookie("userid", $user, $time);
@@ -73,7 +73,7 @@
 			if(mysql_num_rows($result)==1){
 				$row=mysql_fetch_assoc($result);
 				$sid=$row['SessionID'];
-				$time=$time+3600;
+				$time=$time+86400;
 				$query="UPDATE sessions SET SessionTimeout='$time' WHERE SessionID='$sid'";
 				mysql_query($query) or die(mysql_error());
 				setcookie("userid", $user, $time);
