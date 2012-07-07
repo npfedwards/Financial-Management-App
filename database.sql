@@ -1,13 +1,20 @@
 -- phpMyAdmin SQL Dump
--- version 3.2.4
+-- version 3.4.5
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 06, 2012 at 08:22 AM
--- Server version: 5.1.44
--- PHP Version: 5.3.1
+-- Generation Time: Jul 07, 2012 at 06:45 PM
+-- Server version: 5.5.16
+-- PHP Version: 5.3.8
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `money`
@@ -24,12 +31,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `UserID` int(11) NOT NULL,
   `AccountName` varchar(100) NOT NULL,
   PRIMARY KEY (`AccountID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `accounts`
---
-
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
 -- --------------------------------------------------------
 
@@ -43,11 +45,6 @@ CREATE TABLE IF NOT EXISTS `labels` (
   `UserID` int(11) NOT NULL,
   PRIMARY KEY (`LabelID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `labels`
---
-
 
 -- --------------------------------------------------------
 
@@ -67,11 +64,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `LabelID` int(11) NOT NULL,
   `Reconciled` tinyint(1) NOT NULL,
   PRIMARY KEY (`PaymentID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
-
---
--- Dumping data for table `payments`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
 -- --------------------------------------------------------
 
@@ -86,12 +79,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `SessionTimeout` int(11) NOT NULL,
   `IP` varchar(40) NOT NULL,
   PRIMARY KEY (`SessionID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
-
---
--- Dumping data for table `sessions`
---
-
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=32 ;
 
 -- --------------------------------------------------------
 
@@ -107,11 +95,12 @@ CREATE TABLE IF NOT EXISTS `users` (
   `Validated` tinyint(1) NOT NULL,
   `ValidationKey` varchar(64) NOT NULL,
   `ValidatedTimeout` int(11) NOT NULL,
+  `ResetKey` varchar(64) NOT NULL,
+  `ResetTimeout` int(11) NOT NULL,
   `PrefCurrency` varchar(10) NOT NULL,
   PRIMARY KEY (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
---
--- Dumping data for table `users`
---
-
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

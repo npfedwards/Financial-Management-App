@@ -16,12 +16,39 @@
 		echo	"<form action='dologin.php' method='post'>
 					<label for='email'>Email</label><input type='text' name='email' id='email'><br>
 					<label for='password'>Password</label><input type='password' name='password' id='password'><br>
-					<input type='submit' value='Login'> or <a href='register.php'>Register</a>
+					<input type='submit' value='Login'> or <a href='register.php'>Register</a><br>
+					<a href='iforgot.php'>Forgot your password?</a>
 				</form>";	
 	}
 
+	function forgotpasswordform(){
+		echo 	"<p>Please enter your email address, and we'll send you a link with which you can reset your password:</p>
+				<form action='sendpasswordreset.php' method='post'>
+					<input type='email' name='email' id='email' placeholder='Enter your email address'>
+					<input type='submit' value='Submit'>
+				</form>
+
+		";
+	}
+
+	function passwordresetform($key, $UserID){
+		echo 	"<p>Choose a new password (at least 6 characters long):</p>
+				<form action='doresetpassword.php?k=".$key."&id=".$UserID."' method='post'>
+					<input type='password' name='password' id='password' placeholder='New Password'>
+					<input type='password' name='repeat' id='repeat' placeholder='Repeat'>
+					<input type='submit' value='Submit'>
+				</form>
+
+		";
+	}
+
+
 	function sendvalidationkey($email, $key, $UserID){
 		mail($email, "Your validation key", "http://example.com/validate.php?k=" . $key . "&id=" . $UserID, "from: noreply@example.com");
+	}
+
+	function sendpasswordreset($email, $key, $UserID){
+		mail($email, "Click the following link to reset your password. This link is only good for one use, and is only valid for a week.", "http://example.com/validate.php?k=" . $key . "&id=" . $UserID, "from: noreply@example.com");
 	}
 
 	function generatesalt($max = 16){
