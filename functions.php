@@ -319,5 +319,25 @@
 		}
 		echo "</select>";
 	}
+	
+	function pagination($user, $account){
+		if($account!=0){
+			$account="AND payments.AccountID='".$account."' ";
+		}else{
+			$account="";	
+		}
+		$query="SELECT * FROM payments WHERE UserID='$user' ".$account;
+		$result=mysql_query($query) or die(mysql_error());
+		$numrows=mysql_num_rows($result);	
+	}
+	
+	function numperpage($user){
+		echo 	"<select onchange=\"numPerPage(this)\" id='numperpage'>
+					<option>10</option>
+					<option>25</option>
+					<option>50</option>
+					<option>100</option>
+				</select>";
+	}
 
 ?>
