@@ -197,10 +197,7 @@
 			$result=mysql_query($query) or die(mysql_error());
 		}
 		
-		$query="SELECT * FROM users WHERE UserID='$user'";
-		$currencyresult=mysql_query($query) or die(mysql_error());
-		$currencyarray=mysql_fetch_array($currencyresult);
-		$currencysymbol=$currencyarray['PrefCurrency'];
+		$currencysymbol=currencysymbol($user);
 
 
 		echo 	"<table>
@@ -261,7 +258,7 @@
 		}
 		
 		
-		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance'>".$currencysymbol.$total."</td><tr></tbody>
+		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance' class='align_right'>".$currencysymbol.$total."</td><tr></tbody>
 				</table><div id='responsetext'></div>";
 	
 	}
@@ -289,6 +286,13 @@
 			}
 		}
 		return $account;	
+	}
+	
+	function currencysymbol($user){
+		$query="SELECT * FROM users WHERE UserID='$user'";
+		$currencyresult=mysql_query($query) or die(mysql_error());
+		$currencyarray=mysql_fetch_array($currencyresult);
+		return $currencyarray['PrefCurrency'];
 	}
 	
 	function accountList($user){

@@ -51,7 +51,7 @@
 					}
 						
 			echo		"</select></td>
-			  <td><input type='text' name='otherparty' id='otherparty".$row['PaymentID']."' value='".$row['PaymentName']."'></td>
+			  <td><input type='text' name='otherparty' id='otherparty".$row['PaymentID']."' value='".stripslashes($row['PaymentName'])."'></td>
 			  <td><input type='text' name='desc' id='desc".$row['PaymentID']."' value='".$row['PaymentDesc']."'></td>
 			  <td>".$amount."</td>
 			  <td>
@@ -68,6 +68,12 @@
 					<option";
 					if($row['PaymentType']=="Transfer"){ echo " selected='selected'";}
 		echo		">Transfer</option>
+					<option";
+					if($row['PaymentType']=="Direct Debit"){ echo " selected='selected'";}
+		echo		">Direct Debit</option>
+					<option";
+					if($row['PaymentType']=="Standing Order"){ echo " selected='selected'";}
+		echo		">Standing Order</option>
 				</select>
 			  </td><td>
 				<select name='account' id='account".$row['PaymentID']."'>";
