@@ -11,7 +11,7 @@
 		accountForm();
 		currencyPrefForm();
 		echo "<div id='currencycontainer'></div>";
-		changePasswordForm($user);
+		changePasswordForm();
 		echo "<div id='changepasswordcontainer'></div>";
 	}else{
 		loginform();
