@@ -159,6 +159,8 @@
 						<option>Card</option>
 						<option>Cash</option>
 						<option>Transfer</option>
+						<option>Direct Debit</option>
+						<option>Standing Order</option>
 					</select>
 					<label for='amount'>Amount</label><input type='number' step='0.01' name='amount' id='amount' onkeypress=\"addPaymentEnter(event)\">
 					<select name='account' id='account'>";
@@ -293,7 +295,7 @@
 		$query="SELECT * FROM accounts WHERE UserID='$user' ORDER BY AccountName ASC";
 		$result=mysql_query($query) or die(mysql_error());
 		while($row=mysql_fetch_assoc($result)){
-			echo stripslashes($row['AccountName'])."<br>";	
+			echo "<div id='account".$row['AccountID']."'>".stripslashes($row['AccountName'])." <button onclick=\"editAccountForm(".$row['AccountID'].",'".stripslashes($row['AccountName'])."')\">Edit</button></div>";	
 		}
 	}
 	

@@ -269,3 +269,29 @@ function showPage(sel){
 	var offset=sel.value;
 	showStatement(account,order,perpage, offset);
 }
+
+function editAccountForm(id, accountname){
+	var divid = "account"+id;
+	document.getElementById(divid).innerHTML="<input type='text' name='account"+id+"' id='accountedit"+id+"' value='"+accountname+"'> <button onclick=\"doEditAccount("+id+")\">Confirm Edit</button>";
+}
+
+function doEditAccount(id){
+	var a=document.getElementById("accountedit"+id).value;
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+			var divid = "account"+id;
+			document.getElementById(divid).innerHTML=xmlhttp.responseText;
+		}
+	}
+	
+	xmlhttp.open("GET","xmlhttp/doeditaccount.php?id="+id+"&a="+a,true);
+	xmlhttp.send();
+}

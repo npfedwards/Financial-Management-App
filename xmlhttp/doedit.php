@@ -4,16 +4,16 @@
 	opendb();
 	
 	if($loggedin==1){
-		$id=mysql_real_escape_string($_GET['id']);
+		$id=sanitise('id');
 		
-		$otherparty=mysql_real_escape_string(htmlentities($_GET['o']));
-		$desc=mysql_real_escape_string(htmlentities($_GET['d']));
-		$amount=mysql_real_escape_string(htmlentities($_GET['a']));
-		$type=mysql_real_escape_string(htmlentities($_GET['t']));
-		$d=mysql_real_escape_string(htmlentities($_GET['day']));
-		$m=mysql_real_escape_string(htmlentities($_GET['month']));
-		$y=mysql_real_escape_string(htmlentities($_GET['year']));
-		$account=mysql_real_escape_string(htmlentities($_GET['account']));
+		$otherparty=sanitise('o');
+		$desc=sanitise('d');
+		$amount=sanitise('a');
+		$type=sanitise('t');
+		$d=sanitise('day');
+		$m=sanitise('month');
+		$y=sanitise('year');
+		$account=sanitise('account');
 		$account=checkAccount($user, $account);
 		
 		$time=strtotime($m."/".$d."/".$y);
