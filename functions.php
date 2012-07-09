@@ -44,11 +44,11 @@
 
 
 	function sendvalidationkey($email, $key, $UserID){
-		mail($email, "Your validation key", "http://example.com/validate.php?k=" . $key . "&id=" . $UserID, "from: noreply@example.com");
+		mail($email, "Your validation key", "http://unihouse.co.uk/beta/money/validate.php?k=" . $key . "&id=" . $UserID, "from: admin@unihouse.co.uk");
 	}
 
 	function sendpasswordreset($email, $key, $UserID){
-		mail($email, "Click the following link to reset your password. This link is only good for one use, and is only valid for a week.", "http://example.com/validate.php?k=" . $key . "&id=" . $UserID, "from: noreply@example.com");
+		mail($email, "Click the following link to reset your password. This link is only good for one use, and is only valid for a week.", "http://unihouse.co.uk/beta/money/resetpassword.php?k=" . $key . "&id=" . $UserID, "From: admin@unihouse.co.uk");
 	}
 
 	function generatesalt($max = 16){
