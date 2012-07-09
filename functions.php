@@ -44,11 +44,11 @@
 
 
 	function sendvalidationkey($email, $key, $UserID){
-		mail($email, "Your validation key", "http://example.com/validate.php?k=" . $key . "&id=" . $UserID, "from: noreply@example.com");
+		mail($email, "Your validation key", "http://unihouse.co.uk/beta/money/validate.php?k=" . $key . "&id=" . $UserID, "from: admin@unihouse.co.uk");
 	}
 
 	function sendpasswordreset($email, $key, $UserID){
-		mail($email, "Click the following link to reset your password. This link is only good for one use, and is only valid for a week.", "http://example.com/validate.php?k=" . $key . "&id=" . $UserID, "from: noreply@example.com");
+		mail($email, "Click the following link to reset your password. This link is only good for one use, and is only valid for a week.", "http://unihouse.co.uk/beta/money/resetpassword.php?k=" . $key . "&id=" . $UserID, "From: admin@unihouse.co.uk");
 	}
 
 	function generatesalt($max = 16){
@@ -171,7 +171,12 @@
 						echo "<option value='".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
 					}
 		echo		"</select>
-					<button onclick=\"addPayment()\">Add Payment</button>
+					<button onclick=\"addPayment()\">Add Payment</button><br>
+					Repeat <select name='repeat' id='repeat' onchange=\"if(this.value==='Yes'){showRepeatOptions()}\">
+						<option>No</option>
+						<option>Yes</option>
+					</select>
+					<span id='repeatoptions'></span>
 				</div>";	
 	}
 	
@@ -185,7 +190,7 @@
 		$currentpage=intval($offset/$display)+1;
 		pagination($user,$account,$display,$currentpage);
 	
-		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ".$account."ORDER BY Timestamp DESC Limit ".$offset.",".$display;
+		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND Deleted='0' ".$account."ORDER BY Timestamp DESC Limit ".$offset.",".$display;
 		$result=mysql_query($query) or die(mysql_error());
 		
 		if($order!=0 && mysql_num_rows($result)!=0){ //PLEASE PLEASE find a nicer way to do this!
@@ -193,7 +198,7 @@
 				$paymentids=" OR PaymentID='".$row['PaymentID']."'".$paymentids;
 			}
 			$paymentids="WHERE".substr($paymentids, 3);
-			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." ORDER BY Timestamp ASC";
+			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." AND Deleted='0' ORDER BY Timestamp ASC";
 			$result=mysql_query($query) or die(mysql_error());
 		}
 		
@@ -244,7 +249,7 @@
 						</td>
 					</tr>";	
 		}
-		$query="SELECT * FROM payments WHERE UserID='$user' ".$account;
+		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' ".$account;
 		$result=mysql_query($query) or die(mysql_error());
 		$total=0;
 		
@@ -335,7 +340,7 @@
 		}else{
 			$account="";	
 		}
-		$query="SELECT * FROM payments WHERE UserID='$user' ".$account;
+		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0'  ".$account;
 		$result=mysql_query($query) or die(mysql_error());
 		$numrows=mysql_num_rows($result);
 		
@@ -361,6 +366,26 @@
 					<option>50</option>
 					<option>100</option>
 				</select>";
+	}
+	
+	function dorepeats($user){
+		$query="SELECT * FROM repeats LEFT JOIN payments ON repeats.PaymentID=payments.PaymentID WHERE ExpireTime>'".time()."' AND UserID='$user'";
+		$result=mysql_query($query) or die(mysql_error());
+		
+		while($row=mysql_fetch_assoc($result)){
+			$time=$row['Timestamp']+$row['Frequency']*86400;
+			$i=2;
+			while($time<time()+604800 && $i<=$row['Times']){
+				$query="SELECT * FROM payments WHERE Timestamp='$time' AND Repeated='".$row['RepeatID']."'";
+				$out=mysql_query($query) or die(mysql_error());
+				if(mysql_num_rows($out)==0){
+					$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '".$row['AccountID']."', '$time', '".$row['PaymentName']."', '".$row['PaymentDesc']."', '".$row['PaymentAmount']."', '".$row['PaymentType']."', '".$row['RepeatID']."')";
+					mysql_query($query) or die(mysql_error);
+				}
+				$i++;
+				$time=$time+$row['Frequency']*86400;
+			}
+		}	
 	}
 
 ?>
