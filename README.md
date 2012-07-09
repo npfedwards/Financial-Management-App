@@ -9,7 +9,8 @@ Import `database.sql` into your (already created) MySQL database and set up `dbc
 	define("dbuser","root");
 	define("dbpass","");
 	define("dbhost","localhost");
-?>```
+?>
+```
 
 
 ##Fork Me!
