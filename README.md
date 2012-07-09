@@ -4,7 +4,8 @@ Financial-Management-App
 
 ## Database
 Import `database.sql` into your (already created) MySQL database and set up `dbconstants.php` to point to it with the following format.
-```<?php
+```
+<?php
 	define("dbname","money");
 	define("dbuser","root");
 	define("dbpass","");
