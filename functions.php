@@ -373,17 +373,48 @@
 		$result=mysql_query($query) or die(mysql_error());
 		
 		while($row=mysql_fetch_assoc($result)){
-			$time=$row['Timestamp']+$row['Frequency']*86400;
-			$i=2;
-			while($time<time()+604800 && $i<=$row['Times']){
-				$query="SELECT * FROM payments WHERE Timestamp='$time' AND Repeated='".$row['RepeatID']."'";
-				$out=mysql_query($query) or die(mysql_error());
-				if(mysql_num_rows($out)==0){
-					$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '".$row['AccountID']."', '$time', '".$row['PaymentName']."', '".$row['PaymentDesc']."', '".$row['PaymentAmount']."', '".$row['PaymentType']."', '".$row['RepeatID']."')";
-					mysql_query($query) or die(mysql_error);
+			if($row['Frequency']=='m'){
+			  $d=date("j",$row['Timestamp']);
+			  $m=date("n",$row['Timestamp']);
+			  $y=date("Y",$row['Timestamp']);
+			  if($m==12){
+				  $m=1;
+				  $y++;
+			  }else{
+				  $m++;	
+			  }
+			  $time=strtotime($m."/".$d."/".$y);
+			  $i=2;
+			  while($time<time()+86400 && $i<=$rt){
+				  $query="SELECT * FROM payments WHERE Timestamp='$time' AND Repeated='".$row['RepeatID']."'";
+				  $out=mysql_query($query) or die(mysql_error());
+				  if(mysql_num_rows($out)==0){
+					  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$repeatid')";
+					  mysql_query($query) or die(mysql_error);
+				  }
+				  
+				  if($m==12){
+					  $m=1;
+					  $y++;
+				  }else{
+					  $m++;	
+				  }
+				  $time=strtotime($m."/".$d."/".$y);
+				  $i=2;
+			  }
+			}else{
+				$time=$row['Timestamp']+$row['Frequency']*86400;
+				$i=2;
+				while($time<time()+604800 && $i<=$row['Times']){
+					$query="SELECT * FROM payments WHERE Timestamp='$time' AND Repeated='".$row['RepeatID']."'";
+					$out=mysql_query($query) or die(mysql_error());
+					if(mysql_num_rows($out)==0){
+						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '".$row['AccountID']."', '$time', '".$row['PaymentName']."', '".$row['PaymentDesc']."', '".$row['PaymentAmount']."', '".$row['PaymentType']."', '".$row['RepeatID']."')";
+						mysql_query($query) or die(mysql_error);
+					}
+					$i++;
+					$time=$time+$row['Frequency']*86400;
 				}
-				$i++;
-				$time=$time+$row['Frequency']*86400;
 			}
 		}	
 	}
