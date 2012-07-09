@@ -10,12 +10,6 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
 --
 -- Database: `money`
 --
@@ -31,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `UserID` int(11) NOT NULL,
   `AccountName` varchar(100) NOT NULL,
   PRIMARY KEY (`AccountID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -63,10 +57,24 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `PaymentType` varchar(100) NOT NULL,
   `LabelID` int(11) NOT NULL,
   `Reconciled` tinyint(1) NOT NULL,
+  `Repeated` int(11) NOT NULL,
   PRIMARY KEY (`PaymentID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
+--
+-- Table structure for table `repeats`
+--
+
+CREATE TABLE IF NOT EXISTS `repeats` (
+  `RepeatID` int(11) NOT NULL AUTO_INCREMENT,
+  `PaymentID` int(11) NOT NULL,
+  `Frequency` varchar(10) NOT NULL,
+  `Times` int(11) NOT NULL,
+  `ExpireTime` int(11) NOT NULL,
+  PRIMARY KEY (`RepeatID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
 
 --
 -- Table structure for table `sessions`
@@ -79,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `SessionTimeout` int(11) NOT NULL,
   `IP` varchar(40) NOT NULL,
   PRIMARY KEY (`SessionID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=32 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -99,8 +107,5 @@ CREATE TABLE IF NOT EXISTS `users` (
   `ResetTimeout` int(11) NOT NULL,
   `PrefCurrency` varchar(10) NOT NULL,
   PRIMARY KEY (`UserID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

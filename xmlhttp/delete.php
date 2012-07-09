@@ -4,11 +4,19 @@
 	opendb();
 	
 	if($loggedin==1){
-		$id=mysql_real_escape_string($_GET['id']);
-		$query="DELETE FROM payments WHERE PaymentID='$id' AND UserID='$user'";
-		mysql_query($query) or die(mysql_error());
+		$id=sanitise('id');
+		$query="SELECT * FROM payments WHERE PaymentID='$id' AND UserID='$user'";
+		$result=mysql_query($query) or die(mysql_error());
+		$row=mysql_fetch_assoc($result);
+		if($row['Repeated']==0){
+			$query="DELETE FROM payments WHERE PaymentID='$id' AND UserID='$user'";
+			mysql_query($query) or die(mysql_error());
+		}else{
+			$query="UPDATE payments SET Deleted='1' WHERE PaymentID='$id' AND UserID='$user'";
+			mysql_query($query) or die(mysql_error());
+		}
 		
-		$query="SELECT * FROM payments WHERE UserID='$user'";
+		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0'";
 		$result=mysql_query($query) or die(mysql_error());
 		$total=0;
 		

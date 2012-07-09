@@ -6,7 +6,7 @@
 	if($loggedin==1){
 		$id=mysql_real_escape_string($_GET['id']);
 		
-		$query="SELECT * FROM payments WHERE UserID='$user' AND PaymentID='$id'";
+		$query="SELECT * FROM payments WHERE UserID='$user' AND PaymentID='$id' AND Deleted='0' ";
 		$result=mysql_query($query) or die(mysql_error());
 		$row=mysql_fetch_assoc($result);
 		
