@@ -171,7 +171,12 @@
 						echo "<option value='".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
 					}
 		echo		"</select>
-					<button onclick=\"addPayment()\">Add Payment</button>
+					<button onclick=\"addPayment()\">Add Payment</button><br>
+					Repeat <select name='repeat' id='repeat' onchange=\"if(this.value==='Yes'){showRepeatOptions()}\">
+						<option>No</option>
+						<option>Yes</option>
+					</select>
+					<span id='repeatoptions'></span>
 				</div>";	
 	}
 	
