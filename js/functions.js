@@ -324,5 +324,5 @@ function doEditAccount(id){
 }
 
 function showRepeatOptions(){
-	document.getElementById("repeatoptions").innerHTML="<select name='repeatfrequency' id='repeatfrequency'><option value='1'>Daily</option><option value='7'>Weekly</option><option value='31'>Monthly</option></select> For <input type='number' step='1' id='repeattimes' name='repeattimes'>";
+	document.getElementById("repeatoptions").innerHTML="<select name='repeatfrequency' id='repeatfrequency'><option value='1'>Daily</option><option value='7'>Weekly</option><option value='m'>Monthly</option></select> For <input type='number' step='1' id='repeattimes' name='repeattimes'>";
 }
