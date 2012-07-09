@@ -30,20 +30,54 @@
 			$msg="Added!";
 			
 			if($rt!=NULL && $rf!=NULL){
-				if($rt>1){
+				if($rf=='m'){ //If it's monthly we do it based on day of the month
+					$paymentid=mysql_insert_id();
+					$expiretime=$time+($rt*31*86400);
+					$query="INSERT INTO repeats (PaymentID, Frequency, Times, ExpireTime) VALUES ('$paymentid', '$rf', '$rt', '$expiretime')";
+					mysql_query($query) or die(mysql_error());	
+					$repeatid=mysql_insert_id();
+					$m=intval($m);
+					echo $m;
+					$y=intval($y);
+					if($m==12){
+						$m=1;
+						$y++;
+					}else{
+						$m++;	
+					}
+					echo $m;
+					$time=strtotime($m."/".$d."/".$y);
+					$i=2;
+					
+					while($time<time()+86400 && $i<=$rt){
+						
+						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$repeatid')";
+						mysql_query($query) or die(mysql_error);
+						
+						if($m==12){
+							$m=1;
+							$y++;
+						}else{
+							$m++;	
+						}
+						$time=strtotime($m."/".$d."/".$y);
+						$i=2;
+					}
+					
+				}else{
 					$paymentid=mysql_insert_id();
 					$expiretime=$time+($rt*$rf*86400);
 					$query="INSERT INTO repeats (PaymentID, Frequency, Times, ExpireTime) VALUES ('$paymentid', '$rf', '$rt', '$expiretime')";
 					mysql_query($query) or die(mysql_error());	
 					$repeatid=mysql_insert_id();
-				}
-				$time=$time+$rf*86400;
-				$i=2;
-				while($time<time()+604800 && $i<=$rt){
-					$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$repeatid')";
-					mysql_query($query) or die(mysql_error);
-					$i++;
 					$time=$time+$rf*86400;
+					$i=2;
+					while($time<time()+604800 && $i<=$rt){
+						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$repeatid')";
+						mysql_query($query) or die(mysql_error);
+						$i++;
+						$time=$time+$rf*86400;
+					}
 				}
 			}
 		}else{
