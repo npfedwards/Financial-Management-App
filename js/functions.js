@@ -1,5 +1,5 @@
 function confirmDelete(id){
-	var x, dialogue = confirm("Are you sure? You can't undelete it!");
+	var dialogue = confirm("Are you sure? You can't undelete it!");
 	if(dialogue===true){
 		ajaxDelete(id);
 		var trid="#payment"+id;
@@ -14,11 +14,16 @@ function ajaxDelete(id){
 		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	
-	
 	xmlhttp.onreadystatechange=function(){
 		if (xmlhttp.readyState==4 && xmlhttp.status==200){
 			//Response Text or fade out etc.
-			document.getElementById("balance").innerHTML=xmlhttp.responseText;
+			if(xmlhttp.responseText!=""){
+				var dialogue = confirm("You just deleated a repeating entry, do you want to stop future repeats?");
+				if(dialogue===true){
+					deleteRepeat(xmlhttp.responseText);
+				}
+			}
+			updateTotal();
 		}
 	}
 	
@@ -26,13 +31,30 @@ function ajaxDelete(id){
 	xmlhttp.send();
 }
 
-function editForm(id){
+function deleteRepeat(id){
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
 	}else{// code for IE6, IE5
 		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+		}
+	}
+	
+	xmlhttp.open("GET","xmlhttp/deleterepeat.php?id="+id,true);
+	xmlhttp.send();
+}
+
+
+function editForm(id){
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
 	
 	xmlhttp.onreadystatechange=function(){
 		if (xmlhttp.readyState==4 && xmlhttp.status==200){
@@ -187,6 +209,11 @@ function addPayment(){
 	}else{
 		order=1;	
 	}
+	var repeat=document.getElementById("repeat").value;
+	if(repeat==="Yes"){
+		var rf=document.getElementById("repeatfrequency").value;
+		var rt=document.getElementById("repeattimes").value;	
+	}
 	
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
@@ -204,7 +231,7 @@ function addPayment(){
 			document.getElementById("desc").value="";
 		}
 	}
-	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive+"&accsel="+accsel+"&order="+order,true);
+	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive+"&accsel="+accsel+"&order="+order+"&rf="+rf+"&rt="+rt,true);
 	xmlhttp.send();	
 }
 
@@ -294,4 +321,8 @@ function doEditAccount(id){
 	
 	xmlhttp.open("GET","xmlhttp/doeditaccount.php?id="+id+"&a="+a,true);
 	xmlhttp.send();
+}
+
+function showRepeatOptions(){
+	document.getElementById("repeatoptions").innerHTML="<select name='repeatfrequency' id='repeatfrequency'><option value='1'>Daily</option><option value='7'>Weekly</option><option value='31'>Monthly</option></select> For <input type='number' step='1' id='repeattimes' name='repeattimes'>";
 }
