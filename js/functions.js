@@ -17,13 +17,37 @@ function ajaxDelete(id){
 	xmlhttp.onreadystatechange=function(){
 		if (xmlhttp.readyState==4 && xmlhttp.status==200){
 			//Response Text or fade out etc.
-			document.getElementById("balance").innerHTML=xmlhttp.responseText;
+			if(xmlhttp.responseText!=""){
+				var dialogue = confirm("You just deleated a repeating entry, do you want to stop future repeats?");
+				if(dialogue===true){
+					deleteRepeat(xmlhttp.responseText);
+				}
+			}
+			updateTotal();
 		}
 	}
 	
 	xmlhttp.open("GET","xmlhttp/delete.php?id="+id,true);
 	xmlhttp.send();
 }
+
+function deleteRepeat(id){
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+		}
+	}
+	
+	xmlhttp.open("GET","xmlhttp/deleterepeat.php?id="+id,true);
+	xmlhttp.send();
+}
+
 
 function editForm(id){
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
