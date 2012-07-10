@@ -27,7 +27,7 @@
 					<input type='email' name='email' id='email' placeholder='Enter your email address'>
 					<input type='submit' value='Submit'>
 				</form>
-
+				<p>Haven't recieved an email with your validation link? Click <a href=\"resendvalidationkey.php\">here</a> to resend it.</p>
 		";
 	}
 
@@ -44,7 +44,7 @@
 	function resendvalidationkeyform(){
 		echo 	"<p>Enter your email address, and we'll resend your validation link to you:</p>
 				<form action='doresendvalidationkey.php' method='post'>
-					<input type='email' name='email' id='email' placeholder='Email Address'>
+					<input type='email' name='email' id='email' placeholder='Email address'>
 					<input type='submit' value='Submit'>
 				</form>
 		";
