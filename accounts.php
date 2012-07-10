@@ -12,7 +12,7 @@
 		currencyPrefForm();
 		echo "<div id='currencycontainer'></div>";
 		changePasswordForm();
-		echo "<div id='changepasswordcontainer'></div>";
+		echo "<div id='changepasswordcontainer'>".$msg."</div>";
 	}else{
 		loginform();
 		echo $msg;

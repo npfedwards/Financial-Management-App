@@ -1,5 +1,6 @@
 <?php
-	include_once 'accounts.php';
+	include_once 'functions.php';
+	checklogin();
 	//make sure the user's logged in
 	if($loggedin==1){
 		if(!isset($user)){
@@ -58,7 +59,6 @@
 		loginform();
 	}
 	
-	echo $msg;
-
+	include_once 'accounts.php';
 
 ?>
