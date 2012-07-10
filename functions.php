@@ -180,7 +180,7 @@
 				</div>";	
 	}
 	
-	function statement($display, $user, $order = 1, $account = 0, $offset = 0){
+	function statement($display, $user, $order = 1, $account = 0, $offset = 0, $recvalue = 0){
 		if($account!=0){
 			$account="AND payments.AccountID='".$account."' ";
 		}else{
@@ -224,6 +224,7 @@
 							<th>Out</th>
 							<th>Type</th>
 							<th>Account</th>
+							<th>Reconciled</th>
 							<th>Operations</th>
 						</tr>
 					</thead>
@@ -246,8 +247,13 @@
 						<td>".stripslashes($row['PaymentName'])."</td>
 						<td>".stripslashes($row['PaymentDesc'])."</td>
 						<td class='align_right'>".$amount."</td>
-						<td>".$row['PaymentType']."</td>
-						<td>".$row['AccountName']."</td>
+						<td>".stripslashes($row['PaymentType'])."</td>
+						<td>".stripslashes($row['AccountName'])."</td>
+						<td><input type='checkbox' id='reconciled' onclick=\"reconcile(this, ".$row['PaymentID'].")\"";
+			if($row['Reconciled']==1){
+					echo "checked='checked'";
+			}
+			echo		"></td>
 						<td>
 							<button onclick=\"confirmDelete('".$row['PaymentID']."')\">Delete</button>
 							<button onclick=\"editForm('".$row['PaymentID']."')\">Edit</button>
@@ -286,7 +292,9 @@
 		if($offset==0){
 			echo "<div id='future'>The number brackets includes payments from the forthcoming 7 days. We only show the payments up to 7 days in advance, therefore you might have payments you've entered that aren't shown.</div>";
 		}
-		echo 	"<div id='responsetext'></div>";
+		echo "<div id='reconcilereport'>";
+		reconcilereport($user, $account,$recvalue);
+		echo 	"</div><div id='responsetext'></div>";
 	
 	}
 
@@ -440,6 +448,43 @@
 				}
 			}
 		}	
+	}
+	
+	function reconcilereport($user, $account, $value){
+		checkAccount($user, $account, 0);
+		if($account!=0){
+			$account="AccountID='$account' AND ";
+		}else{
+			$account=NULL;	
+		}
+		$query="SELECT * FROM payments WHERE ".$account." UserID='$user' AND Reconciled='1'";
+		$result=mysql_query($query) or die(mysql_error());
+		$recbal=0;
+		while($row=mysql_fetch_assoc($result)){
+			$recbal=$recbal+$row['PaymentAmount'];
+		}
+		$diff=$value-$recbal;
+		
+		echo "Account Balance: <input type='number' value='".$value."' step='0.01' name='accountbalance' id='accbal' onKeyUp=\"updateReconcile(this)\"> <div id='updaterec'>Reconciled Balance: ".$recbal." Difference: ".$diff."</div>";
+			
+	}
+	
+	function updatereconcile($user, $account, $value){
+		checkAccount($user, $account, 0);
+		if($account!=0){
+			$account="AccountID='$account' AND ";
+		}else{
+			$account=NULL;	
+		}
+		$query="SELECT * FROM payments WHERE ".$account." UserID='$user' AND Reconciled='1'";
+		$result=mysql_query($query) or die(mysql_error());
+		$recbal=0;
+		while($row=mysql_fetch_assoc($result)){
+			$recbal=$recbal+$row['PaymentAmount'];
+		}
+		$diff=$value-$recbal;
+		
+		echo "Reconciled Balance: ".$recbal." Difference: ".$diff;
 	}
 
 ?>
