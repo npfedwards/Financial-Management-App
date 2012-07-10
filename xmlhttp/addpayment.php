@@ -22,6 +22,7 @@
 		$offset=sanitise('offset');
 		$recvalue=sanitise('recvalue');
 		$perpage=sanitise('perpage');
+		$field=sanitise('field');
 		
 		$time=strtotime($m."/".$d."/".$y);
 		
@@ -87,7 +88,7 @@
 			$msg="All fields are required and the amount must be a number!";
 		}
 		
-		statement($perpage,$user,$order,$accsel, $offset, $recvalue);
+		statement($perpage,$user,$order,$accsel, $offset, $recvalue, $field);
 	}else{
 		loginform();
 	}

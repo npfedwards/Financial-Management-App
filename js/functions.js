@@ -204,17 +204,13 @@ function addPayment(){
 	var year=escape(document.getElementById("year").value);
 	var account=escape(document.getElementById("account").value);
 	var accsel=escape(document.getElementById("accsel").value);
-	var order=escape(document.getElementById("datesort0").checked);
+	var order=getSortValue();
+	var field=order.slice(1);
+	order=order.slice(0,1);
 	var offset=escape(document.getElementById("page").value);
 	var recvalue=escape(document.getElementById("accbal").value);
 	var perpage=escape(document.getElementById("numperpage").value);
 	
-	
-	if(order===true){
-		order=0;	
-	}else{
-		order=1;	
-	}
 	var repeat=document.getElementById("repeat").value;
 	if(repeat==="Yes"){
 		var rf=escape(document.getElementById("repeatfrequency").value);
@@ -239,42 +235,40 @@ function addPayment(){
 			document.getElementById("repeatoptions").innerHTML="";
 		}
 	}
-	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive+"&accsel="+accsel+"&order="+order+"&rf="+rf+"&rt="+rt+"&offset="+offset+"&recvalue="+recvalue+"&perpage="+perpage,true);
+	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive+"&accsel="+accsel+"&order="+order+"&rf="+rf+"&rt="+rt+"&offset="+offset+"&recvalue="+recvalue+"&perpage="+perpage+"&field="+field,true);
 	xmlhttp.send();	
 }
 
 function showAccount(sel){
+	var order=getSortValue();
+	var field=order.slice(1);
+	order=order.slice(0,1);
 	var account=escape(sel.value);
-	var order=document.getElementById("datesort0").checked;
-	if(order===true){
-		order=0;	
-	}else{
-		order=1;	
-	}
 	var perpage=escape(document.getElementById("numperpage").value);
-	showStatement(account,order,perpage);
+	showStatement(account,order,perpage,0,field);
 }
 
-function orderStatement(radio, field){
+function orderStatement(radio){
 	var order=escape(radio.value);
+	var field=order.slice(1);
+	order=order.slice(0,1);
 	var account=escape(document.getElementById("accsel").value);
 	var perpage=escape(document.getElementById("numperpage").value);
-	showStatement(account,order,perpage);
+	var offset=escape(document.getElementById("page").value);
+	showStatement(account,order,perpage,offset,field);
 }
 
 function numPerPage(sel){
 	var account=escape(document.getElementById("accsel").value);
-	var order=document.getElementById("datesort0").checked;
-	if(order===true){
-		order=0;	
-	}else{
-		order=1;	
-	}
+	var offset=escape(document.getElementById("page").value);
+	var order=getSortValue();
+	var field=order.slice(1);
+	order=order.slice(0,1);
 	var perpage=escape(sel.value);
-	showStatement(account,order,perpage);
+	showStatement(account,order,perpage,offset,field);
 }
 
-function showStatement(account, order, perpage, offset){
+function showStatement(account,order,perpage,offset,field){
 	var value=escape(document.getElementById("accbal").value);
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
@@ -289,21 +283,18 @@ function showStatement(account, order, perpage, offset){
 			document.getElementById("statementhold").innerHTML=xmlhttp.responseText;
 		}
 	}
-	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account+"&order="+order+"&perpage="+perpage+"&offset="+offset+"&value="+value,true);
+	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account+"&order="+order+"&perpage="+perpage+"&offset="+offset+"&value="+value+"&field="+field,true);
 	xmlhttp.send();	
 }
 
 function showPage(sel){
 	var account=escape(document.getElementById("accsel").value);
-	var order=document.getElementById("datesort0").checked;
-	if(order===true){
-		order=0;	
-	}else{
-		order=1;	
-	}
+	var order=getSortValue();
+	var field=order.slice(1);
+	order=order.slice(0,1);
 	var perpage=escape(document.getElementById("numperpage").value);
 	var offset=escape(sel.value);
-	showStatement(account,order,perpage, offset);
+	showStatement(account,order,perpage, offset, field);
 }
 
 function editAccountForm(id, accountname){
@@ -376,4 +367,12 @@ function updateReconcile(input){
 	
 	xmlhttp.open("GET","xmlhttp/updatereconcile.php?account="+account+"&value="+value,true);
 	xmlhttp.send();
+}
+
+function getSortValue(){
+	for (var i=0; i < document.sortbuttons.sort.length; i++){
+		if (document.sortbuttons.sort[i].checked){
+			return document.sortbuttons.sort[i].value;
+		}
+	}
 }
