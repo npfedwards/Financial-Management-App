@@ -37,6 +37,7 @@
 			$query="INSERT INTO accounts (UserID, AccountName) VALUES ('$UserID', 'Current')";
 			mysql_query($query) or die(mysql_error());
 			sendvalidationkey($email, $validationkey, $UserID);
+			$success=1;
 			$msg = $msg . "Success! Before you can use your account, you'll need to validate it - we've sent you an email with a link to do that. If you can't find it, check your spam folder or click here to send it again. ";
 		}elseif(mysql_num_rows($result)==1){
 			$row=mysql_fetch_array($result);
@@ -56,6 +57,13 @@
 			}
 		}
 	}
-
-	echo $msg;
+	
+	closedb($conn);
+	if($success==1){
+		include 'index.php';	
+	}else{
+		include 'register.php';	
+	}
+	
+	
 ?>

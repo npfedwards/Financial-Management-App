@@ -4,3 +4,4 @@
     <label for='repeatpassword'>Password again</label><input type='password' name='repeatpassword' id='password' placeholder='again! again!' pattern=".{6}.*" required><br>
     <input type='submit' value='Register'>
 </form>
+<?php echo $msg; ?>
