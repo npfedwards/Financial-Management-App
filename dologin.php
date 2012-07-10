@@ -35,6 +35,7 @@
 			setcookie("sessionkey", $sesskey, $time);
 			$loggedin=1;
 			$msg=NULL;
+			dorepeats($user);
 		}
 	}
 	

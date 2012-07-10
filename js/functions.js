@@ -1,5 +1,5 @@
 function confirmDelete(id){
-	var x, dialogue = confirm("Are you sure? You can't undelete it!");
+	var dialogue = confirm("Are you sure? You can't undelete it!");
 	if(dialogue===true){
 		ajaxDelete(id);
 		var trid="#payment"+id;
@@ -14,11 +14,16 @@ function ajaxDelete(id){
 		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	
-	
 	xmlhttp.onreadystatechange=function(){
 		if (xmlhttp.readyState==4 && xmlhttp.status==200){
 			//Response Text or fade out etc.
-			document.getElementById("balance").innerHTML=xmlhttp.responseText;
+			if(xmlhttp.responseText!=""){
+				var dialogue = confirm("You just deleated a repeating entry, do you want to stop future repeats?");
+				if(dialogue===true){
+					deleteRepeat(xmlhttp.responseText);
+				}
+			}
+			updateTotal();
 		}
 	}
 	
@@ -26,13 +31,30 @@ function ajaxDelete(id){
 	xmlhttp.send();
 }
 
-function editForm(id){
+function deleteRepeat(id){
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
 	}else{// code for IE6, IE5
 		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+		}
+	}
+	
+	xmlhttp.open("GET","xmlhttp/deleterepeat.php?id="+id,true);
+	xmlhttp.send();
+}
+
+
+function editForm(id){
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
 	
 	xmlhttp.onreadystatechange=function(){
 		if (xmlhttp.readyState==4 && xmlhttp.status==200){
@@ -47,15 +69,15 @@ function editForm(id){
 }
 
 function doEdit(id){
-	var otherparty=document.getElementById("otherparty"+id).value;
-	var desc=document.getElementById("desc"+id).value;
-	var income=document.getElementById("in"+id).value;
-	var out=document.getElementById("out"+id).value;
-	var type=document.getElementById("type"+id).value;
-	var day=document.getElementById("day"+id).value;
-	var month=document.getElementById("month"+id).value;
-	var year=document.getElementById("year"+id).value;
-	var account=document.getElementById("account"+id).value;
+	var otherparty=escape(document.getElementById("otherparty"+id).value);
+	var desc=escape(document.getElementById("desc"+id).value);
+	var income=escape(document.getElementById("in"+id).value);
+	var out=escape(document.getElementById("out"+id).value);
+	var type=escape(document.getElementById("type"+id).value);
+	var day=escape(document.getElementById("day"+id).value);
+	var month=escape(document.getElementById("month"+id).value);
+	var year=escape(document.getElementById("year"+id).value);
+	var account=escape(document.getElementById("account"+id).value);
 
 	var amount=income-out;
 	
@@ -91,6 +113,7 @@ function updateTotal(){
 		if (xmlhttp.readyState==4 && xmlhttp.status==200){
 			//Response Text or fade out etc.
 			document.getElementById("balance").innerHTML=xmlhttp.responseText;
+			updateReconcile(document.getElementById("accbal"));
 		}
 	}
 	
@@ -99,7 +122,7 @@ function updateTotal(){
 }
 
 function addAccount(){
-	var account=document.getElementById("account").value;
+	var account=escape(document.getElementById("account").value);
 	
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
@@ -121,7 +144,7 @@ function addAccount(){
 }
 
 function updateCurrency(){
-	var currency=document.getElementById("currency").value;
+	var currency=escape(document.getElementById("currency").value);
 	
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
@@ -171,21 +194,27 @@ function addPaymentEnter(e){
 }
 
 function addPayment(){
-	var otherparty=document.getElementById("otherparty").value;
-	var desc=document.getElementById("desc").value;
-	var getorgive=document.getElementById("getorgive").value;
-	var amount=document.getElementById("amount").value;
-	var type=document.getElementById("type").value;
-	var day=document.getElementById("day").value;
-	var month=document.getElementById("month").value;
-	var year=document.getElementById("year").value;
-	var account=document.getElementById("account").value;
-	var accsel=document.getElementById("accsel").value;
-	var order=document.getElementById("datesort0").checked;
-	if(order===true){
-		order=0;	
-	}else{
-		order=1;	
+	var otherparty=escape(document.getElementById("otherparty").value);
+	var desc=escape(document.getElementById("desc").value);
+	var getorgive=escape(document.getElementById("getorgive").value);
+	var amount=escape(document.getElementById("amount").value);
+	var type=escape(document.getElementById("type").value);
+	var day=escape(document.getElementById("day").value);
+	var month=escape(document.getElementById("month").value);
+	var year=escape(document.getElementById("year").value);
+	var account=escape(document.getElementById("account").value);
+	var accsel=escape(document.getElementById("accsel").value);
+	var order=getSortValue();
+	var field=order.slice(1);
+	order=order.slice(0,1);
+	var offset=escape(document.getElementById("page").value);
+	var recvalue=escape(document.getElementById("accbal").value);
+	var perpage=escape(document.getElementById("numperpage").value);
+	
+	var repeat=document.getElementById("repeat").value;
+	if(repeat==="Yes"){
+		var rf=escape(document.getElementById("repeatfrequency").value);
+		var rt=escape(document.getElementById("repeattimes").value);	
 	}
 	
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -202,44 +231,45 @@ function addPayment(){
 			document.getElementById("otherparty").value="";
 			document.getElementById("amount").value="";
 			document.getElementById("desc").value="";
+			document.getElementById("repeat").value="No";
+			document.getElementById("repeatoptions").innerHTML="";
 		}
 	}
-	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive+"&accsel="+accsel+"&order="+order,true);
+	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive+"&accsel="+accsel+"&order="+order+"&rf="+rf+"&rt="+rt+"&offset="+offset+"&recvalue="+recvalue+"&perpage="+perpage+"&field="+field,true);
 	xmlhttp.send();	
 }
 
 function showAccount(sel){
-	var account=sel.value;
-	var order=document.getElementById("datesort0").checked;
-	if(order===true){
-		order=0;	
-	}else{
-		order=1;	
-	}
-	var perpage=document.getElementById("numperpage").value;
-	showStatement(account,order,perpage);
+	var order=getSortValue();
+	var field=order.slice(1);
+	order=order.slice(0,1);
+	var account=escape(sel.value);
+	var perpage=escape(document.getElementById("numperpage").value);
+	showStatement(account,order,perpage,0,field);
 }
 
-function orderStatement(radio, field){
-	var order=radio.value;
-	var account=document.getElementById("accsel").value;
-	var perpage=document.getElementById("numperpage").value;
-	showStatement(account,order,perpage);
+function orderStatement(radio){
+	var order=escape(radio.value);
+	var field=order.slice(1);
+	order=order.slice(0,1);
+	var account=escape(document.getElementById("accsel").value);
+	var perpage=escape(document.getElementById("numperpage").value);
+	var offset=escape(document.getElementById("page").value);
+	showStatement(account,order,perpage,offset,field);
 }
 
 function numPerPage(sel){
-	var account=document.getElementById("accsel").value;
-	var order=document.getElementById("datesort0").checked;
-	if(order===true){
-		order=0;	
-	}else{
-		order=1;	
-	}
-	var perpage=sel.value;
-	showStatement(account,order,perpage);
+	var account=escape(document.getElementById("accsel").value);
+	var offset=escape(document.getElementById("page").value);
+	var order=getSortValue();
+	var field=order.slice(1);
+	order=order.slice(0,1);
+	var perpage=escape(sel.value);
+	showStatement(account,order,perpage,offset,field);
 }
 
-function showStatement(account, order, perpage, offset){
+function showStatement(account,order,perpage,offset,field){
+	var value=escape(document.getElementById("accbal").value);
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
 	}else{// code for IE6, IE5
@@ -253,19 +283,96 @@ function showStatement(account, order, perpage, offset){
 			document.getElementById("statementhold").innerHTML=xmlhttp.responseText;
 		}
 	}
-	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account+"&order="+order+"&perpage="+perpage+"&offset="+offset,true);
+	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account+"&order="+order+"&perpage="+perpage+"&offset="+offset+"&value="+value+"&field="+field,true);
 	xmlhttp.send();	
 }
 
 function showPage(sel){
-	var account=document.getElementById("accsel").value;
-	var order=document.getElementById("datesort0").checked;
-	if(order===true){
-		order=0;	
-	}else{
-		order=1;	
+	var account=escape(document.getElementById("accsel").value);
+	var order=getSortValue();
+	var field=order.slice(1);
+	order=order.slice(0,1);
+	var perpage=escape(document.getElementById("numperpage").value);
+	var offset=escape(sel.value);
+	showStatement(account,order,perpage, offset, field);
+}
+
+function editAccountForm(id, accountname){
+	var divid = "account"+id;
+	document.getElementById(divid).innerHTML="<input type='text' name='account"+id+"' id='accountedit"+id+"' value='"+accountname+"'> <button onclick=\"doEditAccount("+id+")\">Confirm Edit</button>";
+}
+
+function doEditAccount(id){
+	var a=escape(document.getElementById("accountedit"+id).value);
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	var perpage=document.getElementById("numperpage").value;
-	var offset=sel.value;
-	showStatement(account,order,perpage, offset);
+	
+	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+			var divid = "account"+id;
+			document.getElementById(divid).innerHTML=xmlhttp.responseText;
+		}
+	}
+	
+	xmlhttp.open("GET","xmlhttp/doeditaccount.php?id="+id+"&a="+a,true);
+	xmlhttp.send();
+}
+
+function showRepeatOptions(){
+	document.getElementById("repeatoptions").innerHTML="<select name='repeatfrequency' id='repeatfrequency'><option value='1'>Daily</option><option value='7'>Weekly</option><option value='m'>Monthly</option></select> For <input type='number' step='1' id='repeattimes' name='repeattimes'>";
+}
+
+function reconcile(checkbox, id){
+	var account=escape(document.getElementById("accsel").value);
+	var value=escape(document.getElementById("accbal").value);
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+			document.getElementById("reconcilereport").innerHTML=xmlhttp.responseText;
+		}
+	}
+	
+	xmlhttp.open("GET","xmlhttp/reconcile.php?id="+id+"&c="+checkbox.checked+"&account="+account+"&value="+value,true);
+	xmlhttp.send();
+}
+
+function updateReconcile(input){
+	var value=escape(input.value);
+	var account=escape(document.getElementById("accsel").value);
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+			document.getElementById("updaterec").innerHTML=xmlhttp.responseText;
+		}
+	}
+	
+	xmlhttp.open("GET","xmlhttp/updatereconcile.php?account="+account+"&value="+value,true);
+	xmlhttp.send();
+}
+
+function getSortValue(){
+	for (var i=0; i < document.sortbuttons.sort.length; i++){
+		if (document.sortbuttons.sort[i].checked){
+			return document.sortbuttons.sort[i].value;
+		}
+	}
 }

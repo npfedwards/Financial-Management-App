@@ -44,11 +44,11 @@
 
 
 	function sendvalidationkey($email, $key, $UserID){
-		mail($email, "Your validation key", "http://example.com/validate.php?k=" . $key . "&id=" . $UserID, "from: noreply@example.com");
+		mail($email, "Your validation key", "http://unihouse.co.uk/beta/money/validate.php?k=" . $key . "&id=" . $UserID, "from: admin@unihouse.co.uk");
 	}
 
 	function sendpasswordreset($email, $key, $UserID){
-		mail($email, "Click the following link to reset your password. This link is only good for one use, and is only valid for a week.", "http://example.com/validate.php?k=" . $key . "&id=" . $UserID, "from: noreply@example.com");
+		mail($email, "Click the following link to reset your password. This link is only good for one use, and is only valid for a week.", "http://unihouse.co.uk/beta/money/resetpassword.php?k=" . $key . "&id=" . $UserID, "From: admin@unihouse.co.uk");
 	}
 
 	function generatesalt($max = 16){
@@ -159,6 +159,8 @@
 						<option>Card</option>
 						<option>Cash</option>
 						<option>Transfer</option>
+						<option>Direct Debit</option>
+						<option>Standing Order</option>
 					</select>
 					<label for='amount'>Amount</label><input type='number' step='0.01' name='amount' id='amount' onkeypress=\"addPaymentEnter(event)\">
 					<select name='account' id='account'>";
@@ -169,11 +171,16 @@
 						echo "<option value='".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
 					}
 		echo		"</select>
-					<button onclick=\"addPayment()\">Add Payment</button>
+					<button onclick=\"addPayment()\">Add Payment</button><br>
+					Repeat <select name='repeat' id='repeat' onchange=\"if(this.value==='Yes'){showRepeatOptions()}\">
+						<option>No</option>
+						<option>Yes</option>
+					</select>
+					<span id='repeatoptions'></span>
 				</div>";	
 	}
 	
-	function statement($display, $user, $order = 1, $account = 0, $offset = 0){
+	function statement($display, $user, $order = 1, $account = 0, $offset = 0, $recvalue = 0, $currfield = 'date'){
 		if($account!=0){
 			$account="AND payments.AccountID='".$account."' ";
 		}else{
@@ -182,8 +189,23 @@
 		
 		$currentpage=intval($offset/$display)+1;
 		pagination($user,$account,$display,$currentpage);
+		$endtime=time()+604800;
+		
+		if($currfield=='otherparty'){
+			$field='PaymentName';	
+		}elseif($currfield=='desc'){
+			$field='PaymentDesc';	
+		}elseif($currfield=='out'){
+			$field='PaymentAmount';	
+		}elseif($currfield=='account'){
+			$field='AccountName';	
+		}elseif($currfield=='reconciled'){
+			$field='Reconciled';	
+		}else{
+			$field='Timestamp';
+		}
 	
-		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' ".$account."ORDER BY Timestamp DESC Limit ".$offset.",".$display;
+		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND Deleted='0' AND Timestamp<'$endtime' ".$account."ORDER BY ".$field." DESC Limit ".$offset.",".$display;
 		$result=mysql_query($query) or die(mysql_error());
 		
 		if($order!=0 && mysql_num_rows($result)!=0){ //PLEASE PLEASE find a nicer way to do this!
@@ -191,35 +213,41 @@
 				$paymentids=" OR PaymentID='".$row['PaymentID']."'".$paymentids;
 			}
 			$paymentids="WHERE".substr($paymentids, 3);
-			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." ORDER BY Timestamp ASC";
+			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." AND Deleted='0' AND Timestamp<'$endtime' ORDER BY ".$field." ASC";
 			$result=mysql_query($query) or die(mysql_error());
 		}
 		
-		$query="SELECT * FROM users WHERE UserID='$user'";
-		$currencyresult=mysql_query($query) or die(mysql_error());
-		$currencyarray=mysql_fetch_array($currencyresult);
-		$currencysymbol=$currencyarray['PrefCurrency'];
+		$currencysymbol=currencysymbol($user);
 
 
 		echo 	"<table>
 					<thead>
 						<tr>
-							<th>Date <input type='radio' name='datesort' value='1' id='datesort1' onchange=\"orderStatement(this, 'date')\"";
-							if($order==1){
-								echo " checked='checked'";	
-							}
-		echo				">&uarr;<input type='radio' name='datesort' value='0' id='datesort0' onchange=\"orderStatement(this, 'date')\"";
-							if($order==0){
-								echo " checked='checked'";	
-							}
-		echo				">&darr;</th>
-							<th>To/From</th>
-							<th>Description</th>
+							<form name='sortbuttons'>
+							<th>Date ";
+							sortbuttons('date', $order, $currfield);
+		echo 				"</th>
+							<th>To/From";
+							sortbuttons('otherparty', $order, $currfield);
+		echo 				"</th>
+							<th>Description";
+							sortbuttons('desc', $order, $currfield);
+		echo 				"</th>
 							<th>In</th>
-							<th>Out</th>
-							<th>Type</th>
-							<th>Account</th>
+							<th>Out";
+							sortbuttons('out', $order, $currfield);
+		echo 				"</th>
+							<th>Type";
+							sortbuttons('type', $order, $currfield);
+		echo 				"</th>
+							<th>Account";
+							sortbuttons('account', $order, $currfield);
+		echo 				"</th>
+							<th>Reconciled";
+							sortbuttons('reconciled', $order, $currfield);
+		echo 				"</th>
 							<th>Operations</th>
+							</form>
 						</tr>
 					</thead>
 					<tbody>";
@@ -232,20 +260,29 @@
 			}else{
 				$amount=$currencysymbol.forcedecimals($amount)."</td><td>";
 			}
-			echo 	"<tr id='payment".$row['PaymentID']."'>
+			echo 	"<tr";
+			if($row['Timestamp']>time()){
+				echo " class='futurepayment'";	
+			}
+			echo 	" id='payment".$row['PaymentID']."'>
 						<td>".date("d/m/y", $row['Timestamp'])."</td>
 						<td>".stripslashes($row['PaymentName'])."</td>
 						<td>".stripslashes($row['PaymentDesc'])."</td>
 						<td class='align_right'>".$amount."</td>
-						<td>".$row['PaymentType']."</td>
-						<td>".$row['AccountName']."</td>
+						<td>".stripslashes($row['PaymentType'])."</td>
+						<td>".stripslashes($row['AccountName'])."</td>
+						<td><input type='checkbox' id='reconciled' onclick=\"reconcile(this, ".$row['PaymentID'].")\"";
+			if($row['Reconciled']==1){
+					echo "checked='checked'";
+			}
+			echo		"></td>
 						<td>
 							<button onclick=\"confirmDelete('".$row['PaymentID']."')\">Delete</button>
 							<button onclick=\"editForm('".$row['PaymentID']."')\">Edit</button>
 						</td>
 					</tr>";	
 		}
-		$query="SELECT * FROM payments WHERE UserID='$user' ".$account;
+		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'".time()."' ".$account;
 		$result=mysql_query($query) or die(mysql_error());
 		$total=0;
 		
@@ -253,15 +290,46 @@
 			$total=$total+$row['PaymentAmount'];
 		}
 		if($total<0){
-			$total="<span class='red'>".forcedecimals($total)."</span>";
+			$total="<span class='red'>-".$currencysymbol.forcedecimals(-$total)."</span>";
 		}else{
-			$total=forcedecimals($total);	
+			$total=$currencysymbol.forcedecimals($total);	
+		}
+		
+		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'$endtime' ".$account;
+		$result=mysql_query($query) or die(mysql_error());
+		$futuretotal=0;
+		
+		while($row=mysql_fetch_assoc($result)){
+			$futuretotal=$futuretotal+$row['PaymentAmount'];
+		}
+		if($futuretotal<0){
+			$futuretotal="<span class='red'>-".$currencysymbol.forcedecimals(-$futuretotal)."</span>";
+		}else{
+			$futuretotal=$currencysymbol.forcedecimals($futuretotal);	
 		}
 		
 		
-		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance'>".$currencysymbol.$total."</td><tr></tbody>
-				</table><div id='responsetext'></div>";
+		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance' class='align_right'>".$total."</td><td id='futurebalance' class='align_right'>(".$futuretotal.")</td><td><tr></tbody>
+				</table>";
+		if($offset==0){
+			echo "<div id='future'>The number brackets includes payments from the forthcoming 7 days. We only show the payments up to 7 days in advance, therefore you might have payments you've entered that aren't shown.</div>";
+		}
+		echo "<div id='reconcilereport'>";
+		reconcilereport($user, $account,$recvalue);
+		echo 	"</div><div id='responsetext'></div>";
 	
+	}
+	
+	function sortbuttons($field, $order, $currfield){
+		echo " <input type='radio' name='sort' value='1".$field."' onchange=\"orderStatement(this)\"";
+			  if($order==1 && $field==$currfield){
+				  echo " checked='checked'";	
+			  }
+		echo	">&uarr;<input type='radio' name='sort' value='0".$field."' onchange=\"orderStatement(this)\"";
+			  if($order==0 && $field==$currfield){
+				  echo " checked='checked'";	
+			  }
+		echo	">&darr;";
 	}
 
 	function forcedecimals($number, $decplaces=2, $decpoint='.', $thousandseparator=''){
@@ -289,11 +357,18 @@
 		return $account;	
 	}
 	
+	function currencysymbol($user){
+		$query="SELECT * FROM users WHERE UserID='$user'";
+		$currencyresult=mysql_query($query) or die(mysql_error());
+		$currencyarray=mysql_fetch_array($currencyresult);
+		return $currencyarray['PrefCurrency'];
+	}
+	
 	function accountList($user){
 		$query="SELECT * FROM accounts WHERE UserID='$user' ORDER BY AccountName ASC";
 		$result=mysql_query($query) or die(mysql_error());
 		while($row=mysql_fetch_assoc($result)){
-			echo stripslashes($row['AccountName'])."<br>";	
+			echo "<div id='account".$row['AccountID']."'>".stripslashes($row['AccountName'])." <button onclick=\"editAccountForm(".$row['AccountID'].",'".stripslashes($row['AccountName'])."')\">Edit</button></div>";	
 		}
 	}
 	
@@ -342,7 +417,8 @@
 		}else{
 			$account="";	
 		}
-		$query="SELECT * FROM payments WHERE UserID='$user' ".$account;
+		$endtime=time()+604800;
+		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'$endtime' ".$account;
 		$result=mysql_query($query) or die(mysql_error());
 		$numrows=mysql_num_rows($result);
 		
@@ -368,6 +444,94 @@
 					<option>50</option>
 					<option>100</option>
 				</select>";
+	}
+	
+	function dorepeats($user){
+		$query="SELECT * FROM repeats LEFT JOIN payments ON repeats.PaymentID=payments.PaymentID WHERE ExpireTime>'".time()."' AND UserID='$user'";
+		$result=mysql_query($query) or die(mysql_error());
+		
+		while($row=mysql_fetch_assoc($result)){
+			if($row['Frequency']=='m'){
+			  $d=date("j",$row['Timestamp']);
+			  $m=date("n",$row['Timestamp']);
+			  $y=date("Y",$row['Timestamp']);
+			  if($m==12){
+				  $m=1;
+				  $y++;
+			  }else{
+				  $m++;	
+			  }
+			  $time=strtotime($m."/".$d."/".$y);
+			  $i=2;
+			  while($time<time()+604800 && $i<=$rt){
+				  $query="SELECT * FROM payments WHERE Timestamp='$time' AND Repeated='".$row['RepeatID']."'";
+				  $out=mysql_query($query) or die(mysql_error());
+				  if(mysql_num_rows($out)==0){
+					  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$repeatid')";
+					  mysql_query($query) or die(mysql_error);
+				  }
+				  
+				  if($m==12){
+					  $m=1;
+					  $y++;
+				  }else{
+					  $m++;	
+				  }
+				  $time=strtotime($m."/".$d."/".$y);
+				  $i=2;
+			  }
+			}else{
+				$time=$row['Timestamp']+$row['Frequency']*86400;
+				$i=2;
+				while($time<time()+604800 && $i<=$row['Times']){
+					$query="SELECT * FROM payments WHERE Timestamp='$time' AND Repeated='".$row['RepeatID']."'";
+					$out=mysql_query($query) or die(mysql_error());
+					if(mysql_num_rows($out)==0){
+						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '".$row['AccountID']."', '$time', '".$row['PaymentName']."', '".$row['PaymentDesc']."', '".$row['PaymentAmount']."', '".$row['PaymentType']."', '".$row['RepeatID']."')";
+						mysql_query($query) or die(mysql_error);
+					}
+					$i++;
+					$time=$time+$row['Frequency']*86400;
+				}
+			}
+		}	
+	}
+	
+	function reconcilereport($user, $account, $value){
+		checkAccount($user, $account, 0);
+		if($account!=0){
+			$account="AccountID='$account' AND ";
+		}else{
+			$account=NULL;	
+		}
+		$query="SELECT * FROM payments WHERE ".$account." UserID='$user' AND Reconciled='1'";
+		$result=mysql_query($query) or die(mysql_error());
+		$recbal=0;
+		while($row=mysql_fetch_assoc($result)){
+			$recbal=$recbal+$row['PaymentAmount'];
+		}
+		$diff=$value-$recbal;
+		
+		echo "Account Balance: <input type='number' value='".$value."' step='0.01' name='accountbalance' id='accbal' onKeyUp=\"updateReconcile(this)\"> <div id='updaterec'>Reconciled Balance: ".$recbal." Difference: ".$diff."</div>";
+			
+	}
+	
+	function updatereconcile($user, $account, $value){
+		checkAccount($user, $account, 0);
+		if($account!=0){
+			$account="AccountID='$account' AND ";
+		}else{
+			$account=NULL;	
+		}
+		$query="SELECT * FROM payments WHERE ".$account." UserID='$user' AND Reconciled='1'";
+		$result=mysql_query($query) or die(mysql_error());
+		$recbal=0;
+		while($row=mysql_fetch_assoc($result)){
+			$recbal=$recbal+$row['PaymentAmount'];
+		}
+		$diff=$value-$recbal;
+		
+		echo "Reconciled Balance: ".$recbal." Difference: ".$diff;
 	}
 
 ?>

@@ -4,16 +4,16 @@
 	opendb();
 	
 	if($loggedin==1){
-		$id=mysql_real_escape_string($_GET['id']);
+		$id=sanitise('id');
 		
-		$otherparty=mysql_real_escape_string(htmlentities($_GET['o']));
-		$desc=mysql_real_escape_string(htmlentities($_GET['d']));
-		$amount=mysql_real_escape_string(htmlentities($_GET['a']));
-		$type=mysql_real_escape_string(htmlentities($_GET['t']));
-		$d=mysql_real_escape_string(htmlentities($_GET['day']));
-		$m=mysql_real_escape_string(htmlentities($_GET['month']));
-		$y=mysql_real_escape_string(htmlentities($_GET['year']));
-		$account=mysql_real_escape_string(htmlentities($_GET['account']));
+		$otherparty=sanitise('o');
+		$desc=sanitise('d');
+		$amount=sanitise('a');
+		$type=sanitise('t');
+		$d=sanitise('day');
+		$m=sanitise('month');
+		$y=sanitise('year');
+		$account=sanitise('account');
 		$account=checkAccount($user, $account);
 		
 		$time=strtotime($m."/".$d."/".$y);
@@ -38,17 +38,18 @@
 		$result=mysql_query($query) or die(mysql_error());
 		$row=mysql_fetch_assoc($result);
 		
+		$cs=currencysymbol($user);
 		$amount=$row['PaymentAmount'];
 		if($amount<0){
-			$amount="</td><td><span class='red'>".$amount*(-1)."</span>";
+			$amount="</td><td class='align_right'><span class='red'>".$cs.$amount*(-1)."</span>";
 		}else{
-			$amount=$amount."</td><td>";
+			$amount=$cs.$amount."</td><td>";
 		}
 		
 		echo "<td>".date("d/m/y", $row['Timestamp'])."</td>
 			  <td>".stripslashes($row['PaymentName'])."</td>
 			  <td>".stripslashes($row['PaymentDesc'])."</td>
-			  <td>".$amount."</td>
+			  <td class='align_right'>".$amount."</td>
 			  <td>".$row['PaymentType']."</td>
 			  <td>".stripslashes($row['AccountName'])."</td>
 			  <td>
