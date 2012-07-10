@@ -180,7 +180,7 @@
 				</div>";	
 	}
 	
-	function statement($display, $user, $order = 1, $account = 0, $offset = 0, $recvalue = 0){
+	function statement($display, $user, $order = 1, $account = 0, $offset = 0, $recvalue = 0, $currfield = 'date'){
 		if($account!=0){
 			$account="AND payments.AccountID='".$account."' ";
 		}else{
@@ -190,8 +190,22 @@
 		$currentpage=intval($offset/$display)+1;
 		pagination($user,$account,$display,$currentpage);
 		$endtime=time()+604800;
+		
+		if($currfield=='otherparty'){
+			$field='PaymentName';	
+		}elseif($currfield=='desc'){
+			$field='PaymentDesc';	
+		}elseif($currfield=='out'){
+			$field='PaymentAmount';	
+		}elseif($currfield=='account'){
+			$field='AccountName';	
+		}elseif($currfield=='reconciled'){
+			$field='Reconciled';	
+		}else{
+			$field='Timestamp';
+		}
 	
-		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND Deleted='0' AND Timestamp<'$endtime' ".$account."ORDER BY Timestamp DESC Limit ".$offset.",".$display;
+		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND Deleted='0' AND Timestamp<'$endtime' ".$account."ORDER BY ".$field." DESC Limit ".$offset.",".$display;
 		$result=mysql_query($query) or die(mysql_error());
 		
 		if($order!=0 && mysql_num_rows($result)!=0){ //PLEASE PLEASE find a nicer way to do this!
@@ -199,7 +213,7 @@
 				$paymentids=" OR PaymentID='".$row['PaymentID']."'".$paymentids;
 			}
 			$paymentids="WHERE".substr($paymentids, 3);
-			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." AND Deleted='0' AND Timestamp<'$endtime' ORDER BY Timestamp ASC";
+			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." AND Deleted='0' AND Timestamp<'$endtime' ORDER BY ".$field." ASC";
 			$result=mysql_query($query) or die(mysql_error());
 		}
 		
@@ -209,23 +223,31 @@
 		echo 	"<table>
 					<thead>
 						<tr>
-							<th>Date <input type='radio' name='datesort' value='1' id='datesort1' onchange=\"orderStatement(this, 'date')\"";
-							if($order==1){
-								echo " checked='checked'";	
-							}
-		echo				">&uarr;<input type='radio' name='datesort' value='0' id='datesort0' onchange=\"orderStatement(this, 'date')\"";
-							if($order==0){
-								echo " checked='checked'";	
-							}
-		echo				">&darr;</th>
-							<th>To/From</th>
-							<th>Description</th>
+							<form name='sortbuttons'>
+							<th>Date ";
+							sortbuttons('date', $order, $currfield);
+		echo 				"</th>
+							<th>To/From";
+							sortbuttons('otherparty', $order, $currfield);
+		echo 				"</th>
+							<th>Description";
+							sortbuttons('desc', $order, $currfield);
+		echo 				"</th>
 							<th>In</th>
-							<th>Out</th>
-							<th>Type</th>
-							<th>Account</th>
-							<th>Reconciled</th>
+							<th>Out";
+							sortbuttons('out', $order, $currfield);
+		echo 				"</th>
+							<th>Type";
+							sortbuttons('type', $order, $currfield);
+		echo 				"</th>
+							<th>Account";
+							sortbuttons('account', $order, $currfield);
+		echo 				"</th>
+							<th>Reconciled";
+							sortbuttons('reconciled', $order, $currfield);
+		echo 				"</th>
 							<th>Operations</th>
+							</form>
 						</tr>
 					</thead>
 					<tbody>";
@@ -296,6 +318,18 @@
 		reconcilereport($user, $account,$recvalue);
 		echo 	"</div><div id='responsetext'></div>";
 	
+	}
+	
+	function sortbuttons($field, $order, $currfield){
+		echo " <input type='radio' name='sort' value='1".$field."' onchange=\"orderStatement(this)\"";
+			  if($order==1 && $field==$currfield){
+				  echo " checked='checked'";	
+			  }
+		echo	">&uarr;<input type='radio' name='sort' value='0".$field."' onchange=\"orderStatement(this)\"";
+			  if($order==0 && $field==$currfield){
+				  echo " checked='checked'";	
+			  }
+		echo	">&darr;";
 	}
 
 	function forcedecimals($number, $decplaces=2, $decpoint='.', $thousandseparator=''){
