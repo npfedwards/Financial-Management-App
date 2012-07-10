@@ -151,7 +151,10 @@
 						<option value='-1'>Pay</option>
 						<option value='1'>Receive From</option>
 					</select>
-					<input type='text' name='otherparty' id='otherparty'>
+					<span id='tofrom'>
+						<input type='text' name='otherparty' id='otherparty'>
+						<span onclick=\"otherAccountSelect()\">Another of your accounts?</span>
+					</span>
 					<label for='desc'>Description</label><input type='text' name='desc' id='desc'>
 					<label for='type'>Type</label>
 					<select name='type' id='type'>
@@ -519,6 +522,13 @@
 		$diff=$value-$recbal;
 		
 		echo "Reconciled Balance: ".$recbal." Difference: ".$diff;
+	}
+	
+	function getaccountname($account){
+		$query="SELECT * FROM accounts WHERE AccountID='$account'";
+		$result=mysql_query($query) or die(mysql_error());
+		$row=mysql_fetch_assoc($result);
+		return $row['AccountName'];	
 	}
 
 ?>
