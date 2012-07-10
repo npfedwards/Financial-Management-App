@@ -27,7 +27,7 @@
 					<input type='email' name='email' id='email' placeholder='Enter your email address'>
 					<input type='submit' value='Submit'>
 				</form>
-
+				<p>Haven't recieved an email with your validation link? Click <a href=\"resendvalidationkey.php\">here</a> to resend it.</p>
 		";
 	}
 
@@ -38,17 +38,28 @@
 					<input type='password' name='repeat' id='repeat' placeholder='Repeat'>
 					<input type='submit' value='Submit'>
 				</form>
-
 		";
 	}
 
+	function resendvalidationkeyform(){
+		echo 	"<p>Enter your email address, and we'll resend your validation link to you:</p>
+				<form action='doresendvalidationkey.php' method='post'>
+					<input type='email' name='email' id='email' placeholder='Email address'>
+					<input type='submit' value='Submit'>
+				</form>
+		";
+	}
 
 	function sendvalidationkey($email, $key, $UserID){
-		mail($email, "Your validation key", "http://unihouse.co.uk/beta/money/validate.php?k=" . $key . "&id=" . $UserID, "from: admin@unihouse.co.uk");
+		mail($email, "Your validation key", "Thanks for signing up! Before you can use your account, you'll need to activate it. To do that, just click on this link: http://unihouse.co.uk/beta/money/validate.php?k=" . $key . "&id=" . $UserID, "from: admin@unihouse.co.uk");
 	}
 
 	function sendpasswordreset($email, $key, $UserID){
-		mail($email, "Click the following link to reset your password. This link is only good for one use, and is only valid for a week.", "http://unihouse.co.uk/beta/money/resetpassword.php?k=" . $key . "&id=" . $UserID, "From: admin@unihouse.co.uk");
+		mail($email, "Passowrd Reset Link", "Click the following link to reset your password. This link is only good for one use, and is only valid for a week. http://unihouse.co.uk/beta/money/resetpassword.php?k=" . $key . "&id=" . $UserID, "From: admin@unihouse.co.uk");
+	}
+
+	function resendvalidationkey($email, $key, $UserID){
+		mail($email, "Your validation key", "Here's your validation key again: http://unihouse.co.uk/beta/money/validate.php?k=" . $key . "&id=" . $UserID."<br>Remember that it's only valid for the a week since you first registered!", "from: admin@unihouse.co.uk");
 	}
 
 	function generatesalt($max = 16){
