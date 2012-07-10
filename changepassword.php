@@ -51,12 +51,7 @@
 				$msg = $msg . "Password Incorrect. Please try again. ";
 			}
 		}
-
-
-
-	}else{
-		//user isn't logged in, so show them the login form:
-		loginform();
+		
 	}
 	
 	include_once 'accounts.php';
