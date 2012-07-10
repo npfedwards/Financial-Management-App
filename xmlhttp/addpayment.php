@@ -32,16 +32,16 @@
 				$toaccount=substr($otherparty,11);
 				$toaccount=checkAccount($user, $toaccount,0);
 				if($toaccount!=0){
-					$otherparty=getaccountname($account);
+					$theotherparty=getaccountname($account);
 					$toamount=-$amount;
-					$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount) VALUES ('$user', '$toaccount', '$time', '$otherparty', '$desc', '$toamount', '$type', '$account')";
+					$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount) VALUES ('$user', '$toaccount', '$time', '$theotherparty', '$desc', '$toamount', '$type', '$account')";
 					mysql_query($query) or die(mysql_error());
 					$insertid=mysql_insert_id();
 					$otherparty=getaccountname($toaccount);
 				}
 			}
 			
-			if($insertid=NULL){
+			if($insertid==NULL){
 				$insertid=0;	
 			}
 			
@@ -76,8 +76,11 @@
 					$i=2;
 					
 					while($time<time()+86400 && $i<=$rt){
-						
-						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$repeatid')";
+						if($insertid!=0){
+							$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount) VALUES ('$user', '$toaccount', '$time', '$theotherparty', '$desc', '$toamount', '$type', '$account')";
+							mysql_query($query) or die(mysql_error());
+						}
+						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$insertid')";
 						mysql_query($query) or die(mysql_error);
 						
 						if($m==12){
@@ -99,7 +102,11 @@
 					$time=$time+$rf*86400;
 					$i=2;
 					while($time<time()+604800 && $i<=$rt){
-						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$repeatid')";
+						if($insertid!=0){
+							$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount) VALUES ('$user', '$toaccount', '$time', '$theotherparty', '$desc', '$toamount', '$type', '$account')";
+							mysql_query($query) or die(mysql_error());
+						}
+						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$insertid')";
 						mysql_query($query) or die(mysql_error);
 						$i++;
 						$time=$time+$rf*86400;
