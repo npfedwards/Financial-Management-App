@@ -189,8 +189,9 @@
 		
 		$currentpage=intval($offset/$display)+1;
 		pagination($user,$account,$display,$currentpage);
+		$endtime=time()+604800;
 	
-		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND Deleted='0' ".$account."ORDER BY Timestamp DESC Limit ".$offset.",".$display;
+		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND Deleted='0' AND Timestamp<'$endtime' ".$account."ORDER BY Timestamp DESC Limit ".$offset.",".$display;
 		$result=mysql_query($query) or die(mysql_error());
 		
 		if($order!=0 && mysql_num_rows($result)!=0){ //PLEASE PLEASE find a nicer way to do this!
@@ -198,7 +199,7 @@
 				$paymentids=" OR PaymentID='".$row['PaymentID']."'".$paymentids;
 			}
 			$paymentids="WHERE".substr($paymentids, 3);
-			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." AND Deleted='0' ORDER BY Timestamp ASC";
+			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." AND Deleted='0' AND Timestamp<'$endtime' ORDER BY Timestamp ASC";
 			$result=mysql_query($query) or die(mysql_error());
 		}
 		
@@ -236,7 +237,11 @@
 			}else{
 				$amount=$currencysymbol.forcedecimals($amount)."</td><td>";
 			}
-			echo 	"<tr id='payment".$row['PaymentID']."'>
+			echo 	"<tr";
+			if($row['Timestamp']>time()){
+				echo " class='futurepayment'";	
+			}
+			echo 	" id='payment".$row['PaymentID']."'>
 						<td>".date("d/m/y", $row['Timestamp'])."</td>
 						<td>".stripslashes($row['PaymentName'])."</td>
 						<td>".stripslashes($row['PaymentDesc'])."</td>
@@ -249,7 +254,7 @@
 						</td>
 					</tr>";	
 		}
-		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' ".$account;
+		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'".time()."' ".$account;
 		$result=mysql_query($query) or die(mysql_error());
 		$total=0;
 		
@@ -257,14 +262,31 @@
 			$total=$total+$row['PaymentAmount'];
 		}
 		if($total<0){
-			$total="<span class='red'>".forcedecimals($total)."</span>";
+			$total="<span class='red'>-".$currencysymbol.forcedecimals(-$total)."</span>";
 		}else{
-			$total=forcedecimals($total);	
+			$total=$currencysymbol.forcedecimals($total);	
+		}
+		
+		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'$endtime' ".$account;
+		$result=mysql_query($query) or die(mysql_error());
+		$futuretotal=0;
+		
+		while($row=mysql_fetch_assoc($result)){
+			$futuretotal=$futuretotal+$row['PaymentAmount'];
+		}
+		if($futuretotal<0){
+			$futuretotal="<span class='red'>-".$currencysymbol.forcedecimals(-$futuretotal)."</span>";
+		}else{
+			$futuretotal=$currencysymbol.forcedecimals($futuretotal);	
 		}
 		
 		
-		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance' class='align_right'>".$currencysymbol.$total."</td><tr></tbody>
-				</table><div id='responsetext'></div>";
+		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance' class='align_right'>".$total."</td><td id='futurebalance' class='align_right'>(".$futuretotal.")</td><td><tr></tbody>
+				</table>";
+		if($offset==0){
+			echo "<div id='future'>The number brackets includes payments from the forthcoming 7 days. We only show the payments up to 7 days in advance, therefore you might have payments you've entered that aren't shown.</div>";
+		}
+		echo 	"<div id='responsetext'></div>";
 	
 	}
 
@@ -340,7 +362,8 @@
 		}else{
 			$account="";	
 		}
-		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0'  ".$account;
+		$endtime=time()+604800;
+		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'$endtime' ".$account;
 		$result=mysql_query($query) or die(mysql_error());
 		$numrows=mysql_num_rows($result);
 		
@@ -385,7 +408,7 @@
 			  }
 			  $time=strtotime($m."/".$d."/".$y);
 			  $i=2;
-			  while($time<time()+86400 && $i<=$rt){
+			  while($time<time()+604800 && $i<=$rt){
 				  $query="SELECT * FROM payments WHERE Timestamp='$time' AND Repeated='".$row['RepeatID']."'";
 				  $out=mysql_query($query) or die(mysql_error());
 				  if(mysql_num_rows($out)==0){

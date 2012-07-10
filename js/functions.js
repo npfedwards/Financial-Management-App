@@ -229,6 +229,8 @@ function addPayment(){
 			document.getElementById("otherparty").value="";
 			document.getElementById("amount").value="";
 			document.getElementById("desc").value="";
+			document.getElementById("repeat").value="No";
+			document.getElementById("repeatoptions").innerHTML="";
 		}
 	}
 	xmlhttp.open("GET","xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive+"&accsel="+accsel+"&order="+order+"&rf="+rf+"&rt="+rt,true);
