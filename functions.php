@@ -349,10 +349,10 @@
 		}
 		
 		
-		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance' class='align_right'>".$total."</td><td id='futurebalance' class='align_right'>(".$futuretotal.")</td><td></td></tr></tbody>
+		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance' class='align_right'>".$total."</td><td id='futurebalance' class='align_right'>(".$futuretotal.")</td><td>Current</td><td colspan='2'>(Includes next 7 days)</td></tr></tbody>
 				</table>";
 		if($offset==0){
-			echo "<div id='future'>The number brackets includes payments from the forthcoming 7 days. We only show the payments up to 7 days in advance, therefore you might have payments you've entered that aren't shown.</div>";
+			echo "<div id='future'>We only show the payments up to 7 days in advance, therefore you might have payments you've entered that aren't shown.</div>";
 		}
 		echo "<div id='reconcilereport'>";
 		reconcilereport($user, $account,$recvalue);
@@ -407,13 +407,14 @@
 	function accountList($user){
 		$query="SELECT * FROM accounts WHERE UserID='$user' ORDER BY AccountName ASC";
 		$result=mysql_query($query) or die(mysql_error());
+		echo "<table>";
 		while($row=mysql_fetch_assoc($result)){
-			echo "<div id='account".$row['AccountID']."'>".stripslashes($row['AccountName'])." <button onclick=\"editAccountForm(".$row['AccountID'].",'".stripslashes($row['AccountName'])."')\">Edit</button></div>";	
+			echo "<tr id='account".$row['AccountID']."'><td>".stripslashes($row['AccountName'])."</td><td><button onclick=\"editAccountForm(".$row['AccountID'].",'".stripslashes($row['AccountName'])."')\">Edit</button></td></tr>";	
 		}
 	}
 	
 	function accountForm(){
-		echo "<input type='text' name='account' id='account' placeholder='Account Name' onkeypress=\"addAccountEnter(event)\"><button onclick=\"addAccount()\">Add Account</button><br>";
+		echo "<tr><td><input type='text' name='account' id='account' placeholder='Account Name' onkeypress=\"addAccountEnter(event)\"></td><td><button onclick=\"addAccount()\">Add Account</button></td></tr></table>";
 	}
 
 	function currencyPrefForm($user){
@@ -597,7 +598,8 @@
 		}
 		$diff=$value-$recbal;
 		
-		echo "Account Balance: <input type='number' value='".$value."' step='0.01' name='accountbalance' id='accbal' onKeyUp=\"updateReconcile(this)\"> <div id='updaterec'>Reconciled Balance: ".$recbal." Difference: ".$diff."</div>";
+		echo "<h4>Reconcile Tool</h4>
+		Account Balance: <input type='number' value='".$value."' step='0.01' name='accountbalance' id='accbal' onKeyUp=\"updateReconcile(this)\"> <div id='updaterec'>Reconciled Balance: ".$recbal." Difference: ".$diff."</div>";
 			
 	}
 	

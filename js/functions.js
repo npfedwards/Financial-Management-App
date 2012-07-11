@@ -305,7 +305,7 @@ function showPage(sel){
 
 function editAccountForm(id, accountname){
 	var divid = "account"+id;
-	document.getElementById(divid).innerHTML="<input type='text' name='account"+id+"' id='accountedit"+id+"' value='"+accountname+"'> <button onclick=\"doEditAccount("+id+")\">Confirm Edit</button>";
+	document.getElementById(divid).innerHTML="<td><input type='text' name='account"+id+"' id='accountedit"+id+"' value='"+accountname+"'></td><td><button onclick=\"doEditAccount("+id+")\">Confirm Edit</button></td>";
 }
 
 function doEditAccount(id){
