@@ -83,6 +83,11 @@
 						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$insertid')";
 						mysql_query($query) or die(mysql_error);
 						
+						if($insertid!=0){
+							$paymentid=mysql_insert_id();
+							$query="UPDATE payments SET PairedID='$paymentid' WHERE PaymentID='$insertid'";
+							mysql_query($query) or die(mysql_error());
+						}
 						if($m==12){
 							$m=1;
 							$y++;
@@ -108,6 +113,11 @@
 						}
 						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$insertid')";
 						mysql_query($query) or die(mysql_error);
+						if($insertid!=0){
+							$paymentid=mysql_insert_id();
+							$query="UPDATE payments SET PairedID='$paymentid' WHERE PaymentID='$insertid'";
+							mysql_query($query) or die(mysql_error());
+						}
 						$i++;
 						$time=$time+$rf*86400;
 					}

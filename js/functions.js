@@ -70,6 +70,7 @@ function editForm(id){
 
 function doEdit(id){
 	var otherparty=escape(document.getElementById("otherparty"+id).value);
+	var toaccount=escape(document.getElementById("toaccount"+id).value);
 	var desc=escape(document.getElementById("desc"+id).value);
 	var income=escape(document.getElementById("in"+id).value);
 	var out=escape(document.getElementById("out"+id).value);
@@ -93,11 +94,16 @@ function doEdit(id){
 			//Response Text or fade out etc.
 			var trid="payment"+id;
 			document.getElementById(trid).innerHTML=xmlhttp.responseText;
-			updateTotal();
+			if(toaccount!=0){
+				updatePairedPayment(id);
+			}else{
+				updateTotal();
+			}
+			
 		}
 	}
 	
-	xmlhttp.open("GET","xmlhttp/doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account,true);
+	xmlhttp.open("GET","xmlhttp/doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&toaccount="+toaccount,true);
 	xmlhttp.send();
 }
 
@@ -398,4 +404,44 @@ function otherAccountSelect(){
 
 function otherParty(){
 	document.getElementById("tofrom").innerHTML="<input type='text' name='otherparty' id='otherparty'><span onclick=\"otherAccountSelect()\">Another of your accounts?</span>";	
+}
+
+function updatePairedPayment(id){
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+			updatePayment(xmlhttp.responseText);
+		}
+	}
+	
+	xmlhttp.open("GET","xmlhttp/getpairedid.php?id="+id,true);
+	xmlhttp.send();
+}
+
+function updatePayment(id){
+	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}else{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			//Response Text or fade out etc.
+			var trid="payment"+id;
+			document.getElementById(trid).innerHTML=xmlhttp.responseText;
+			updateTotal();
+		}
+	}
+	
+	xmlhttp.open("GET","xmlhttp/getpayment.php?id="+id,true);
+	xmlhttp.send();	
 }
