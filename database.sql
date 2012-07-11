@@ -58,6 +58,9 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `LabelID` int(11) NOT NULL,
   `Reconciled` tinyint(1) NOT NULL,
   `Repeated` int(11) NOT NULL,
+  `Deleted` tinyint(4) NOT NULL,
+  `ToAccount` int(11) NOT NULL,
+  `PairedID` int(11) NOT NULL,
   PRIMARY KEY (`PaymentID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

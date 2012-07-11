@@ -51,7 +51,23 @@
 					}
 						
 			echo		"</select></td>
-			  <td><input type='text' name='otherparty' id='otherparty".$row['PaymentID']."' value='".stripslashes($row['PaymentName'])."'></td>
+			  <td>";
+			  if($row['ToAccount']!=0){
+				echo "<select id='toaccount".$row['PaymentID']."'>";
+				$query="SELECT * FROM accounts WHERE UserID='$user'";
+				$result2=mysql_query($query) or die(mysql_error());
+				while($row2=mysql_fetch_assoc($result2)){
+					echo "<option value='".$row2['AccountID']."'";
+					if($row['ToAccount']==$row2['AccountID']){
+						echo " selected='selected'";	
+					}
+					echo ">".stripslashes($row2['AccountName'])."</option>";
+			  	}
+				echo "</select><input type='hidden' id='otherparty".$row['PaymentID']."' value='0'>";
+			  }else{
+				echo "<input type='text' name='otherparty' id='otherparty".$row['PaymentID']."' value='".stripslashes($row['PaymentName'])."'><input type='hidden' id='toaccount".$row['PaymentID']."' value='0'>";
+			  }
+		echo 	"</td>
 			  <td><input type='text' name='desc' id='desc".$row['PaymentID']."' value='".$row['PaymentDesc']."'></td>
 			  <td>".$amount."</td>
 			  <td>

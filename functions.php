@@ -162,7 +162,10 @@
 						<option value='-1'>Pay</option>
 						<option value='1'>Receive From</option>
 					</select>
-					<input type='text' name='otherparty' id='otherparty'>
+					<span id='tofrom'>
+						<input type='text' name='otherparty' id='otherparty'>
+						<span onclick=\"otherAccountSelect()\">Another of your accounts?</span>
+					</span>
 					<label for='desc'>Description</label><input type='text' name='desc' id='desc'>
 					<label for='type'>Type</label>
 					<select name='type' id='type'>
@@ -472,14 +475,30 @@
 			  }else{
 				  $m++;	
 			  }
+			  $account=$row['Account'];
+			  if($row['ToAccount']!=0){
+				  $theotherparty=getaccountname($account);
+				  $toamount=-$amount;
+			  }
 			  $time=strtotime($m."/".$d."/".$y);
 			  $i=2;
 			  while($time<time()+604800 && $i<=$rt){
+				  $insertid=0;
 				  $query="SELECT * FROM payments WHERE Timestamp='$time' AND Repeated='".$row['RepeatID']."'";
 				  $out=mysql_query($query) or die(mysql_error());
 				  if(mysql_num_rows($out)==0){
-					  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$repeatid')";
+					  if($row['ToAccount']!=0){
+						  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount) VALUES ('$user', '".$row['ToAccount']."', '$time', '$theotherparty', '".$row['PaymentDesc']."', '$toamount', '".$row['PaymentType']."', '$account')";
+						  mysql_query($query) or die(mysql_error());
+						  $insertid=mysql_insert_id();
+					  }
+					  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$insertid')";
 					  mysql_query($query) or die(mysql_error);
+					  if($insertid!=0){
+						  $paymentid=mysql_insert_id();
+						  $query="UPDATE payments SET PairedID='$paymentid' WHERE PaymentID='$insertid'";
+						  mysql_query($query) or die(mysql_error());
+					  }
 				  }
 				  
 				  if($m==12){
@@ -498,8 +517,18 @@
 					$query="SELECT * FROM payments WHERE Timestamp='$time' AND Repeated='".$row['RepeatID']."'";
 					$out=mysql_query($query) or die(mysql_error());
 					if(mysql_num_rows($out)==0){
-						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, Repeated) VALUES ('$user', '".$row['AccountID']."', '$time', '".$row['PaymentName']."', '".$row['PaymentDesc']."', '".$row['PaymentAmount']."', '".$row['PaymentType']."', '".$row['RepeatID']."')";
+						if($row['ToAccount']!=0){
+						  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount) VALUES ('$user', '".$row['ToAccount']."', '$time', '$theotherparty', '".$row['PaymentDesc']."', '$toamount', '".$row['PaymentType']."', '$account')";
+						  mysql_query($query) or die(mysql_error());
+						  $insertid=mysql_insert_id();
+						}
+						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$insertid')";
 						mysql_query($query) or die(mysql_error);
+						if($insertid!=0){
+							$paymentid=mysql_insert_id();
+							$query="UPDATE payments SET PairedID='$paymentid' WHERE PaymentID='$insertid'";
+							mysql_query($query) or die(mysql_error());
+						}
 					}
 					$i++;
 					$time=$time+$row['Frequency']*86400;
@@ -543,6 +572,13 @@
 		$diff=$value-$recbal;
 		
 		echo "Reconciled Balance: ".$recbal." Difference: ".$diff;
+	}
+	
+	function getaccountname($account){
+		$query="SELECT * FROM accounts WHERE AccountID='$account'";
+		$result=mysql_query($query) or die(mysql_error());
+		$row=mysql_fetch_assoc($result);
+		return $row['AccountName'];	
 	}
 
 ?>
