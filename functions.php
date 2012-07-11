@@ -27,7 +27,7 @@
 					<input type='email' name='email' id='email' placeholder='Enter your email address'>
 					<input type='submit' value='Submit'>
 				</form>
-
+				<p>Haven't recieved an email with your validation link? Click <a href=\"resendvalidationkey.php\">here</a> to resend it.</p>
 		";
 	}
 
@@ -38,17 +38,28 @@
 					<input type='password' name='repeat' id='repeat' placeholder='Repeat'>
 					<input type='submit' value='Submit'>
 				</form>
-
 		";
 	}
 
+	function resendvalidationkeyform(){
+		echo 	"<p>Enter your email address, and we'll resend your validation link to you:</p>
+				<form action='doresendvalidationkey.php' method='post'>
+					<input type='email' name='email' id='email' placeholder='Email address'>
+					<input type='submit' value='Submit'>
+				</form>
+		";
+	}
 
 	function sendvalidationkey($email, $key, $UserID){
-		mail($email, "Your validation key", "http://unihouse.co.uk/beta/money/validate.php?k=" . $key . "&id=" . $UserID, "from: admin@unihouse.co.uk");
+		mail($email, "Your validation key", "Thanks for signing up! Before you can use your account, you'll need to activate it. To do that, just click on this link: http://unihouse.co.uk/beta/money/validate.php?k=" . $key . "&id=" . $UserID, "from: admin@unihouse.co.uk");
 	}
 
 	function sendpasswordreset($email, $key, $UserID){
-		mail($email, "Click the following link to reset your password. This link is only good for one use, and is only valid for a week.", "http://unihouse.co.uk/beta/money/resetpassword.php?k=" . $key . "&id=" . $UserID, "From: admin@unihouse.co.uk");
+		mail($email, "Passowrd Reset Link", "Click the following link to reset your password. This link is only good for one use, and is only valid for a week. http://unihouse.co.uk/beta/money/resetpassword.php?k=" . $key . "&id=" . $UserID, "From: admin@unihouse.co.uk");
+	}
+
+	function resendvalidationkey($email, $key, $UserID){
+		mail($email, "Your validation key", "Here's your validation key again: http://unihouse.co.uk/beta/money/validate.php?k=" . $key . "&id=" . $UserID."<br>Remember that it's only valid for the a week since you first registered!", "from: admin@unihouse.co.uk");
 	}
 
 	function generatesalt($max = 16){
@@ -377,7 +388,20 @@
 	
 	function accountForm(){
 		echo "<input type='text' name='account' id='account' placeholder='Account Name' onkeypress=\"addAccountEnter(event)\"><button onclick=\"addAccount()\">Add Account</button><br>";
+	}
+
+	function currencyPrefForm(){
 		echo "Preffered Currency<select name='prefcurrency' id='currency'><option value='pound'>&pound;</option><option value='dollar'>&dollar;</option><option value='euro'>&euro;</option></select><button onclick=\"updateCurrency()\">Update</button>";
+	}
+
+	function changePasswordForm(){
+		echo "	<h3>Change Password:</h3>
+				<form action='changepassword.php' method='post'>
+				<input type='password' name='currentpassword' id='currentpassword' placeholder='Current Password'><br>
+				<input type='password' name='newpassword1' id='newpassword1' placeholder='New Password'><br>
+				<input type='password' name='newpassword2' id='newpassword2' placeholder='Repeat'><br>
+				<input type='submit' value='Change Password'></input>
+				</form>";
 	}
 
 	function sanitise($fetch, $g='g'){

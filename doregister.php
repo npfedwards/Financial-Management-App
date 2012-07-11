@@ -51,9 +51,9 @@
 				//insrt
 				mysql_query($query) or die(mysql_error());
 				sendvalidationkey($email, $validationkey, $UserID);
-				$msg = $msg . "Successfully re-registered. Before you can use your account, you'll need to validate it - we've sent you an email with a link to do that. If you can't find it, check your spam folder or click here to send it again.";
+				$msg = $msg . "Successfully re-registered. Before you can use your account, you'll need to validate it - we've sent you an email with a link to do that. If you can't find it, check your spam folder or click <a href=\"resendvalidationkey.php\">here</a> to send it again.";
 			} else {
-				$msg = $msg."You've already registered that email! Please validate it by clicking the link in the email you received. ";
+				$msg = $msg."You've already registered that email! Please validate it by clicking the link in the email you received. If you can't find the email, click <a href=\"resendvalidationkey.php\">here<a/> to resend it ";
 			}
 		}
 	}
