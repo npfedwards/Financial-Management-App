@@ -12,7 +12,7 @@
 		echo "<option value='ThisAccount".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
 	}
 	
-	echo "</select><span onclick=\"otherParty()\">Not between accounts?</span>";
+	echo "</select><span onclick=\"otherParty()\" class='clickable'>Not between accounts?</span>";
 	
 	closedb($conn);
 ?>
