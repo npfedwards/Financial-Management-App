@@ -5,14 +5,16 @@
 		if(!isset($user)){
 			$user=mysql_real_escape_string($_COOKIE['userid']);
 		}
-		echo "<div id='accounts'>";
-		accountList($user);
-		echo "</div>";
-		accountForm();
-		currencyPrefForm($user);
-		echo "<div id='currencycontainer'></div>";
-		changePasswordForm();
-		echo "<div id='changepasswordcontainer'>".$msg."</div>";
+		echo "<div id='accountspage'>
+			<div id='accounts'>";
+			accountList($user);
+			accountForm();
+			echo "</div>";
+			currencyPrefForm($user);
+			echo "<div id='currencycontainer'></div>";
+			changePasswordForm();
+			echo "<div id='changepasswordcontainer'>".$msg."</div>
+			</div>";
 	}else{
 		loginform();
 		echo $msg;

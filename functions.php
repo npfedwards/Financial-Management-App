@@ -13,12 +13,33 @@
 	}
 	
 	function loginform(){
-		echo	"<form action='dologin.php' method='post'>
-					<label for='email'>Email</label><input type='text' name='email' id='email'><br>
-					<label for='password'>Password</label><input type='password' name='password' id='password'><br>
-					<input type='submit' value='Login'> or <a href='register.php'>Register</a><br>
-					<a href='iforgot.php'>Forgot your password?</a>
-				</form>";	
+		echo	"<div id='loginform'>
+					<form action='dologin.php' method='post'>
+						<table>
+							<tr>
+								<td>
+									<label for='email'>Email</label>
+								</td><td>
+									<input type='text' name='email' id='email'>
+								</td>
+							</tr><tr>
+								<td>
+									<label for='password'>Password</label>
+								</td><td>
+									<input type='password' name='password' id='password'>
+								</td>
+							</tr><tr>
+								<td></td><td>
+									<input type='submit' value='Login'> or <a href='register.php'>Register</a>
+								</td>
+							</tr><tr>
+								<td></td><td>
+									<a href='iforgot.php'>Forgot your password?</a>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>";	
 	}
 
 	function forgotpasswordform(){
@@ -124,7 +145,7 @@
 	
 	function paymentForm($user){
 		echo 	"<div id='paymentform'>
-				On <select name='day' id='day'>";
+				<span>On <select name='day' id='day'>";
 				$i=0;
 				while($i<31){
 					$i++;
@@ -162,10 +183,12 @@
 						<option value='-1'>Pay</option>
 						<option value='1'>Receive From</option>
 					</select>
+					</span>
 					<span id='tofrom'>
 						<input type='text' name='otherparty' id='otherparty'>
-						<span onclick=\"otherAccountSelect()\">Another of your accounts?</span>
+						<span onclick=\"otherAccountSelect()\" class='clickable'>Another of your accounts?</span>
 					</span>
+					<span>
 					<label for='desc'>Description</label><input type='text' name='desc' id='desc'>
 					<label for='type'>Type</label>
 					<select name='type' id='type'>
@@ -185,12 +208,12 @@
 						echo "<option value='".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
 					}
 		echo		"</select>
-					<button onclick=\"addPayment()\">Add Payment</button><br>
 					Repeat <select name='repeat' id='repeat' onchange=\"if(this.value==='Yes'){showRepeatOptions()}\">
 						<option>No</option>
 						<option>Yes</option>
 					</select>
 					<span id='repeatoptions'></span>
+					<button onclick=\"addPayment()\">Add Payment</button></span>
 				</div>";	
 	}
 	
@@ -234,33 +257,36 @@
 		$currencysymbol=currencysymbol($user);
 
 
-		echo 	"<table>
+		echo 	"<table id='statement'>
 					<thead>
 						<tr>
-							<form name='sortbuttons'>
-							<th>Date ";
-							sortbuttons('date', $order, $currfield);
-		echo 				"</th>
-							<th>To/From";
-							sortbuttons('otherparty', $order, $currfield);
-		echo 				"</th>
-							<th>Description";
-							sortbuttons('desc', $order, $currfield);
-		echo 				"</th>
+							<th>Date</th>
+							<th>To/From</th>
+							<th>Description</th>
 							<th>In</th>
-							<th>Out";
-							sortbuttons('out', $order, $currfield);
-		echo 				"</th>
-							<th>Type";
-							sortbuttons('type', $order, $currfield);
-		echo 				"</th>
-							<th>Account";
-							sortbuttons('account', $order, $currfield);
-		echo 				"</th>
-							<th>Reconciled";
-							sortbuttons('reconciled', $order, $currfield);
-		echo 				"</th>
+							<th>Out</th>
+							<th>Type</th>
+							<th>Account</th>
+							<th>Reconciled</th>
 							<th>Operations</th>
+						</tr>
+						<tr>
+							<form name='sortbuttons'>
+							<th>";
+							sortbuttons('date', $order, $currfield);
+		echo 				"</th><th>";
+							sortbuttons('otherparty', $order, $currfield);
+		echo 				"</th><th>";
+							sortbuttons('desc', $order, $currfield);
+		echo 				"</th><th></th><th>";
+							sortbuttons('out', $order, $currfield);
+		echo 				"</th><th>";
+							sortbuttons('type', $order, $currfield);
+		echo 				"</th><th>";
+							sortbuttons('account', $order, $currfield);
+		echo 				"</th><th>";
+							sortbuttons('reconciled', $order, $currfield);
+		echo 				"</th><th></th>
 							</form>
 						</tr>
 					</thead>
@@ -323,10 +349,10 @@
 		}
 		
 		
-		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance' class='align_right'>".$total."</td><td id='futurebalance' class='align_right'>(".$futuretotal.")</td><td><tr></tbody>
+		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance' class='align_right'>".$total."</td><td id='futurebalance' class='align_right'>(".$futuretotal.")</td><td>Current</td><td colspan='2'>(Includes next 7 days)</td></tr></tbody>
 				</table>";
 		if($offset==0){
-			echo "<div id='future'>The number brackets includes payments from the forthcoming 7 days. We only show the payments up to 7 days in advance, therefore you might have payments you've entered that aren't shown.</div>";
+			echo "<div id='future'>We only show the payments up to 7 days in advance, therefore you might have payments you've entered that aren't shown.</div>";
 		}
 		echo "<div id='reconcilereport'>";
 		reconcilereport($user, $account,$recvalue);
@@ -335,7 +361,7 @@
 	}
 	
 	function sortbuttons($field, $order, $currfield){
-		echo " <input type='radio' name='sort' value='1".$field."' onchange=\"orderStatement(this)\"";
+		echo "<input type='radio' name='sort' value='1".$field."' onchange=\"orderStatement(this)\"";
 			  if($order==1 && $field==$currfield){
 				  echo " checked='checked'";	
 			  }
@@ -381,13 +407,14 @@
 	function accountList($user){
 		$query="SELECT * FROM accounts WHERE UserID='$user' ORDER BY AccountName ASC";
 		$result=mysql_query($query) or die(mysql_error());
+		echo "<table>";
 		while($row=mysql_fetch_assoc($result)){
-			echo "<div id='account".$row['AccountID']."'>".stripslashes($row['AccountName'])." <button onclick=\"editAccountForm(".$row['AccountID'].",'".stripslashes($row['AccountName'])."')\">Edit</button></div>";	
+			echo "<tr id='account".$row['AccountID']."'><td>".stripslashes($row['AccountName'])."</td><td><button onclick=\"editAccountForm(".$row['AccountID'].",'".stripslashes($row['AccountName'])."')\">Edit</button></td></tr>";	
 		}
 	}
 	
 	function accountForm(){
-		echo "<input type='text' name='account' id='account' placeholder='Account Name' onkeypress=\"addAccountEnter(event)\"><button onclick=\"addAccount()\">Add Account</button><br>";
+		echo "<tr><td><input type='text' name='account' id='account' placeholder='Account Name' onkeypress=\"addAccountEnter(event)\"></td><td><button onclick=\"addAccount()\">Add Account</button></td></tr></table>";
 	}
 
 	function currencyPrefForm($user){
@@ -571,7 +598,8 @@
 		}
 		$diff=$value-$recbal;
 		
-		echo "Account Balance: <input type='number' value='".$value."' step='0.01' name='accountbalance' id='accbal' onKeyUp=\"updateReconcile(this)\"> <div id='updaterec'>Reconciled Balance: ".$recbal." Difference: ".$diff."</div>";
+		echo "<h4>Reconcile Tool</h4>
+		Account Balance: <input type='number' value='".$value."' step='0.01' name='accountbalance' id='accbal' onKeyUp=\"updateReconcile(this)\"> <div id='updaterec'>Reconciled Balance: ".$recbal." Difference: ".$diff."</div>";
 			
 	}
 	
