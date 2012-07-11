@@ -390,8 +390,27 @@
 		echo "<input type='text' name='account' id='account' placeholder='Account Name' onkeypress=\"addAccountEnter(event)\"><button onclick=\"addAccount()\">Add Account</button><br>";
 	}
 
-	function currencyPrefForm(){
-		echo "Preffered Currency<select name='prefcurrency' id='currency'><option value='pound'>&pound;</option><option value='dollar'>&dollar;</option><option value='euro'>&euro;</option></select><button onclick=\"updateCurrency()\">Update</button>";
+	function currencyPrefForm($user){
+		$cs=currencysymbol($user);
+		echo "Preffered Currency
+				<select name='prefcurrency' id='currency'>
+					<option value='pound'";
+			if($cs=="&pound;"){
+				echo " selected='selected'";	
+			}
+			echo	">&pound;</option>
+					<option value='dollar'";
+			if($cs=="&dollar;"){
+				echo " selected='selected'";	
+			}
+			echo	">&dollar;</option>
+					<option value='euro'";
+			if($cs=="&euro;"){
+				echo " selected='selected'";	
+			}
+			echo	">&euro;</option>
+				</select>
+				<button onclick=\"updateCurrency()\">Update</button>";
 	}
 
 	function changePasswordForm(){
