@@ -9,7 +9,7 @@
 		accountList($user);
 		echo "</div>";
 		accountForm();
-		currencyPrefForm();
+		currencyPrefForm($user);
 		echo "<div id='currencycontainer'></div>";
 		changePasswordForm();
 		echo "<div id='changepasswordcontainer'>".$msg."</div>";

@@ -23,6 +23,11 @@
 			  <td class='align_right'>".$amount."</td>
 			  <td>".$row['PaymentType']."</td>
 			  <td>".stripslashes($row['AccountName'])."</td>
+			  <td><input type='checkbox' id='reconciled' onclick=\"reconcile(this, ".$row['PaymentID'].")\"";
+				if($row['Reconciled']==1){
+						echo "checked='checked'";
+				}
+				echo		"></td>
 			  <td>
 				  <button onclick=\"confirmDelete('".$row['PaymentID']."')\">Delete</button>
 				  <button onclick=\"editForm('".$row['PaymentID']."')\">Edit</button>
