@@ -1,5 +1,41 @@
 /* CSS Document */
 
+#loginform{
+	width:100%;
+	margin-top:200px;
+	table{
+		margin:0 auto;
+	}
+}
+
+#paymentform{
+	font-size:12px;
+	margin:20px 0px;
+	width:100%;
+	float:left;
+	> *{
+		float:left;
+	}
+	span:first-child{
+		padding-left:20px;
+	}
+	#tofrom{
+		width:150px;
+		span{
+			float:left;
+		}
+	}
+}
+
+a, span.clickable{
+	cursor:pointer;
+	color: #00A;
+	text-decoration:none;
+	&:hover{
+		text-decoration:underline;
+	}
+}
+
 .red{
 	color:#A00;	
 }
@@ -8,9 +44,33 @@
 	text-align: right;
 }
 
-.futurepayment{
-	color:#555;
-	.red{
-		color: #F55;
+#statementcontrols{
+	float:right;
+}
+
+#statement{
+	border-spacing:0px;
+	td, th{
+		padding:3px;
+	}
+	tr{
+		&:nth-child(even){
+			background:#EEE;
+		}
+		&:last-child{
+			background:#FFF;
+		}
+	}
+	thead{
+		tr{
+			background:#FFF;
+		}
+	}
+
+	.futurepayment{
+		color:#555;
+		.red{
+			color: #B55;
+		}
 	}
 }

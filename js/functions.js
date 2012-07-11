@@ -403,7 +403,7 @@ function otherAccountSelect(){
 }
 
 function otherParty(){
-	document.getElementById("tofrom").innerHTML="<input type='text' name='otherparty' id='otherparty'><span onclick=\"otherAccountSelect()\">Another of your accounts?</span>";	
+	document.getElementById("tofrom").innerHTML="<input type='text' name='otherparty' id='otherparty'><span onclick=\"otherAccountSelect()\" class='clickable'>Another of your accounts?</span>";	
 }
 
 function updatePairedPayment(id){

@@ -11,6 +11,7 @@
         <script src='js/functions.js'></script>
    	</head>
 	<body>
+    	<div id='wrapper'>
    		<?php
         	if($loggedin==1){
 				echo 	"<a href='logout.php'>Log Out</a>
