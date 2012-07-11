@@ -10,7 +10,7 @@
 			$query="UPDATE users SET PrefCurrency='$currency' WHERE UserID='$user'";
 			mysql_query($query) or die(mysql_error());
 		
-			echo "Success!!";
+			echo "Success! Your currency has been changed to ".$currency;
 		}
 	}else{
 		loginform();
