@@ -335,8 +335,12 @@ function doEditAccount(id){
 	xmlhttp.send();
 }
 
-function showRepeatOptions(){
-	document.getElementById("repeatoptions").innerHTML="<select name='repeatfrequency' id='repeatfrequency'><option value='1'>Daily</option><option value='7'>Weekly</option><option value='m'>Monthly</option></select> For <input type='number' step='1' id='repeattimes' name='repeattimes'>";
+function showHideRepeatOptions(sel){
+	if(sel.value==='Yes'){
+		document.getElementById("repeatoptions").innerHTML="<select name='repeatfrequency' id='repeatfrequency'><option value='1'>Daily</option><option value='7'>Weekly</option><option value='m'>Monthly</option></select> For <input type='number' step='1' id='repeattimes' name='repeattimes'>";
+	}else{
+		document.getElementById("repeatoptions").innerHTML="";
+	}
 }
 
 function reconcile(checkbox, id){

@@ -208,7 +208,7 @@
 						echo "<option value='".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
 					}
 		echo		"</select>
-					Repeat <select name='repeat' id='repeat' onchange=\"if(this.value==='Yes'){showRepeatOptions()}\">
+					Repeat <select name='repeat' id='repeat' onchange=\"showHideRepeatOptions(this)\">
 						<option>No</option>
 						<option>Yes</option>
 					</select>
