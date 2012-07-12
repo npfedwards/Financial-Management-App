@@ -4,8 +4,14 @@
 	opendb();
 	
 	if($loggedin==1){
-		$value=sanitise('value');
 		$account=sanitise('account');
+		$sd=sanitise('sd');
+		$sm=sanitise('sm');
+		$sy=sanitise('sy');
+		$ed=sanitise('ed');
+		$em=sanitise('em');
+		$ey=sanitise('ey');
+		$value=sanitise('value');
 		$order=sanitise('order');
 		$field=sanitise('field');
 		$perpage=intval(sanitise('perpage'));
@@ -14,7 +20,12 @@
 		}
 		$offset=intval(sanitise('offset'));
 		checkAccount($user,$account,0);
-		statement($perpage,$user,$order, $account, $offset, $value, $field);
+		$startdate=strtotime($sm."/".$sd."/".$sy)-1;
+		$enddate=strtotime($em."/".$ed."/".$ey)+1;
+		if($enddate<$startdate){
+			$enddate=$startdate+2;	
+		}
+		statement($perpage,$user,$order, $account, $offset, $value, $field, $startdate, $enddate);
 	}else{
 		loginform();
 	}

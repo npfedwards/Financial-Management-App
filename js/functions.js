@@ -276,6 +276,12 @@ function numPerPage(sel){
 
 function showStatement(account,order,perpage,offset,field){
 	var value=escape(document.getElementById("accbal").value);
+	var sd=escape(document.getElementById("startday").value);
+	var sm=escape(document.getElementById("startmonth").value);
+	var sy=escape(document.getElementById("startyear").value);
+	var ed=escape(document.getElementById("endday").value);
+	var em=escape(document.getElementById("endmonth").value);
+	var ey=escape(document.getElementById("endyear").value);
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
 	}else{// code for IE6, IE5
@@ -289,8 +295,8 @@ function showStatement(account,order,perpage,offset,field){
 			document.getElementById("statementhold").innerHTML=xmlhttp.responseText;
 		}
 	}
-	xmlhttp.open("GET","xmlhttp/showaccount.php?account="+account+"&order="+order+"&perpage="+perpage+"&offset="+offset+"&value="+value+"&field="+field,true);
-	xmlhttp.send();	
+	xmlhttp.open("GET","xmlhttp/showaccount.php?sd="+sd+"&sm="+sm+"&sy="+sy+"&ed="+ed+"&em="+em+"&ey="+ey+"&account="+account+"&order="+order+"&perpage="+perpage+"&offset="+offset+"&value="+value+"&field="+field,true);
+	xmlhttp.send();
 }
 
 function showPage(sel){
@@ -444,4 +450,14 @@ function updatePayment(id){
 	
 	xmlhttp.open("GET","xmlhttp/getpayment.php?id="+id,true);
 	xmlhttp.send();	
+}
+
+function showBetweenDates(){
+	var account=escape(document.getElementById("accsel").value);
+	var order=getSortValue();
+	var field=order.slice(1);
+	order=order.slice(0,1);
+	var perpage=escape(document.getElementById("numperpage").value);
+	var offset=escape(document.getElementById("page").value);
+	showStatement(account,order,perpage, offset, field);
 }
