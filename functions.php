@@ -208,7 +208,7 @@
 						echo "<option value='".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
 					}
 		echo		"</select>
-					Repeat <select name='repeat' id='repeat' onchange=\"if(this.value==='Yes'){showRepeatOptions()}\">
+					Repeat <select name='repeat' id='repeat' onchange=\"showHideRepeatOptions(this)\">
 						<option>No</option>
 						<option>Yes</option>
 					</select>
@@ -365,11 +365,11 @@
 	}
 	
 	function sortbuttons($field, $order, $currfield){
-		echo "<input type='radio' name='sort' value='1".$field."' onchange=\"orderStatement(this)\"";
+		echo "<input type='radio' name='sort' value='1".$field."' onchange=\"showWithOffset()\"";
 			  if($order==1 && $field==$currfield){
 				  echo " checked='checked'";	
 			  }
-		echo	">&uarr;<input type='radio' name='sort' value='0".$field."' onchange=\"orderStatement(this)\"";
+		echo	">&uarr;<input type='radio' name='sort' value='0".$field."' onchange=\"showWithOffset()\"";
 			  if($order==0 && $field==$currfield){
 				  echo " checked='checked'";	
 			  }
@@ -467,7 +467,7 @@
 	function accountPicker($user){
 		$query="SELECT * FROM accounts WHERE UserID='$user' ORDER BY AccountName ASC";
 		$result=mysql_query($query) or die(mysql_error());
-		echo "Account: <select onchange=\"showAccount(this)\" id='accsel'>
+		echo "Account: <select onchange=\"showStatement(0)\" id='accsel'>
 				<option value='0'>All</option>";
 		while($row=mysql_fetch_assoc($result)){
 			echo "<option value='".$row['AccountID']."'>".stripslashes($row['AccountName'])."</option>";	
@@ -488,7 +488,7 @@
 		
 		$pages=ceil($numrows/$perpage);
 		$i=0;
-		echo "Page <select onchange=\"showPage(this)\" id='page'>";
+		echo "Page <select onchange=\"showWithOffset()\" id='page'>";
 		while($i<$pages){
 			$offset=$i*$perpage;
 			$i++;
@@ -502,7 +502,7 @@
 	}
 	
 	function numperpage(){
-		echo 	"Per Page <select onchange=\"numPerPage(this)\" id='numperpage'>
+		echo 	"Per Page <select onchange=\"showWithOffset()\" id='numperpage'>
 					<option>10</option>
 					<option selected='selected'>20</option>
 					<option>50</option>
@@ -633,7 +633,7 @@
 	}
 
 	function statementdatepicker(){
-		echo " between <select onchange=\"showBetweenDates()\" name='day' id='startday'>";
+		echo " between <select onchange=\"showWithOffset()\" name='day' id='startday'>";
 				$i=0;
 				while($i<31){
 					$i++;
@@ -644,7 +644,7 @@
 					echo ">".$i.date("S", strtotime("01/".$i."/2000"))."</option>";
 				}
 					
-		echo		"</select><select onchange=\"showBetweenDates()\" name='month' id='startmonth'>";
+		echo		"</select><select onchange=\"showWithOffset()\" name='month' id='startmonth'>";
 				$i=0;
 				while($i<12){
 					$i++;
@@ -655,7 +655,7 @@
 					echo ">".date("M", strtotime($i."/01/2000"))."</option>";
 				}
 					
-		echo		"</select><select onchange=\"showBetweenDates()\" name='year' id='startyear'>";
+		echo		"</select><select onchange=\"showWithOffset()\" name='year' id='startyear'>";
 				$i=2009;
 				while($i<date("Y")+2){
 					$i++;
@@ -666,7 +666,7 @@
 					echo ">".$i."</option>";
 				}
 					
-		echo		"</select> and <select onchange=\"showBetweenDates()\" name='day' id='endday'>";
+		echo		"</select> and <select onchange=\"showWithOffset()\" name='day' id='endday'>";
 				$i=0;
 				while($i<31){
 					$i++;
@@ -677,7 +677,7 @@
 					echo ">".$i.date("S", strtotime("01/".$i."/2000"))."</option>";
 				}
 					
-		echo		"</select><select onchange=\"showBetweenDates()\" name='month' id='endmonth'>";
+		echo		"</select><select onchange=\"showWithOffset()\" name='month' id='endmonth'>";
 				$i=0;
 				while($i<12){
 					$i++;
@@ -688,7 +688,7 @@
 					echo ">".date("M", strtotime($i."/01/2000"))."</option>";
 				}
 					
-		echo		"</select><select onchange=\"showBetweenDates()\" name='year' id='endyear'>";
+		echo		"</select><select onchange=\"showWithOffset()\" name='year' id='endyear'>";
 				$i=2009;
 				while($i<date("Y")+2){
 					$i++;
@@ -700,6 +700,6 @@
 				}
 					
 		echo		"</select>
-					<button onclick=\"showBetweenDates()\">Show</button>";
+					<button onclick=\"showWithOffset()\">Show</button>";
 	}
 ?>
