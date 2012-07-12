@@ -245,7 +245,7 @@
 			$between=" AND Timestamp>'$startdate' ";	
 		}
 		if($enddate==NULL){
-			$enddate=time()+604801;
+			$enddate=time();
 		}
 		
 	
@@ -260,9 +260,6 @@
 			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." AND Deleted='0' ORDER BY ".$field." ASC";
 			$result=mysql_query($query) or die(mysql_error());
 		}
-		
-		$currencysymbol=currencysymbol($user);
-
 
 		echo 	"<table id='statement'>
 					<thead>
@@ -302,11 +299,7 @@
 
 		while($row=mysql_fetch_assoc($result)){
 			$amount=$row['PaymentAmount'];
-			if($amount<0){
-				$amount="</td><td class='align_right'><span class='red'>".$currencysymbol.forcedecimals($amount*(-1))."</span>";
-			}else{
-				$amount=$currencysymbol.forcedecimals($amount)."</td><td>";
-			}
+			$amount=displayamount($amount,$user,1);
 			echo 	"<tr";
 			if($row['Timestamp']>time()){
 				echo " class='futurepayment'";	
@@ -329,34 +322,20 @@
 						</td>
 					</tr>";	
 		}
-		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'".time()."' ".$account;
+		$endtime=$enddate;
+		if($enddate<time()){
+			$endtime=time();
+		}
+		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'".$endtime."' ".$account;
 		$result=mysql_query($query) or die(mysql_error());
 		$total=0;
 		
 		while($row=mysql_fetch_assoc($result)){
 			$total=$total+$row['PaymentAmount'];
 		}
-		if($total<0){
-			$total="<span class='red'>-".$currencysymbol.forcedecimals(-$total)."</span>";
-		}else{
-			$total=$currencysymbol.forcedecimals($total);	
-		}
+		$total=displayamount($total,$user,1);
 		
-		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'$endtime' ".$account;
-		$result=mysql_query($query) or die(mysql_error());
-		$futuretotal=0;
-		
-		while($row=mysql_fetch_assoc($result)){
-			$futuretotal=$futuretotal+$row['PaymentAmount'];
-		}
-		if($futuretotal<0){
-			$futuretotal="<span class='red'>-".$currencysymbol.forcedecimals(-$futuretotal)."</span>";
-		}else{
-			$futuretotal=$currencysymbol.forcedecimals($futuretotal);	
-		}
-		
-		
-		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance' class='align_right'>".$total."</td><td id='futurebalance' class='align_right'>(".$futuretotal.")</td><td>Current</td><td colspan='2'>(Includes next 7 days)</td></tr></tbody>
+		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance' class='align_right'>".$total."</td></tr></tbody>
 				</table>";
 		echo "<div id='reconcilereport'>";
 		reconcilereport($user, $account,$recvalue);
@@ -601,6 +580,8 @@
 			$recbal=$recbal+$row['PaymentAmount'];
 		}
 		$diff=$value-$recbal;
+		$recbal=displayamount($recbal,$user);
+		$diff=displayamount($diff,$user);
 		
 		echo "<h4>Reconcile Tool</h4>
 		Account Balance: <input type='number' value='".$value."' step='0.01' name='accountbalance' id='accbal' onKeyUp=\"updateReconcile(this)\"> <div id='updaterec'>Reconciled Balance: ".$recbal." Difference: ".$diff."</div>";
@@ -621,6 +602,8 @@
 			$recbal=$recbal+$row['PaymentAmount'];
 		}
 		$diff=$value-$recbal;
+		$recbal=displayamount($recbal,$user);
+		$diff=displayamount($diff,$user);
 		
 		echo "Reconciled Balance: ".$recbal." Difference: ".$diff;
 	}
@@ -671,7 +654,7 @@
 				while($i<31){
 					$i++;
 					echo "<option value='".$i."'";
-					if($i==date("j", time()+604800)){
+					if($i==date("j", time())){
 						echo " selected='selected'";
 					}
 					echo ">".$i.date("S", strtotime("01/".$i."/2000"))."</option>";
@@ -682,7 +665,7 @@
 				while($i<12){
 					$i++;
 					echo "<option value='".$i."'";
-					if($i==date("n", time()+604800)){
+					if($i==date("n", time())){
 						echo " selected='selected'";
 					}
 					echo ">".date("M", strtotime($i."/01/2000"))."</option>";
@@ -693,7 +676,7 @@
 				while($i<date("Y")+2){
 					$i++;
 					echo "<option value='".$i."'";
-					if($i==date("Y", time()+604800)){
+					if($i==date("Y", time())){
 						echo " selected='selected'";
 					}
 					echo ">".$i."</option>";
@@ -701,5 +684,22 @@
 					
 		echo		"</select>
 					<button onclick=\"showWithOffset()\">Show</button>";
+	}
+	
+	function displayamount($amount, $user, $instatement=0){
+		$currencysymbol=currencysymbol($user);
+		$amount=forcedecimals($amount);
+		if($amount<0){
+			$amount="<span class='red'>-".$currencysymbol.forcedecimals(-$amount)."</span>";
+			if($instatement==1){
+				$amount="</td><td class='align_right'>".$amount;	
+			}
+		}else{
+			$amount=$currencysymbol.forcedecimals($amount);
+			if($instatement==1){
+				$amount=$amount."</td><td>";	
+			}
+		}
+		return $amount;
 	}
 ?>
