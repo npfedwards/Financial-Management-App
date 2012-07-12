@@ -245,36 +245,17 @@ function addPayment(){
 	xmlhttp.send();	
 }
 
-function showAccount(sel){
-	var order=getSortValue();
-	var field=order.slice(1);
-	order=order.slice(0,1);
-	var account=escape(sel.value);
-	var perpage=escape(document.getElementById("numperpage").value);
-	showStatement(account,order,perpage,0,field);
+function showWithOffset(){
+	var offset=escape(document.getElementById("page").value);
+	showStatement(offset);
 }
 
-function orderStatement(radio){
-	var order=escape(radio.value);
+function showStatement(offset){
+	var order=getSortValue();
 	var field=order.slice(1);
 	order=order.slice(0,1);
 	var account=escape(document.getElementById("accsel").value);
 	var perpage=escape(document.getElementById("numperpage").value);
-	var offset=escape(document.getElementById("page").value);
-	showStatement(account,order,perpage,offset,field);
-}
-
-function numPerPage(sel){
-	var account=escape(document.getElementById("accsel").value);
-	var offset=escape(document.getElementById("page").value);
-	var order=getSortValue();
-	var field=order.slice(1);
-	order=order.slice(0,1);
-	var perpage=escape(sel.value);
-	showStatement(account,order,perpage,offset,field);
-}
-
-function showStatement(account,order,perpage,offset,field){
 	var value=escape(document.getElementById("accbal").value);
 	var sd=escape(document.getElementById("startday").value);
 	var sm=escape(document.getElementById("startmonth").value);
@@ -299,15 +280,6 @@ function showStatement(account,order,perpage,offset,field){
 	xmlhttp.send();
 }
 
-function showPage(sel){
-	var account=escape(document.getElementById("accsel").value);
-	var order=getSortValue();
-	var field=order.slice(1);
-	order=order.slice(0,1);
-	var perpage=escape(document.getElementById("numperpage").value);
-	var offset=escape(sel.value);
-	showStatement(account,order,perpage, offset, field);
-}
 
 function editAccountForm(id, accountname){
 	var divid = "account"+id;
@@ -454,14 +426,4 @@ function updatePayment(id){
 	
 	xmlhttp.open("GET","xmlhttp/getpayment.php?id="+id,true);
 	xmlhttp.send();	
-}
-
-function showBetweenDates(){
-	var account=escape(document.getElementById("accsel").value);
-	var order=getSortValue();
-	var field=order.slice(1);
-	order=order.slice(0,1);
-	var perpage=escape(document.getElementById("numperpage").value);
-	var offset=escape(document.getElementById("page").value);
-	showStatement(account,order,perpage, offset, field);
 }
