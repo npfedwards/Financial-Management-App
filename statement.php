@@ -6,6 +6,7 @@
 	echo "<div id='statementcontrols'>";
 	accountPicker($user);
 	numperpage();
+	statementdatepicker();
 	echo "</div>";
 	echo "<div id='statementhold'>";
 	statement(20, $user);
