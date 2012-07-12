@@ -64,13 +64,8 @@
 			mysql_query($query) or die(mysql_error());
 		}
 		
-		$cs=currencysymbol($user);
 		$amount=$row['PaymentAmount'];
-		if($amount<0){
-			$amount="</td><td class='align_right'><span class='red'>".$cs.$amount*(-1)."</span>";
-		}else{
-			$amount=$cs.$amount."</td><td>";
-		}
+		$amount=displayamount($amount,$user,1);
 		
 		echo "<td>".date("d/m/y", $row['Timestamp'])."</td>
 			  <td>".stripslashes($row['PaymentName'])."</td>
