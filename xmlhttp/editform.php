@@ -103,7 +103,11 @@
 					echo ">".stripslashes($row2['AccountName'])."</option>";
 			  }
 		echo  	"</select>
-			  </td><td>
+			  </td><td><input type='checkbox' id='reconciled' onclick=\"reconcile(this, ".$row['PaymentID'].")\"";
+			if($row['Reconciled']==1){
+					echo "checked='checked'";
+			}
+			echo		"></td><td>
 				  <button onclick=\"confirmDelete('".$row['PaymentID']."')\">Delete</button>
 				  <button onclick=\"doEdit('".$row['PaymentID']."')\">Confirm Edit</button>
 			  </td>";
