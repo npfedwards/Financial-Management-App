@@ -3,7 +3,7 @@
 	checklogin();
 	opendb();
 	
-	$endtime=time()+604800;
+	$endtime=time();
 	$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'$endtime'";
 	$result=mysql_query($query) or die(mysql_error());
 	$total=0;
