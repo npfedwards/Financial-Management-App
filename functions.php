@@ -217,7 +217,7 @@
 				</div>";	
 	}
 	
-	function statement($display, $user, $order = 1, $account = 0, $offset = 0, $recvalue = 0, $currfield = 'date'){
+	function statement($display, $user, $order = 1, $account = 0, $offset = 0, $recvalue = 0, $currfield = 'date', $startdate=NULL, $enddate=NULL){
 		if($account!=0){
 			$account="AND payments.AccountID='".$account."' ";
 		}else{
@@ -226,7 +226,6 @@
 		
 		$currentpage=intval($offset/$display)+1;
 		pagination($user,$account,$display,$currentpage);
-		$endtime=time()+604800;
 		
 		if($currfield=='otherparty'){
 			$field='PaymentName';	
@@ -241,8 +240,16 @@
 		}else{
 			$field='Timestamp';
 		}
+		
+		if($startdate!=NULL){
+			$between=" AND Timestamp>'$startdate' ";	
+		}
+		if($enddate==NULL){
+			$enddate=time()+604801;
+		}
+		
 	
-		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND Deleted='0' AND Timestamp<'$endtime' ".$account."ORDER BY ".$field." DESC Limit ".$offset.",".$display;
+		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND Deleted='0' AND Timestamp<'$enddate' ".$between.$account."ORDER BY ".$field." DESC Limit ".$offset.",".$display;
 		$result=mysql_query($query) or die(mysql_error());
 		
 		if($order!=0 && mysql_num_rows($result)!=0){ //PLEASE PLEASE find a nicer way to do this!
@@ -250,7 +257,7 @@
 				$paymentids=" OR PaymentID='".$row['PaymentID']."'".$paymentids;
 			}
 			$paymentids="WHERE".substr($paymentids, 3);
-			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." AND Deleted='0' AND Timestamp<'$endtime' ORDER BY ".$field." ASC";
+			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." AND Deleted='0' ORDER BY ".$field." ASC";
 			$result=mysql_query($query) or die(mysql_error());
 		}
 		
@@ -351,9 +358,6 @@
 		
 		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance' class='align_right'>".$total."</td><td id='futurebalance' class='align_right'>(".$futuretotal.")</td><td>Current</td><td colspan='2'>(Includes next 7 days)</td></tr></tbody>
 				</table>";
-		if($offset==0){
-			echo "<div id='future'>We only show the payments up to 7 days in advance, therefore you might have payments you've entered that aren't shown.</div>";
-		}
 		echo "<div id='reconcilereport'>";
 		reconcilereport($user, $account,$recvalue);
 		echo 	"</div><div id='responsetext'></div>";
@@ -628,4 +632,74 @@
 		return $row['AccountName'];	
 	}
 
+	function statementdatepicker(){
+		echo " between <select onchange=\"showBetweenDates()\" name='day' id='startday'>";
+				$i=0;
+				while($i<31){
+					$i++;
+					echo "<option value='".$i."'";
+					if($i==1){
+						echo " selected='selected'";
+					}
+					echo ">".$i.date("S", strtotime("01/".$i."/2000"))."</option>";
+				}
+					
+		echo		"</select><select onchange=\"showBetweenDates()\" name='month' id='startmonth'>";
+				$i=0;
+				while($i<12){
+					$i++;
+					echo "<option value='".$i."'";
+					if($i==1){
+						echo " selected='selected'";
+					}
+					echo ">".date("M", strtotime($i."/01/2000"))."</option>";
+				}
+					
+		echo		"</select><select onchange=\"showBetweenDates()\" name='year' id='startyear'>";
+				$i=2009;
+				while($i<date("Y")+2){
+					$i++;
+					echo "<option value='".$i."'";
+					if($i==2009){
+						echo " selected='selected'";
+					}
+					echo ">".$i."</option>";
+				}
+					
+		echo		"</select> and <select onchange=\"showBetweenDates()\" name='day' id='endday'>";
+				$i=0;
+				while($i<31){
+					$i++;
+					echo "<option value='".$i."'";
+					if($i==date("j", time()+604800)){
+						echo " selected='selected'";
+					}
+					echo ">".$i.date("S", strtotime("01/".$i."/2000"))."</option>";
+				}
+					
+		echo		"</select><select onchange=\"showBetweenDates()\" name='month' id='endmonth'>";
+				$i=0;
+				while($i<12){
+					$i++;
+					echo "<option value='".$i."'";
+					if($i==date("n", time()+604800)){
+						echo " selected='selected'";
+					}
+					echo ">".date("M", strtotime($i."/01/2000"))."</option>";
+				}
+					
+		echo		"</select><select onchange=\"showBetweenDates()\" name='year' id='endyear'>";
+				$i=2009;
+				while($i<date("Y")+2){
+					$i++;
+					echo "<option value='".$i."'";
+					if($i==date("Y", time()+604800)){
+						echo " selected='selected'";
+					}
+					echo ">".$i."</option>";
+				}
+					
+		echo		"</select>
+					<button onclick=\"showBetweenDates()\">Show</button>";
+	}
 ?>
