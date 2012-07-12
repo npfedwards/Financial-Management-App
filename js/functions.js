@@ -200,43 +200,19 @@ function showHideRepeatOptions(sel){
 function reconcile(checkbox, id){
 	var account=escape(document.getElementById("accsel").value);
 	var value=escape(document.getElementById("accbal").value);
-	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}else{// code for IE6, IE5
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	function a(){
+		document.getElementById("reconcilereport").innerHTML=xmlhttp.responseText;
 	}
-	
-	
-	xmlhttp.onreadystatechange=function(){
-		if (xmlhttp.readyState==4 && xmlhttp.status==200){
-			//Response Text or fade out etc.
-			document.getElementById("reconcilereport").innerHTML=xmlhttp.responseText;
-		}
-	}
-	
-	xmlhttp.open("GET","xmlhttp/reconcile.php?id="+id+"&c="+checkbox.checked+"&account="+account+"&value="+value,true);
-	xmlhttp.send();
+	ajaxRequest("xmlhttp/reconcile.php?id="+id+"&c="+checkbox.checked+"&account="+account+"&value="+value, a);
 }
 
 function updateReconcile(input){
 	var value=escape(input.value);
 	var account=escape(document.getElementById("accsel").value);
-	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}else{// code for IE6, IE5
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	function a(){
+		document.getElementById("updaterec").innerHTML=xmlhttp.responseText;
 	}
-	
-	
-	xmlhttp.onreadystatechange=function(){
-		if (xmlhttp.readyState==4 && xmlhttp.status==200){
-			//Response Text or fade out etc.
-			document.getElementById("updaterec").innerHTML=xmlhttp.responseText;
-		}
-	}
-	
-	xmlhttp.open("GET","xmlhttp/updatereconcile.php?account="+account+"&value="+value,true);
-	xmlhttp.send();
+	ajaxRequest("xmlhttp/updatereconcile.php?account="+account+"&value="+value, a);
 }
 
 function getSortValue(){
@@ -248,22 +224,10 @@ function getSortValue(){
 }
 
 function otherAccountSelect(){
-	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}else{// code for IE6, IE5
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	function a(){
+		document.getElementById("tofrom").innerHTML=xmlhttp.responseText;
 	}
-	
-	
-	xmlhttp.onreadystatechange=function(){
-		if (xmlhttp.readyState==4 && xmlhttp.status==200){
-			//Response Text or fade out etc.
-			document.getElementById("tofrom").innerHTML=xmlhttp.responseText;
-		}
-	}
-	
-	xmlhttp.open("GET","xmlhttp/accountselect.php",true);
-	xmlhttp.send();
+	ajaxRequest("xmlhttp/accountselect.php", a);
 }
 
 function otherParty(){
@@ -271,43 +235,19 @@ function otherParty(){
 }
 
 function updatePairedPayment(id){
-	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}else{// code for IE6, IE5
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	function a(){
+		updatePayment(xmlhttp.responseText);
 	}
-	
-	
-	xmlhttp.onreadystatechange=function(){
-		if (xmlhttp.readyState==4 && xmlhttp.status==200){
-			//Response Text or fade out etc.
-			updatePayment(xmlhttp.responseText);
-		}
-	}
-	
-	xmlhttp.open("GET","xmlhttp/getpairedid.php?id="+id,true);
-	xmlhttp.send();
+	ajaxRequest("xmlhttp/getpairedid.php?id="+id, a);
 }
 
 function updatePayment(id){
-	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}else{// code for IE6, IE5
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	function a(id){
+		var trid="payment"+id;
+		document.getElementById(trid).innerHTML=xmlhttp.responseText;
+		updateTotal();
 	}
-	
-	
-	xmlhttp.onreadystatechange=function(){
-		if (xmlhttp.readyState==4 && xmlhttp.status==200){
-			//Response Text or fade out etc.
-			var trid="payment"+id;
-			document.getElementById(trid).innerHTML=xmlhttp.responseText;
-			updateTotal();
-		}
-	}
-	
-	xmlhttp.open("GET","xmlhttp/getpayment.php?id="+id,true);
-	xmlhttp.send();	
+	ajaxRequest("xmlhttp/getpayment.php?id="+id, a, id);
 }
 
 function ajaxRequest(url, callbackfunction, param1){
