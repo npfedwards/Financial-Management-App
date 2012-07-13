@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `AccountID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `AccountName` varchar(100) NOT NULL,
+  `ReconcileTotal` int(11) NOT NULL,
   PRIMARY KEY (`AccountID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

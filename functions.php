@@ -1,5 +1,7 @@
 <?php
 	include 'dbconstants.php';
+	define(fromheader, "From: admin@unihouse.co.uk");
+	define(baseurl, "http://unihouse.co.uk/beta/money/");
 	
 	function opendb(){
 		$conn = mysql_connect(dbhost, dbuser, dbpass) or die(mysql_error());
@@ -72,15 +74,15 @@
 	}
 
 	function sendvalidationkey($email, $key, $UserID){
-		mail($email, "Your validation key", "Thanks for signing up! Before you can use your account, you'll need to activate it. To do that, just click on this link: http://unihouse.co.uk/beta/money/validate.php?k=" . $key . "&id=" . $UserID, "from: admin@unihouse.co.uk");
+		mail($email, "Your validation key", "Thanks for signing up! Before you can use your account, you'll need to activate it. To do that, just click on this link: ".baseurl."validate.php?k=" . $key . "&id=" . $UserID, fromheader);
 	}
 
 	function sendpasswordreset($email, $key, $UserID){
-		mail($email, "Passowrd Reset Link", "Click the following link to reset your password. This link is only good for one use, and is only valid for a week. http://unihouse.co.uk/beta/money/resetpassword.php?k=" . $key . "&id=" . $UserID, "From: admin@unihouse.co.uk");
+		mail($email, "Passowrd Reset Link", "Click the following link to reset your password. This link is only good for one use, and is only valid for a week. ".baseurl."resetpassword.php?k=" . $key . "&id=" . $UserID, fromheader);
 	}
 
 	function resendvalidationkey($email, $key, $UserID){
-		mail($email, "Your validation key", "Here's your validation key again: http://unihouse.co.uk/beta/money/validate.php?k=" . $key . "&id=" . $UserID."<br>Remember that it's only valid for the a week since you first registered!", "from: admin@unihouse.co.uk");
+		mail($email, "Your validation key", "Here's your validation key again: ".baseurl."validate.php?k=" . $key . "&id=" . $UserID."<br>Remember that it's only valid for the a week since you first registered!", fromheader);
 	}
 
 	function generatesalt($max = 16){
@@ -218,10 +220,11 @@
 	}
 	
 	function statement($display, $user, $order = 1, $account = 0, $offset = 0, $recvalue = 0, $currfield = 'date', $startdate=NULL, $enddate=NULL){
+		$account=checkAccount($user, $account, 0);
 		if($account!=0){
-			$account="AND payments.AccountID='".$account."' ";
+			$accountquery="AND payments.AccountID='".$account."' ";
 		}else{
-			$account="";	
+			$accountquery="";	
 		}
 		
 		$currentpage=intval($offset/$display)+1;
@@ -249,7 +252,7 @@
 		}
 		
 	
-		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND Deleted='0' AND Timestamp<'$enddate' ".$between.$account."ORDER BY ".$field." DESC Limit ".$offset.",".$display;
+		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND Deleted='0' AND Timestamp<'$enddate' ".$between.$accountquery."ORDER BY ".$field." DESC Limit ".$offset.",".$display;
 		$result=mysql_query($query) or die(mysql_error());
 		
 		if($order!=0 && mysql_num_rows($result)!=0){ //PLEASE PLEASE find a nicer way to do this!
@@ -326,7 +329,7 @@
 		if($enddate<time()){
 			$endtime=time();
 		}
-		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'".$endtime."' ".$account;
+		$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'".$endtime."' ".$accountquery;
 		$result=mysql_query($query) or die(mysql_error());
 		$total=0;
 		
@@ -338,7 +341,7 @@
 		echo		"<tr><td colspan='2'</td><td>Balance</td><td id='balance' class='align_right'>".$total."</td></tr></tbody>
 				</table>";
 		echo "<div id='reconcilereport'>";
-		reconcilereport($user, $account,$recvalue);
+		reconcilereport($user, $account);
 		echo 	"</div><div id='responsetext'></div>";
 	
 	}
@@ -566,14 +569,24 @@
 		}	
 	}
 	
-	function reconcilereport($user, $account, $value){
-		checkAccount($user, $account, 0);
+	function reconcilereport($user, $account){
+		$account=checkAccount($user, $account, 0);
 		if($account!=0){
-			$account="AccountID='$account' AND ";
+			$query="SELECT * FROM accounts WHERE AccountID='$account'";
+			$result=mysql_query($query) or die(mysql_error());
+			$row=mysql_fetch_assoc($result);
+			$value=$row['ReconciledTotal'];
+			$accountquery="AccountID='$account' AND ";
 		}else{
-			$account=NULL;	
+			$query="SELECT * FROM accounts WHERE UserID='$user'";
+			$result=mysql_query($query) or die(mysql_error());
+			$value=0;
+			while($row=mysql_fetch_assoc($result)){
+				$value+=$row['ReconciledTotal'];
+			}
+			$accountquery=NULL;	
 		}
-		$query="SELECT * FROM payments WHERE ".$account." UserID='$user' AND Reconciled='1'";
+		$query="SELECT * FROM payments WHERE ".$accountquery." UserID='$user' AND Reconciled='1'";
 		$result=mysql_query($query) or die(mysql_error());
 		$recbal=0;
 		while($row=mysql_fetch_assoc($result)){
@@ -584,12 +597,20 @@
 		$diff=displayamount($diff,$user);
 		
 		echo "<h4>Reconcile Tool</h4>
-		Account Balance: <input type='number' value='".$value."' step='0.01' name='accountbalance' id='accbal' onKeyUp=\"updateReconcile(this)\"> <div id='updaterec'>Reconciled Balance: ".$recbal." Difference: ".$diff."</div>";
+		Account Balance: ";
+		if($account==0){
+			echo displayamount($value,$user)."<input type='hidden' value='".$value."' id='accbal'>";	
+		}else{
+			echo "<input type='number' value='".$value."' step='0.01' name='accountbalance' id='accbal' onKeyUp=\"updateReconcile(this)\">";
+		}
+		echo "<div id='updaterec'>Reconciled Balance: ".$recbal." Difference: ".$diff."</div>";
 			
 	}
 	
 	function updatereconcile($user, $account, $value){
-		checkAccount($user, $account, 0);
+		$account=checkAccount($user, $account, 0);
+		$query="UPDATE accounts SET ReconciledTotal='$value' WHERE AccountID='$account'";
+		mysql_query($query) or die(mysql_error());
 		if($account!=0){
 			$account="AccountID='$account' AND ";
 		}else{

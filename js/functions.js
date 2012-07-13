@@ -3,7 +3,7 @@ function confirmDelete(id){
 	if(dialogue===true){
 		ajaxDelete(id);
 		var trid="#payment"+id;
-		$(trid).fadeOut("fast");
+		document.getElementById(trid).value="";
 	}
 }
 
