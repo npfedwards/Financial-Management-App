@@ -203,7 +203,7 @@
 					</select>
 					<label for='amount'>Amount</label><input type='number' step='0.01' name='amount' id='amount' onkeypress=\"addPaymentEnter(event)\">
 					<select name='account' id='account'>";
-					$query="SELECT * FROM accounts WHERE UserID='$user'";
+					$query="SELECT * FROM accounts WHERE UserID='$user' AND Archived='0'";
 					$result=mysql_query($query) or die(mysql_error());
 					
 					while($row=mysql_fetch_assoc($result)){
@@ -395,8 +395,34 @@
 		$result=mysql_query($query) or die(mysql_error());
 		echo "<table>";
 		while($row=mysql_fetch_assoc($result)){
-			echo "<tr id='account".$row['AccountID']."'><td>".stripslashes($row['AccountName'])."</td><td><button onclick=\"editAccountForm(".$row['AccountID'].",'".stripslashes($row['AccountName'])."')\">Edit</button></td></tr>";	
+			echo "<tr id='account".$row['AccountID']."'>";
+			accountInList($row['AccountID'],$row['AccountName'],$row['Archived']);
+			echo "</tr>";	
 		}
+	}
+	
+	function accountInList($account, $accountname, $archive){
+		echo "<td";
+		if($archive==1){
+			echo " class='archived'";
+		}
+		echo ">".stripslashes($accountname)."</td><td";
+		if($archive==1){
+			echo " class='archived'";
+		}
+		echo "><button onclick=\"editAccountForm(".$account.",'".stripslashes($accountname)."')\">Edit</button><button onclick=\"deleteAccount(".$account.")\">Delete</button><button onclick=\"archiveAccount(".$account.",";
+		if($archive==1){
+			echo "0";
+		}else{
+			echo "1";	
+		}
+		echo ")\">";
+		if($archive==1){
+			echo "Unarchive";
+		}else{
+			echo "Archive";	
+		}
+		echo "</button></td>";
 	}
 	
 	function accountForm(){

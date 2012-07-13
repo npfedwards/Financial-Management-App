@@ -250,6 +250,29 @@ function updatePayment(id){
 	ajaxRequest("xmlhttp/getpayment.php?id="+id, a, id);
 }
 
+function deleteAccount(id){
+	var dialogue = confirm("Are you sure you want to delete this account? This deletes all corresponding transactions");
+	if(dialogue===true){
+		doDeleteAccount(id);
+	}	
+}
+
+function doDeleteAccount(id){
+	function a(){
+		var trid="account"+id;
+		document.getElementById(trid).innerHTML=xmlhttp.responseText;
+	}
+	ajaxRequest("xmlhttp/deleteaccount.php?id="+id, a);	
+}
+
+function archiveAccount(id,archive){
+	function a(){
+		var trid="account"+id;
+		document.getElementById(trid).innerHTML=xmlhttp.responseText;
+	}
+	ajaxRequest("xmlhttp/archiveaccount.php?id="+id+"&archive="+archive, a);	
+}
+
 function ajaxRequest(url, callbackfunction, param1){
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();

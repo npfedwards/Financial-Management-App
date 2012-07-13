@@ -5,7 +5,7 @@
 	
 	echo "<select id='otherparty' name='otherparty'>";
 	
-	$query="SELECT * FROM accounts WHERE UserID='$user' ORDER BY AccountName ASC";
+	$query="SELECT * FROM accounts WHERE UserID='$user' AND Archived='0' ORDER BY AccountName ASC";
 	$result=mysql_query($query) or die(mysql_error());
 	
 	while($row=mysql_fetch_assoc($result)){
