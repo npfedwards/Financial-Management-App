@@ -15,7 +15,7 @@
 	}
 	mysql_query($query) or die(mysql_error());
 	
-	reconcilereport($user, $account, $value);
+	reconcilereport($user, $account);
 	
 	closedb($conn);
 ?>
