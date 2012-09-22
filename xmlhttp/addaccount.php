@@ -9,6 +9,7 @@
 		mysql_query($query) or die(mysql_error());
 		
 		accountList($user);
+		accountForm();
 	}else{
 		loginform();
 	}
