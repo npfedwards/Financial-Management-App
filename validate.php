@@ -3,8 +3,8 @@
 	opendb();
 	
 	//TODO: check that v has been submitted,  and it's of the correct length (64)
-	$submittedkey=mysql_real_escape_string(htmlentities($_GET['k']));
-	$UserID=mysql_real_escape_string(htmlentities($_GET['id']));
+	$submittedkey=sanitise('k');
+	$UserID=sanitise('id');
 
 	$msg=NULL;
 
