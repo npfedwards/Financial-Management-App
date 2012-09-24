@@ -2,10 +2,10 @@
 	include 'functions.php';
 	opendb();
 
-	$email=mysql_real_escape_string(htmlentities($_POST['email']));
-	$pass=mysql_real_escape_string(htmlentities($_POST['password']));
-	$repeatpass=mysql_real_escape_string(htmlentities($_POST['repeatpassword']));
-	$prefcurrency=mysql_real_escape_string(htmlentities($_POST['prefcurrency']));
+	$email=sanitise('email', 'p');
+	$pass=sanitise('password', 'p');
+	$repeatpass=sanitise('repeatpassword', 'p');
+	$prefcurrency=sanitise('prefcurrency', 'p');
 	
 	$msg = NULL;
 

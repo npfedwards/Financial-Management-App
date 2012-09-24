@@ -1,8 +1,8 @@
 <?php
 	include_once 'functions.php';
 	opendb();
-	$email=mysql_real_escape_string(htmlentities($_POST['email']));
-	$pass=mysql_real_escape_string(htmlentities($_POST['password']));
+	$email=sanitise('email', 'p');
+	$pass=sanitise('password', 'p');
 	
 	$msg='Your email or password were incorrect or your account is not yet validated';
 	
