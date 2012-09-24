@@ -3,12 +3,13 @@
 	checklogin();
 	opendb();
 	if($loggedin==1){
-		$account=mysql_real_escape_string(htmlentities($_GET['account']));
+		$account=sanitise('account');
 		
 		$query="INSERT INTO accounts (UserID, AccountName) VALUES ('$user', '$account')";
 		mysql_query($query) or die(mysql_error());
 		
 		accountList($user);
+		accountForm();
 	}else{
 		loginform();
 	}
