@@ -226,6 +226,9 @@
 		}else{
 			$accountquery="";	
 		}
+		if(!is_int($offset)){
+			$offset=0;
+		}
 		
 		$currentpage=intval($offset/$display)+1;
 		pagination($user,$account,$display,$currentpage);

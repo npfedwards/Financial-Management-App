@@ -12,9 +12,9 @@
 		
 		$amount=$row['PaymentAmount'];
 		if($amount<0){
-			$amount="<input type='number' step='0.01' name='in' id='in".$row['PaymentID']."'></td><td><span class='red'><input type='number' step='0.01' name='out' id='out".$row['PaymentID']."' value='".$amount*(-1)."'></span>";
+			$amount="<input type='number' step='0.01' name='in' id='in".$row['PaymentID']."'></td><td><input type='number' step='0.01' name='out' id='out".$row['PaymentID']."' value='".$amount*(-1)."' class='red'>";
 		}else{
-			$amount="<input type='number' step='0.01' name='in' id='in".$row['PaymentID']."' value='".$amount."'></td><td><span class='red'><input type='number' step='0.01' name='out' id='out".$row['PaymentID']."'></span>";
+			$amount="<input type='number' step='0.01' name='in' id='in".$row['PaymentID']."' value='".$amount."'></td><td><input type='number' step='0.01' name='out' id='out".$row['PaymentID']."' class='red'>";
 		}
 		
 		echo "<td><select name='day' id='day".$row['PaymentID']."'>";
@@ -65,10 +65,10 @@
 			  	}
 				echo "</select><input type='hidden' id='otherparty".$row['PaymentID']."' value='0'>";
 			  }else{
-				echo "<input type='text' name='otherparty' id='otherparty".$row['PaymentID']."' value='".stripslashes($row['PaymentName'])."'><input type='hidden' id='toaccount".$row['PaymentID']."' value='0'>";
+				echo "<input type='text' name='otherparty' id='otherparty".$row['PaymentID']."' value='".htmlspecialchars($row['PaymentName'],ENT_QUOTES)."'><input type='hidden' id='toaccount".$row['PaymentID']."' value='0'>";
 			  }
 		echo 	"</td>
-			  <td><input type='text' name='desc' id='desc".$row['PaymentID']."' value='".$row['PaymentDesc']."'></td>
+			  <td><input type='text' name='desc' id='desc".$row['PaymentID']."' value='".htmlspecialchars($row['PaymentDesc'], ENT_QUOTES)."'></td>
 			  <td>".$amount."</td>
 			  <td>
 				<select name='type' id='type".$row['PaymentID']."'>
