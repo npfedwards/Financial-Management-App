@@ -2,7 +2,7 @@ function confirmDelete(id){
 	var dialogue = confirm("Are you sure? You can't undelete it!");
 	if(dialogue===true){
 		ajaxDelete(id);
-		var trid="#payment"+id;
+		var trid="payment"+id;
 		document.getElementById(trid).value="";
 	}
 }
@@ -11,6 +11,7 @@ function ajaxDelete(id){
 	function a(){
 		//Response Text or fade out etc.
 		if(xmlhttp.responseText!=""){
+			alert(xmlhttp.responseText);
 			var dialogue = confirm("You just deleated a repeating entry, do you want to stop future repeats?");
 			if(dialogue===true){
 				deleteRepeat(xmlhttp.responseText);
@@ -54,7 +55,7 @@ function doEdit(id){
 		if(toaccount!=0){
 			updatePairedPayment(id);
 		}else{
-			updateTotal();
+			showWithOffset();
 		}
 	}
 	ajaxRequest("xmlhttp/doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&toaccount="+toaccount, a, id);
