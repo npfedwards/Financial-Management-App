@@ -824,7 +824,7 @@
 	
 	function labellist($user){
 		$query="SELECT * FROM labels WHERE UserID='$user'";
-		$result=mysql_query($query) or die(mysql_error());
+		$result=mysql_query($query) or die(mysqlerror(mysql_error(), "L1"));
 		
 		echo "<thead>
 				<tr>
@@ -834,5 +834,11 @@
 			while($row=mysql_fetch_assoc($result)){
 				echo "<tr><td><span style='color:".$row['Colour']."'>".stripslashes($row['LabelName'])."</span></td><td><input type='number' step='1' value='".stripslashes($row['Budget'])."' id='budget".$row['LabelID']."' onKeyUp=\"editBudget(".$row['LabelID'].",this.value)\"></td></tr>";	
 			}
+	}
+	
+	function mysqlerror($error, $number='0'){
+		return "We've had a problem, here's the error message<br>
+		".$error."<br>
+		It's on ".$_SERVER['REQUEST_URI']." #".$number;
 	}
 ?>
