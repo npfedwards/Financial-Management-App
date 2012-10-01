@@ -11,9 +11,9 @@
 			accountForm();
 			echo "</div>";
 			currencyPrefForm($user);
-			echo "<div id='currencycontainer'></div>";
+			echo "<br>";
 			paymentPrefForm($user);
-			echo "<div id='paymentprefcontainer'></div>";
+			echo "<br>";
 			changePasswordForm();
 			echo "<div id='changepasswordcontainer'>".$msg."</div>
 			</div>";

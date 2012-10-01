@@ -80,7 +80,8 @@ function addAccount(){
 function updateCurrency(){
 	var currency=escape(document.getElementById("currency").value);
 	function a(){
-		document.getElementById('currencycontainer').innerHTML=xmlhttp.responseText;
+		document.getElementById('feedbackcontainer').innerHTML=xmlhttp.responseText;
+		document.getElementById('feedbackbox').style.display='block';
 	}
 	ajaxRequest("xmlhttp/updatecurrency.php?currency="+currency, a);
 }
@@ -88,7 +89,8 @@ function updateCurrency(){
 function updatePaymentMethod(){
 	var method=escape(document.getElementById("paymentmethod").value);
 	function a(){
-		document.getElementById('paymentprefcontainer').innerHTML=xmlhttp.responseText;
+		document.getElementById('feedbackcontainer').innerHTML=xmlhttp.responseText;
+		document.getElementById('feedbackbox').style.display='block';
 	}
 	ajaxRequest("xmlhttp/updatepaymentmethod.php?pm="+method, a);
 }
