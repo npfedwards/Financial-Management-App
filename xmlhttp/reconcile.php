@@ -1,7 +1,7 @@
 <?php
 	include_once '../functions.php';
 	checklogin();
-	opendb();
+	$conn=opendb();
 	
 	$id=sanitise('id');
 	$c=sanitise('c');
@@ -17,5 +17,5 @@
 	
 	reconcilereport($user, $account);
 	
-	closedb($conn);
+	
 ?>
