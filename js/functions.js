@@ -236,11 +236,14 @@ function otherAccountSelect(){
 	function a(){
 		document.getElementById("tofrom").innerHTML=xmlhttp.responseText;
 	}
-	ajaxRequest("xmlhttp/accountselect.php", a);
+	var selectedIndex = document.getElementById("type").selectedIndex;
+	ajaxRequest("xmlhttp/accountselect.php?i="+selectedIndex, a);
+	document.getElementById("type").selectedIndex=3;
 }
 
-function otherParty(){
+function otherParty(index){
 	document.getElementById("tofrom").innerHTML="<input type='text' name='otherparty' id='otherparty'><span onclick=\"otherAccountSelect()\" class='clickable'>Another of your accounts?</span>";	
+	document.getElementById("type").selectedIndex=index;
 }
 
 function updatePairedPayment(id){

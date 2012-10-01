@@ -179,7 +179,6 @@
 					}
 					echo ">".$i."</option>";
 				}
-					
 		echo		"</select>
 					<select name='getorgive' id='getorgive'>
 						<option value='-1'>Pay</option>
