@@ -20,5 +20,6 @@
 		?>
 		<div id='loadingbox'>
 			<h3>Loading...</h3>
-				<p>Have a cup of tea while we work on your request!</p>
+				<img src="img/ajax-loader.gif" alt="pac-man"></img>
+				<p>Currently nomming...</p>
 			</div>
