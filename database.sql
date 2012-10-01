@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.5
+-- version 3.5.1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 07, 2012 at 06:45 PM
--- Server version: 5.5.16
--- PHP Version: 5.3.8
+-- Generation Time: Oct 01, 2012 at 12:36 PM
+-- Server version: 5.5.25
+-- PHP Version: 5.4.4
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `accounts`
 --
 
-CREATE TABLE IF NOT EXISTS `accounts` (
+CREATE TABLE `accounts` (
   `AccountID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `AccountName` varchar(100) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 -- Table structure for table `labels`
 --
 
-CREATE TABLE IF NOT EXISTS `labels` (
+CREATE TABLE `labels` (
   `LabelID` int(11) NOT NULL AUTO_INCREMENT,
   `LabelName` varchar(100) NOT NULL,
   `UserID` int(11) NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `labels` (
 -- Table structure for table `payments`
 --
 
-CREATE TABLE IF NOT EXISTS `payments` (
+CREATE TABLE `payments` (
   `PaymentID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `AccountID` int(11) NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `PaymentType` varchar(100) NOT NULL,
   `LabelID` int(11) NOT NULL,
   `Reconciled` tinyint(1) NOT NULL,
-  `Repeated` int(11) NOT NULL,
+  `RepeatID` int(11) NOT NULL,
   `Deleted` tinyint(4) NOT NULL,
   `ToAccount` int(11) NOT NULL,
   `PairedID` int(11) NOT NULL,
@@ -67,25 +67,37 @@ CREATE TABLE IF NOT EXISTS `payments` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
+
 --
 -- Table structure for table `repeats`
 --
 
-CREATE TABLE IF NOT EXISTS `repeats` (
+CREATE TABLE `repeats` (
   `RepeatID` int(11) NOT NULL AUTO_INCREMENT,
-  `PaymentID` int(11) NOT NULL,
   `Frequency` varchar(10) NOT NULL,
   `Times` int(11) NOT NULL,
   `ExpireTime` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `AccountID` int(11) NOT NULL,
+  `Timestamp` int(11) NOT NULL,
+  `PaymentName` varchar(100) NOT NULL,
+  `PaymentDesc` varchar(200) NOT NULL,
+  `PaymentAmount` float NOT NULL,
+  `PaymentType` varchar(100) NOT NULL,
+  `LabelID` int(11) NOT NULL,
+  `Reconciled` tinyint(4) NOT NULL,
+  `ToAccount` int(11) NOT NULL,
+  `PairedID` int(11) NOT NULL,
   PRIMARY KEY (`RepeatID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `sessions`
 --
 
-CREATE TABLE IF NOT EXISTS `sessions` (
+CREATE TABLE `sessions` (
   `SessionID` int(11) NOT NULL AUTO_INCREMENT,
   `SessionKey` varchar(64) NOT NULL,
   `UserID` int(11) NOT NULL,
@@ -100,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 -- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE `users` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,
   `Email` varchar(100) NOT NULL,
   `Password` varchar(64) NOT NULL,
@@ -113,4 +125,3 @@ CREATE TABLE IF NOT EXISTS `users` (
   `PrefCurrency` varchar(10) NOT NULL,
   PRIMARY KEY (`UserID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-

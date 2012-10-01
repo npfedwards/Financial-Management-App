@@ -522,7 +522,7 @@
 	}
 	
 	function dorepeats($user){
-		$query="SELECT * FROM repeats LEFT JOIN payments ON repeats.PaymentID=payments.PaymentID WHERE ExpireTime>'".time()."' AND UserID='$user'";
+		$query="SELECT * FROM repeats LEFT JOIN payments ON repeats.RepeatID=payments.RepeatID WHERE ExpireTime>'".time()."' AND repeats.UserID='$user'";
 		$result=mysql_query($query) or die(mysql_error());
 		
 		while($row=mysql_fetch_assoc($result)){
