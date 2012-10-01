@@ -35,12 +35,14 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 -- Table structure for table `labels`
 --
 
-CREATE TABLE IF NOT EXISTS `labels` (
+CREATE TABLE `labels` (
   `LabelID` int(11) NOT NULL AUTO_INCREMENT,
   `LabelName` varchar(100) NOT NULL,
   `UserID` int(11) NOT NULL,
+  `Colour` varchar(7) NOT NULL,
+  `Budget` float NOT NULL,
   PRIMARY KEY (`LabelID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
