@@ -25,7 +25,8 @@
 		}
 		$query="INSERT INTO labels (LabelName, Colour, UserID) VALUES ('$label', '$pickedcolour', '$user')";
 		mysql_query($query) or die(mysql_error());
-		echo "<span style='color:$pickedcolour'>".stripslashes($label)."</span>";
+		
+		labellist($user);
 	}else{
 		loginform();
 	}

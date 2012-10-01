@@ -306,8 +306,13 @@ function ajaxRequest(url, callbackfunction, param1){
 function addLabel(){
 	var label = escape(document.getElementById('addlabel').value);
 	function a(){
-		document.getElementById('labels').innerHTML+=xmlhttp.responseText;
+		document.getElementById('labels').innerHTML=xmlhttp.responseText;
 		document.getElementById('addlabel').value="";
 	}
 	ajaxRequest('xmlhttp/addlabel.php?label='+label, a);
+}
+
+function editBudget(id, budget){
+	function a(){}
+	ajaxRequest('xmlhttp/editbudget.php?id='+id+'&budget='+budget, a);
 }

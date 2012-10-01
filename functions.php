@@ -826,11 +826,13 @@
 		$query="SELECT * FROM labels WHERE UserID='$user'";
 		$result=mysql_query($query) or die(mysql_error());
 		
-		echo "<div id='labels'>";
+		echo "<thead>
+				<tr>
+					<th>Label</th>
+					<th>Monthly Budget</th>
+				</tr>";
 			while($row=mysql_fetch_assoc($result)){
-				echo "<span style='color:".$row['Colour']."'>".stripslashes($row['LabelName'])."</span><br>";	
+				echo "<tr><td><span style='color:".$row['Colour']."'>".stripslashes($row['LabelName'])."</span></td><td><input type='number' step='1' value='".stripslashes($row['Budget'])."' id='budget".$row['LabelID']."' onKeyUp=\"editBudget(".$row['LabelID'].",this.value)\"></td></tr>";	
 			}
-		echo "</div>";
-		echo "<input type='text' id='addlabel'><button onClick=\"addLabel()\">Add Label</button>";
 	}
 ?>
