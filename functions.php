@@ -821,5 +821,18 @@
 				</select>
 				<button onclick=\"updatePaymentMethod()\">Change</button>";
 	}
-
+	
+	function labellist($user){
+		$query="SELECT * FROM labels WHERE UserID='$user'";
+		$result=mysql_query($query) or die(mysql_error());
+		
+		echo "<thead>
+				<tr>
+					<th>Label</th>
+					<th>Monthly Budget</th>
+				</tr>";
+			while($row=mysql_fetch_assoc($result)){
+				echo "<tr><td><span style='color:".$row['Colour']."'>".stripslashes($row['LabelName'])."</span></td><td><input type='number' step='1' value='".stripslashes($row['Budget'])."' id='budget".$row['LabelID']."' onKeyUp=\"editBudget(".$row['LabelID'].",this.value)\"></td></tr>";	
+			}
+	}
 ?>
