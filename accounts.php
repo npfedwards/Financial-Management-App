@@ -11,12 +11,21 @@
 			accountForm();
 			echo "</div>";
 			currencyPrefForm($user);
-			echo "<div id='currencycontainer'></div>";
+			echo "<br>";
 			paymentPrefForm($user);
-			echo "<div id='paymentprefcontainer'></div>";
+			echo "<br>";
 			changePasswordForm();
-			echo "<div id='changepasswordcontainer'>".$msg."</div>
-			</div>";
+			echo "<br>";
+
+			if (isset($msg)) {
+				$safemessage=htmlspecialchars($msg, ENT_QUOTES);
+				echo "<script type='text/javascript'>displayFeedback('$safemessage'";
+				if (!$success){ 
+					echo " , 'error'";
+				}
+			echo ");</script>";
+			}
+			echo "</div>";
 	}else{
 		loginform();
 		echo $msg;

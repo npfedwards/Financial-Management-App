@@ -79,15 +79,39 @@ function addAccount(){
 function updateCurrency(){
 	var currency=escape(document.getElementById("currency").value);
 	function a(){
-		document.getElementById('currencycontainer').innerHTML=xmlhttp.responseText;
+		displayFeedback(xmlhttp.responseText)
 	}
 	ajaxRequest("xmlhttp/updatecurrency.php?currency="+currency, a);
 }
 
+function displayFeedback(message, type) {
+	/*	USAGE:
+		message is a string (can be html) to be displayed in box
+		type is the type of message to be shown.
+			defaults to success (green).
+			passing 'error' here makes the box red.
+	*/
+	//Check if there's already a timer running, and cancel it so that this message isn't cut off prematurely:
+	if (typeof t!='undefined') {clearTimeout(t);}
+	//check what type of message:
+	if (type==='error') {
+		document.getElementById('feedbackbox').className='error';
+	} else{
+		document.getElementById('feedbackbox').className='success';
+	}
+	//set the message contents
+	document.getElementById('feedbackcontainer').innerHTML=message;
+	//show the feedback
+	document.getElementById('feedbackbox').style.display='block';
+	//set the box to disappear in 5(ish) seconds...
+	t = window.setTimeout(function() {document.getElementById('feedbackbox').style.display='none';}, 5000);
+}
+
+
 function updatePaymentMethod(){
 	var method=escape(document.getElementById("paymentmethod").value);
 	function a(){
-		document.getElementById('paymentprefcontainer').innerHTML=xmlhttp.responseText;
+		displayFeedback(xmlhttp.responseText)
 	}
 	ajaxRequest("xmlhttp/updatepaymentmethod.php?pm="+method, a);
 }
