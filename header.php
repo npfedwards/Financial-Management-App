@@ -11,6 +11,9 @@
    	</head>
 	<body>
     	<div id='wrapper'>
+   		<div id='feedbackbox'>
+			<div id='feedbackcontainer'></div>
+		</div>
    		<?php
         	if($loggedin==1){
 				echo 	"<a href='logout.php'>Log Out</a>
@@ -22,4 +25,5 @@
 			<h3>Loading...</h3>
 				<img src="img/ajax-loader.gif" alt="pac-man"></img>
 				<p>Currently nomming...</p>
-			</div>
+		</div>
+
