@@ -86,6 +86,14 @@ function updateCurrency(){
 	ajaxRequest("xmlhttp/updatecurrency.php?currency="+currency, a);
 }
 
+function updatePaymentMethod(){
+	var method=escape(document.getElementById("paymentmethod").value);
+	function a(){
+		document.getElementById('paymentprefcontainer').innerHTML=xmlhttp.responseText;
+	}
+	ajaxRequest("xmlhttp/updatepaymentmethod.php?pm="+method, a);
+}
+
 function addAccountEnter(e){
 	if(checkEnter(e)){
 		addAccount();	
