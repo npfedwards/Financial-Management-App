@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
+
 --
 -- Table structure for table `repeats`
 --
@@ -80,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `repeats` (
   PRIMARY KEY (`RepeatID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `sessions`
@@ -111,6 +113,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   `ResetKey` varchar(64) NOT NULL,
   `ResetTimeout` int(11) NOT NULL,
   `PrefCurrency` varchar(10) NOT NULL,
+  `PrefPaymentMethod` varchar(64) NOT NULL,
   PRIMARY KEY (`UserID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
