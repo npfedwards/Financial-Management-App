@@ -15,8 +15,17 @@
 			paymentPrefForm($user);
 			echo "<br>";
 			changePasswordForm();
-			echo "<div id='changepasswordcontainer'>".$msg."</div>
-			</div>";
+			echo "<br>";
+
+			if (isset($msg)) {
+				$safemessage=htmlspecialchars($msg, ENT_QUOTES);
+				echo "<script type='text/javascript'>displayFeedback('$safemessage'";
+				if (!$success){ 
+					echo " , 'error'";
+				}
+			echo ");</script>";
+			}
+			echo "</div>";
 	}else{
 		loginform();
 		echo $msg;
