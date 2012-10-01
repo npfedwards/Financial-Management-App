@@ -84,8 +84,14 @@ function updateCurrency(){
 	ajaxRequest("xmlhttp/updatecurrency.php?currency="+currency, a);
 }
 
-function displayFeedback(message) {
+function displayFeedback(message, type) {
 	if (typeof t!='undefined') {clearTimeout(t);}
+	if (type==='error') {
+		document.getElementById('feedbackbox').className='error';
+	} else{
+		document.getElementById('feedbackbox').className='success';
+	}
+
 	document.getElementById('feedbackcontainer').innerHTML=message;
 	document.getElementById('feedbackbox').style.display='block';
 	t = window.setTimeout(function() {document.getElementById('feedbackbox').style.display='none';}, 5000);
