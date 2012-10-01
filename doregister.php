@@ -5,7 +5,6 @@
 	$email=sanitise('email', 'p');
 	$pass=sanitise('password', 'p');
 	$repeatpass=sanitise('repeatpassword', 'p');
-	$prefcurrency=sanitise('prefcurrency', 'p');
 	
 	$msg = NULL;
 
@@ -30,7 +29,7 @@
 			$salt = generatesalt();
 			$hash = sha1($pass . $salt);
 			$validationkey = sha1(generatesalt(64));
-			$query="INSERT INTO users (Email, Password, Salt, ValidatedTimeout, ValidationKey, PrefCurrency) VALUES ('$email', '$hash', '$salt', '$time', '$validationkey', '&pound;')";
+			$query="INSERT INTO users (Email, Password, Salt, ValidatedTimeout, ValidationKey, PrefCurrency, PrefPaymentMethod) VALUES ('$email', '$hash', '$salt', '$time', '$validationkey', '&pound;', 'Card')";
 			//insrt
 			mysql_query($query) or die(mysql_error());
 			$UserID = mysql_insert_id();

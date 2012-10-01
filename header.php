@@ -18,3 +18,8 @@
 						<a href='accounts.php'>Account</a>";	
 			}
 		?>
+		<div id='loadingbox'>
+			<h3>Loading...</h3>
+				<img src="img/ajax-loader.gif" alt="pac-man"></img>
+				<p>Currently nomming...</p>
+			</div>
