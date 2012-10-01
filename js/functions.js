@@ -84,6 +84,14 @@ function updateCurrency(){
 	ajaxRequest("xmlhttp/updatecurrency.php?currency="+currency, a);
 }
 
+function updatePaymentMethod(){
+	var method=escape(document.getElementById("paymentmethod").value);
+	function a(){
+		document.getElementById('paymentprefcontainer').innerHTML=xmlhttp.responseText;
+	}
+	ajaxRequest("xmlhttp/updatepaymentmethod.php?pm="+method, a);
+}
+
 function addAccountEnter(e){
 	if(checkEnter(e)){
 		addAccount();	
@@ -226,11 +234,14 @@ function otherAccountSelect(){
 	function a(){
 		document.getElementById("tofrom").innerHTML=xmlhttp.responseText;
 	}
-	ajaxRequest("xmlhttp/accountselect.php", a);
+	var selectedIndex = document.getElementById("type").selectedIndex;
+	ajaxRequest("xmlhttp/accountselect.php?i="+selectedIndex, a);
+	document.getElementById("type").selectedIndex=3;
 }
 
-function otherParty(){
+function otherParty(index){
 	document.getElementById("tofrom").innerHTML="<input type='text' name='otherparty' id='otherparty'><span onclick=\"otherAccountSelect()\" class='clickable'>Another of your accounts?</span>";	
+	document.getElementById("type").selectedIndex=index;
 }
 
 function updatePairedPayment(id){
@@ -273,6 +284,7 @@ function archiveAccount(id,archive){
 }
 
 function ajaxRequest(url, callbackfunction, param1){
+	document.getElementById("loadingbox").style.display='block';
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
 	}else{// code for IE6, IE5
@@ -284,9 +296,9 @@ function ajaxRequest(url, callbackfunction, param1){
 		if (xmlhttp.readyState==4 && xmlhttp.status==200){
 			//Response Text or fade out etc.
 			callbackfunction(param1);
+			document.getElementById("loadingbox").style.display='none';
 		}
 	}
-	
 	xmlhttp.open("GET",url,true);
 	xmlhttp.send();
 }

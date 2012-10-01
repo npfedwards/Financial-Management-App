@@ -179,7 +179,6 @@
 					}
 					echo ">".$i."</option>";
 				}
-					
 		echo		"</select>
 					<select name='getorgive' id='getorgive'>
 						<option value='-1'>Pay</option>
@@ -192,14 +191,39 @@
 					</span>
 					<span>
 					<label for='desc'>Description</label><input type='text' name='desc' id='desc'>
-					<label for='type'>Type</label>
-					<select name='type' id='type'>
-						<option>Cheque</option>
-						<option>Card</option>
-						<option>Cash</option>
-						<option>Transfer</option>
-						<option>Direct Debit</option>
-						<option>Standing Order</option>
+					<label for='type'>Type</label>";
+		$pm=paymentMethod($user);
+		echo 		"<select name='type' id='type'>
+						<option";
+					if($pm=="Cheque"){
+						echo " selected='selected'";	
+					}
+		echo 		">Cheque</option>
+						<option";
+					if($pm=="Card"){
+						echo " selected='selected'";	
+					}
+		echo		">Card</option>
+						<option";
+					if($pm=="Cash"){
+						echo " selected='selected'";	
+					}
+		echo		">Cash</option>
+						<option";
+					if($pm=="Transfer"){
+						echo " selected='selected'";	
+					}
+		echo		">Transfer</option>
+						<option";
+					if($pm=="Direct Debit"){
+						echo " selected='selected'";	
+					}
+		echo		">Direct Debit</option>
+						<option";
+					if($pm=="Standing Order"){
+						echo " selected='selected'";	
+					}
+		echo		">Standing Order</option>
 					</select>
 					<label for='amount'>Amount</label><input type='number' step='0.01' name='amount' id='amount' onkeypress=\"addPaymentEnter(event)\">
 					<select name='account' id='account'>";
@@ -386,7 +410,7 @@
 		return $account;	
 	}
 	
-	function currencysymbol($user){
+	function currencySymbol($user){
 		$query="SELECT * FROM users WHERE UserID='$user'";
 		$currencyresult=mysql_query($query) or die(mysql_error());
 		$currencyarray=mysql_fetch_array($currencyresult);
@@ -433,7 +457,7 @@
 	}
 
 	function currencyPrefForm($user){
-		$cs=currencysymbol($user);
+		$cs=currencySymbol($user);
 		echo "Preffered Currency
 				<select name='prefcurrency' id='currency'>
 					<option value='pound'";
@@ -757,4 +781,51 @@
 		}
 		return $amount;
 	}
+
+
+	function paymentMethod($user){
+		$query="SELECT * FROM users WHERE UserID='$user'";
+		$paymentresult=mysql_query($query) or die(mysql_error());
+		$paymentarray=mysql_fetch_array($paymentresult);
+		return $paymentarray['PrefPaymentMethod'];
+	}
+
+	function paymentPrefForm($user){
+		$pm=paymentMethod($user);
+		echo "Preffered Currency
+				<select name='prefpaymentmethod' id='paymentmethod'>
+					<option value='Cheque'";
+			if($pm=="Cheque"){
+				echo " selected='selected'";	
+			}
+			echo	">Cheque</option>
+					<option value='Card'";
+			if($pm=="Card"){
+				echo " selected='selected'";	
+			}
+			echo	">Card</option>
+					<option value='Cash'";
+			if($pm=="Cash"){
+				echo " selected='selected'";	
+			}
+			echo	">Cash</option>
+					<option value='Transfer'";
+			if($pm=="Transfer"){
+				echo " selected='selected'";	
+			}
+			echo	">Transfer</option>
+					<option value='Direct Debit'";
+			if($pm=="Direct Debit"){
+				echo " selected='selected'";	
+			}
+			echo	">Direct Debit</option>
+					<option value='Standing Order'";
+			if($pm=="Standing Order"){
+				echo " selected='selected'";	
+			}
+			echo	">Standing Order</option>
+				</select>
+				<button onclick=\"updatePaymentMethod()\">Change</button>";
+	}
+
 ?>
