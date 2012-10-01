@@ -2,8 +2,6 @@ function confirmDelete(id){
 	var dialogue = confirm("Are you sure? You can't undelete it!");
 	if(dialogue===true){
 		ajaxDelete(id);
-		var trid="payment"+id;
-		document.getElementById(trid).value="";
 	}
 }
 
@@ -16,13 +14,14 @@ function ajaxDelete(id){
 				deleteRepeat(xmlhttp.responseText, id);
 			}
 		}
-		updateTotal();
+		showWithOffset();
 	}
 	ajaxRequest("xmlhttp/delete.php?id="+id, a);
 }
 
 function deleteRepeat(id, payid){
-	ajaxRequest("xmlhttp/deleterepeat.php?id="+id+"&payid="+payid);
+	function a(){}
+	ajaxRequest("xmlhttp/deleterepeat.php?id="+id+"&payid="+payid, a);
 }
 
 
