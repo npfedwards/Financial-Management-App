@@ -11,10 +11,9 @@ function ajaxDelete(id){
 	function a(){
 		//Response Text or fade out etc.
 		if(xmlhttp.responseText!=""){
-			alert(xmlhttp.responseText);
 			var dialogue = confirm("You just deleated a repeating entry, do you want to stop future repeats?");
 			if(dialogue===true){
-				deleteRepeat(xmlhttp.responseText);
+				deleteRepeat(xmlhttp.responseText, id);
 			}
 		}
 		updateTotal();
@@ -22,8 +21,8 @@ function ajaxDelete(id){
 	ajaxRequest("xmlhttp/delete.php?id="+id, a);
 }
 
-function deleteRepeat(id){
-	ajaxRequest("xmlhttp/deleterepeat.php?id="+id);
+function deleteRepeat(id, payid){
+	ajaxRequest("xmlhttp/deleterepeat.php?id="+id+"&payid="+payid);
 }
 
 
