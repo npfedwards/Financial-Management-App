@@ -286,6 +286,7 @@ function archiveAccount(id,archive){
 }
 
 function ajaxRequest(url, callbackfunction, param1){
+	document.getElementById("loadingbox").style.display='block';
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
 	}else{// code for IE6, IE5
@@ -299,7 +300,7 @@ function ajaxRequest(url, callbackfunction, param1){
 			callbackfunction(param1);
 		}
 	}
-	
 	xmlhttp.open("GET",url,true);
 	xmlhttp.send();
+	document.getElementById("loadingbox").style.display='none';
 }

@@ -18,3 +18,7 @@
 						<a href='accounts.php'>Account</a>";	
 			}
 		?>
+		<div id='loadingbox'>
+			<h3>Loading...</h3>
+				<p>Have a cup of tea while we work on your request!</p>
+			</div>
