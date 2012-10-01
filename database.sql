@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `AccountID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `AccountName` varchar(100) NOT NULL,
-  `ReconcileTotal` float NOT NULL,
+  `ReconciledTotal` float NOT NULL,
   `Archived` tinyint(4) NOT NULL,
   PRIMARY KEY (`AccountID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `repeats` (
   `Times` int(11) NOT NULL,
   `ExpireTime` int(11) NOT NULL,
   PRIMARY KEY (`RepeatID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
