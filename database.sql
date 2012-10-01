@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `ReconcileTotal` float NOT NULL,
   `Archived` tinyint(4) NOT NULL,
   PRIMARY KEY (`AccountID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `ToAccount` int(11) NOT NULL,
   `PairedID` int(11) NOT NULL,
   PRIMARY KEY (`PaymentID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `repeats` (
   `Times` int(11) NOT NULL,
   `ExpireTime` int(11) NOT NULL,
   PRIMARY KEY (`RepeatID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `SessionTimeout` int(11) NOT NULL,
   `IP` varchar(40) NOT NULL,
   PRIMARY KEY (`SessionID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -115,4 +115,4 @@ CREATE TABLE IF NOT EXISTS `users` (
   `PrefCurrency` varchar(10) NOT NULL,
   `PrefPaymentMethod` varchar(64) NOT NULL,
   PRIMARY KEY (`UserID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
