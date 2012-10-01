@@ -12,6 +12,8 @@
 			echo "</div>";
 			currencyPrefForm($user);
 			echo "<div id='currencycontainer'></div>";
+			paymentPrefForm($user);
+			echo "<div id='paymentprefcontainer'></div>";
 			changePasswordForm();
 			echo "<div id='changepasswordcontainer'>".$msg."</div>
 			</div>";
