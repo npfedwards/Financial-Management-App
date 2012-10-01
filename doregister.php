@@ -1,6 +1,6 @@
 <?php
 	include 'functions.php';
-	opendb();
+	$conn=opendb();
 
 	$email=sanitise('email', 'p');
 	$pass=sanitise('password', 'p');
@@ -57,7 +57,7 @@
 		}
 	}
 	
-	closedb($conn);
+	
 	if($success==1){
 		include 'index.php';	
 	}else{

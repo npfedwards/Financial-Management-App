@@ -1,12 +1,12 @@
 <?php
 	include_once '../functions.php';
 	checklogin();
-	opendb();
+	$conn=opendb();
 	
 	$account=sanitise('account');
 	$value=sanitise('value');
 	
 	updatereconcile($user, $account, $value);
 	
-	closedb($conn);
+	
 ?>

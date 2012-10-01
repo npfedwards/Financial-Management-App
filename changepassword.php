@@ -7,7 +7,7 @@
 			$user=mysql_real_escape_string($_COOKIE['userid']);
 		}
 		
-		opendb();
+		$conn=opendb();
 
 		$pass = sanitise('currentpassword', 'p');
 		$newpass1 = sanitise('newpassword1', 'p');

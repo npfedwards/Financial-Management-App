@@ -1,7 +1,7 @@
 <?php
 	include_once '../functions.php';
 	checklogin();
-	opendb();
+	$conn=opendb();
 	
 	if($loggedin==1){
 		$getorgive=sanitise('getorgive'); //sanitise assumes $_GET
@@ -168,5 +168,5 @@
 		loginform();
 	}
 	
-	closedb($conn);
+	
 ?>

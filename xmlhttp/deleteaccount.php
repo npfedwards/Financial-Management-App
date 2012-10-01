@@ -1,7 +1,7 @@
 <?php
 	include_once '../functions.php';
 	checklogin();
-	opendb();
+	$conn=opendb();
 	
 	if($loggedin==1){
 		$account=sanitise('id');
@@ -13,5 +13,5 @@
 		mysql_query($query) or die(mysql_error());
 		
 	}
-	closedb($conn);
+	
 ?>

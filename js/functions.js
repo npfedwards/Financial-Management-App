@@ -9,7 +9,7 @@ function ajaxDelete(id){
 	function a(){
 		//Response Text or fade out etc.
 		if(xmlhttp.responseText!=""){
-			var dialogue = confirm("You just deleated a repeating entry, do you want to stop future repeats?");
+			var dialogue = confirm("You just deleated a repeating entry, do you want to delete all subsequent repeats?");
 			if(dialogue===true){
 				deleteRepeat(xmlhttp.responseText, id);
 			}
