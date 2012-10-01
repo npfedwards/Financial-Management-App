@@ -79,15 +79,23 @@ function addAccount(){
 function updateCurrency(){
 	var currency=escape(document.getElementById("currency").value);
 	function a(){
-		document.getElementById('currencycontainer').innerHTML=xmlhttp.responseText;
+		displayFeedback(xmlhttp.responseText)
 	}
 	ajaxRequest("xmlhttp/updatecurrency.php?currency="+currency, a);
 }
 
+function displayFeedback(message) {
+	if (typeof t!='undefined') {clearTimeout(t);}
+	document.getElementById('feedbackcontainer').innerHTML=message;
+	document.getElementById('feedbackbox').style.display='block';
+	t = window.setTimeout(function() {document.getElementById('feedbackbox').style.display='none';}, 5000);
+}
+
+
 function updatePaymentMethod(){
 	var method=escape(document.getElementById("paymentmethod").value);
 	function a(){
-		document.getElementById('paymentprefcontainer').innerHTML=xmlhttp.responseText;
+		displayFeedback(xmlhttp.responseText)
 	}
 	ajaxRequest("xmlhttp/updatepaymentmethod.php?pm="+method, a);
 }
