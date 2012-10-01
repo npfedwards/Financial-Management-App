@@ -1,7 +1,7 @@
 <?php
 
 	include_once 'functions.php';
-	opendb();
+	$conn=opendb();
 
 	$submittedkey=sanitise('k');
 	$UserID=sanitise('id');
@@ -34,7 +34,7 @@
 				$msg = $msg."Invalid key! ";
 			}
 
-			closedb($conn);
+			
 		}else{
 			$msg = $msg."Your password's too short! It needs to be at least 6 characters long! ";
 		}

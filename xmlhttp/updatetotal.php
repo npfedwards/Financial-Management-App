@@ -1,7 +1,7 @@
 <?php
 	include_once '../functions.php';
 	checklogin();
-	opendb();
+	$conn=opendb();
 	
 	$endtime=time();
 	$query="SELECT * FROM payments WHERE UserID='$user' AND Deleted='0' AND Timestamp<'$endtime'";
@@ -15,5 +15,5 @@
 	
 	echo $total;
 	
-	closedb($conn);
+	
 ?>

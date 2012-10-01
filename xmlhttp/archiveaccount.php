@@ -1,7 +1,7 @@
 <?php
 	include_once '../functions.php';
 	checklogin();
-	opendb();
+	$conn=opendb();
 	
 	if($loggedin==1){
 		$account=sanitise('id');
@@ -17,5 +17,5 @@
 		accountInList($row['AccountID'],$row['AccountName'],$archive);
 		
 	}
-	closedb($conn);
+	
 ?>

@@ -1,6 +1,6 @@
 <?php
 	include_once 'functions.php';
-	opendb();
+	$conn=opendb();
 	
 	//TODO: check that v has been submitted,  and it's of the correct length (64)
 	$submittedkey=sanitise('k');
@@ -29,7 +29,7 @@
 		$msg = $msg . "Invalid Key! ";
 	}
 
-	closedb($conn);
+	
 	if($msg==NULL){
 		echo "Sucessfully Validated! Now just <a href='index.php'>login!</a>";
 	}else{

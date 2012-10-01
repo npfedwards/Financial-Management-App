@@ -1,7 +1,7 @@
 <?php
 	include_once '../functions.php';
 	checklogin();
-	opendb();
+	$conn=opendb();
 	
 	if($loggedin==1){
 		$id=mysql_real_escape_string($_GET['id']);
@@ -115,5 +115,5 @@
 		loginform();
 	}
 	
-	closedb($conn);
+	
 ?>

@@ -1,7 +1,7 @@
 <?php
 	include_once '../functions.php';
 	checklogin();
-	opendb();
+	$conn=opendb();
 	
 	$id=sanitise('id');
 	$paymentid=sanitise('id');
@@ -25,5 +25,5 @@
 	$query="UPDATE payments SET Deleted='1' WHERE (RepeatID='$id' OR RepeatID='$paired') AND UserID='$user' AND Timestamp>'".$row['Timestamp']."'";
 	mysql_query($query) or die(mysql_error());
 	
-	closedb($conn);
+	
 ?>

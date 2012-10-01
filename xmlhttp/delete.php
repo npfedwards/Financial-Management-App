@@ -2,7 +2,7 @@
 	ini_set('display_errors', 'Off');
 	include_once '../functions.php';
 	checklogin();
-	opendb();
+	$conn=opendb();
 	
 	$id=sanitise('id');
 	$query="SELECT * FROM payments WHERE PaymentID='$id' AND UserID='$user'";
@@ -16,5 +16,5 @@
 		echo $row['RepeatID'];
 	}
 	
-	closedb($conn);
+	
 ?>

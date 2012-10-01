@@ -1,7 +1,7 @@
 <?php
 	include_once '../functions.php';
 	checklogin();
-	opendb();
+	$conn=opendb();
 	if($loggedin==1){
 		$account=sanitise('account');
 		
@@ -14,5 +14,5 @@
 		loginform();
 	}
 	
-	closedb($conn);
+	
 ?>
