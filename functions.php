@@ -821,5 +821,16 @@
 				</select>
 				<button onclick=\"updatePaymentMethod()\">Change</button>";
 	}
-
+	
+	function labellist($user){
+		$query="SELECT * FROM labels WHERE UserID='$user'";
+		$result=mysql_query($query) or die(mysql_error());
+		
+		echo "<div id='labels'>";
+			while($row=mysql_fetch_assoc($result)){
+				echo "<span style='color:".$row['Colour']."'>".stripslashes($row['LabelName'])."</span><br>";	
+			}
+		echo "</div>";
+		echo "<input type='text' id='addlabel'><button onClick=\"addLabel()\">Add Label</button>";
+	}
 ?>
