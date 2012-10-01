@@ -1,7 +1,7 @@
 <?php
 	include_once '../functions.php';
 	checklogin();
-	opendb();
+	$conn=opendb();
 	
 	$index = sanitise("i");
 
@@ -17,5 +17,5 @@
 	
 	echo "</select><span onclick=\"otherParty(".$index.")\" class='clickable'>Not between accounts?</span>";
 	
-	closedb($conn);
+	
 ?>

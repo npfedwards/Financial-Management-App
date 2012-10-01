@@ -1,6 +1,6 @@
 <?php
 	include_once 'functions.php';
-	opendb();
+	$conn=opendb();
 	
 	$submittedkey=sanitise('k');
 	$UserID=sanitise('id');
@@ -23,7 +23,7 @@
 	}else{
 		$msg = $msg . "Invalid Key! ";
 	}
-	closedb($conn);
+	
 	
 	echo $msg;
 ?>

@@ -1,17 +1,11 @@
 <?php
 	include 'dbconstants.php';
-	define(fromheader, "From: admin@unihouse.co.uk");
-	define(baseurl, "http://unihouse.co.uk/beta/money/");
+	define('fromheader', "From: admin@unihouse.co.uk");
+	define('baseurl', "http://money.unihouse.co.uk/");
 	
 	function opendb(){
 		$conn = mysql_connect(dbhost, dbuser, dbpass) or die(mysql_error());
 		$dbc = mysql_select_db(dbname) or die("Failed to connect");
-	}
-	
-	function closedb($conn){
-		if($conn!=NULL){
-			mysql_close($conn);	
-		}
 	}
 	
 	function loginform(){
@@ -142,7 +136,7 @@
 				$loggedin=1;	
 			}	
 		}
-		closedb($conn);
+		
 	}
 	
 	function paymentForm($user){
@@ -496,7 +490,7 @@
 		}elseif($g=='p'){
 			return mysql_real_escape_string(htmlentities($_POST[$fetch]));
 		}
-		closedb($conn);
+		
 	}
 	
 	function accountPicker($user){
