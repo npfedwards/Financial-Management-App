@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `accounts`
 --
 
-CREATE TABLE `accounts` (
+CREATE TABLE IF NOT EXISTS `accounts` (
   `AccountID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `AccountName` varchar(100) NOT NULL,
@@ -35,12 +35,12 @@ CREATE TABLE `accounts` (
 -- Table structure for table `labels`
 --
 
-CREATE TABLE `labels` (
+CREATE TABLE IF NOT EXISTS `labels` (
   `LabelID` int(11) NOT NULL AUTO_INCREMENT,
   `LabelName` varchar(100) NOT NULL,
   `UserID` int(11) NOT NULL,
   PRIMARY KEY (`LabelID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -48,7 +48,7 @@ CREATE TABLE `labels` (
 -- Table structure for table `payments`
 --
 
-CREATE TABLE `payments` (
+CREATE TABLE IF NOT EXISTS `payments` (
   `PaymentID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `AccountID` int(11) NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE `payments` (
 -- Table structure for table `repeats`
 --
 
-CREATE TABLE `repeats` (
+CREATE TABLE IF NOT EXISTS `repeats` (
   `RepeatID` int(11) NOT NULL AUTO_INCREMENT,
   `Frequency` varchar(10) NOT NULL,
   `Times` int(11) NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE `repeats` (
 -- Table structure for table `sessions`
 --
 
-CREATE TABLE `sessions` (
+CREATE TABLE IF NOT EXISTS `sessions` (
   `SessionID` int(11) NOT NULL AUTO_INCREMENT,
   `SessionKey` varchar(64) NOT NULL,
   `UserID` int(11) NOT NULL,
