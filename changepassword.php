@@ -36,19 +36,23 @@
 						$query="UPDATE users SET Password='$hash', Salt='$salt' WHERE UserID='$user'";
 						$result=mysql_query($query) or die(mysql_error());
 						//tell the user that it has been sucessfull:
-						$msg = $msg."Successfully changed your password, you can now <a href=\"index.php\">go back home.</a> ";
+						$msg = $msg."Successfully changed your password!";
+						$success=True;
 
 					}else{
 						$msg = $msg."New Password is too short - make sure it's at least 6 characters long. ";
+						$sucess=False;
 					}
 				}else{
 					//passwords didn't match:
 					$msg = $msg . "New Passwords don't match. Please try again. ";
+					$sucess=False;
 				}
 
 			}else{
 				//Password provided was incorrect:
 				$msg = $msg . "Password Incorrect. Please try again. ";
+				$sucess=False;
 			}
 		}
 		
