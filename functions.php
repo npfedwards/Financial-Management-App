@@ -786,15 +786,6 @@
 		return $paymentarray['PrefPaymentMethod'];
 	}
 
-//						<option>Cheque</option>
-//						<option>Card</option>
-//						<option>Cash</option>
-//						<option>Transfer</option>
-//						<option>Direct Debit</option>
-//						<option>Standing Order</option>
-
-
-
 	function paymentPrefForm($user){
 		$pm=paymentMethod($user);
 		echo "Preffered Currency
