@@ -297,9 +297,9 @@ function ajaxRequest(url, callbackfunction, param1){
 		if (xmlhttp.readyState==4 && xmlhttp.status==200){
 			//Response Text or fade out etc.
 			callbackfunction(param1);
+			document.getElementById("loadingbox").style.display='none';
 		}
 	}
 	xmlhttp.open("GET",url,true);
 	xmlhttp.send();
-	document.getElementById("loadingbox").style.display='none';
 }
