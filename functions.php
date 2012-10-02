@@ -112,6 +112,8 @@
 					mysql_query($query) or die(mysql_error());
 					setcookie("userid", $user, $time);
 					setcookie("sessionkey", $sessionkey, $time);
+					setcookie("userid", $user, $time, "/xmlhttp/");
+					setcookie("sessionkey", $sesskey, $time, "/xmlhttp/");
 					$loggedin=1;	
 				}
 			}
@@ -133,6 +135,8 @@
 				mysql_query($query) or die(mysql_error());
 				setcookie("userid", $user, $time);
 				setcookie("sessionkey", $sessionkey, $time);
+				setcookie("userid", $user, $time, "/xmlhttp/");
+				setcookie("sessionkey", $sesskey, $time, "/xmlhttp/");
 				$loggedin=1;	
 			}	
 		}

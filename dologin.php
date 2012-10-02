@@ -33,6 +33,8 @@
 			
 			setcookie("userid", $user, $time);
 			setcookie("sessionkey", $sesskey, $time);
+			setcookie("userid", $user, $time, "/xmlhttp/");
+			setcookie("sessionkey", $sesskey, $time, "/xmlhttp/");
 			$loggedin=1;
 			$msg=NULL;
 			dorepeats($user);
