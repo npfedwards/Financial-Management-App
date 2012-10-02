@@ -17,6 +17,8 @@
 		$y=sanitise('year');
 		$account=sanitise('account');
 		$account=checkAccount($user, $account);
+		$label=sanitise('label');
+		$label=checklabel($user, $label);
 		
 		$time=strtotime($m."/".$d."/".$y);
 		
@@ -37,7 +39,7 @@
 		if($type!=NULL){
 			$query=$query."PaymentType='$type', ";
 		}
-		$query=$query."AccountID='$account', Timestamp='$time', ToAccount='$toaccount' WHERE UserID='$user' AND PaymentID='$id'";
+		$query=$query."AccountID='$account', Timestamp='$time', ToAccount='$toaccount', LabelID='$label' WHERE UserID='$user' AND PaymentID='$id'";
 		mysql_query($query) or die(mysql_error());
 		
 		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND PaymentID='$id'";
@@ -60,7 +62,7 @@
 			if($type!=NULL){
 				$query=$query."PaymentType='$type', ";
 			}
-			$query=$query."AccountID='$toaccount', Timestamp='$time', ToAccount='$account' WHERE UserID='$user' AND PaymentID='".$row['PairedID']."'";
+			$query=$query."AccountID='$toaccount', Timestamp='$time', ToAccount='$account', LabelID='$label' WHERE UserID='$user' AND PaymentID='".$row['PairedID']."'";
 			mysql_query($query) or die(mysql_error());
 		}
 		
