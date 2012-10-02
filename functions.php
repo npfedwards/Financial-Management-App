@@ -276,6 +276,8 @@
 			$field='AccountName';	
 		}elseif($currfield=='reconciled'){
 			$field='Reconciled';	
+		}elseif($currfield=='label'){
+			$field='payments.LabelID';	
 		}else{
 			$field='Timestamp';
 		}
@@ -288,7 +290,7 @@
 		}
 		
 	
-		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID WHERE payments.UserID='$user' AND Deleted='0' AND Timestamp<'$enddate' ".$between.$accountquery."ORDER BY ".$field." DESC Limit ".$offset.",".$display;
+		$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID LEFT JOIN labels ON labels.LabelID=payments.LabelID WHERE payments.UserID='$user' AND Deleted='0' AND Timestamp<'$enddate' ".$between.$accountquery."ORDER BY ".$field." DESC Limit ".$offset.",".$display;
 		$result=mysql_query($query) or die(mysql_error());
 		
 		if($order!=0 && mysql_num_rows($result)!=0){ //PLEASE PLEASE find a nicer way to do this!
@@ -296,7 +298,7 @@
 				$paymentids=" OR PaymentID='".$row['PaymentID']."'".$paymentids;
 			}
 			$paymentids="WHERE".substr($paymentids, 3);
-			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID ".$paymentids." AND Deleted='0' ORDER BY ".$field." ASC";
+			$query="SELECT * FROM payments LEFT JOIN accounts ON payments.AccountID=accounts.AccountID LEFT JOIN labels ON labels.LabelID=payments.LabelID ".$paymentids." AND Deleted='0' ORDER BY ".$field." ASC";
 			$result=mysql_query($query) or die(mysql_error());
 		}
 
@@ -310,6 +312,7 @@
 							<th>Out</th>
 							<th>Type</th>
 							<th>Account</th>
+							<th>Label</th>
 							<th>Reconciled</th>
 							<th>Operations</th>
 						</tr>
@@ -327,6 +330,8 @@
 							sortbuttons('type', $order, $currfield);
 		echo 				"</th><th>";
 							sortbuttons('account', $order, $currfield);
+		echo 				"</th><th>";
+							sortbuttons('label', $order, $currfield);
 		echo 				"</th><th>";
 							sortbuttons('reconciled', $order, $currfield);
 		echo 				"</th><th></th>
@@ -350,6 +355,7 @@
 						<td class='align_right'>".$amount."</td>
 						<td>".stripslashes($row['PaymentType'])."</td>
 						<td>".stripslashes($row['AccountName'])."</td>
+						<td style='color:".stripslashes($row['Colour'])."'>".stripslashes($row['LabelName'])."</td>
 						<td><input type='checkbox' id='reconciled' onclick=\"reconcile(this, ".$row['PaymentID'].")\"";
 			if($row['Reconciled']==1){
 					echo "checked='checked'";
@@ -596,11 +602,11 @@
 				  $out=mysql_query($query) or die(mysql_error());
 				  if(mysql_num_rows($out)==0){
 					  if($row['PairedID']!=0){
-						  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, RepeatID) VALUES ('$user', '".$row['ToAccount']."', '$time', '$theotherparty', '".$row['PaymentDesc']."', '$toamount', '".$row['PaymentType']."', '$account', '$repeatinsertid')";
+						  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, RepeatID, LabelID) VALUES ('$user', '".$row['ToAccount']."', '$time', '$theotherparty', '".$row['PaymentDesc']."', '$toamount', '".$row['PaymentType']."', '$account', '$repeatinsertid', '".$row['LabelID']."')";
 						  mysql_query($query) or die(mysql_error()." dorepeat#001");
 						  $insertid=mysql_insert_id();
 					  }
-					  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID, RepeatID) VALUES ('$user', '$account', '$time', '".$row['PaymentName']."', '".$row['PaymentDesc']."', '$amount', '".$row['PaymentType']."', '".$row['ToAccount']."', '$insertid', '$repeatid')";
+					  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID, RepeatID, LabelID) VALUES ('$user', '$account', '$time', '".$row['PaymentName']."', '".$row['PaymentDesc']."', '$amount', '".$row['PaymentType']."', '".$row['ToAccount']."', '$insertid', '$repeatid', '".$row['LabelID']."')";
 					  mysql_query($query) or die(mysql_error()." dorepeat#002");
 					  
 					  if($insertid!=0){
@@ -627,11 +633,11 @@
 					$out=mysql_query($query) or die(mysql_error());
 					if(mysql_num_rows($out)==0){
 					  if($row['PairedID']!=0){
-						  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, RepeatID) VALUES ('$user', '".$row['ToAccount']."', '$time', '$theotherparty', '".$row['PaymentDesc']."', '$toamount', '".$row['PaymentType']."', '$account', '$repeatinsertid')";
+						  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, RepeatID, LabelID) VALUES ('$user', '".$row['ToAccount']."', '$time', '$theotherparty', '".$row['PaymentDesc']."', '$toamount', '".$row['PaymentType']."', '$account', '$repeatinsertid', '".$row['LabelID']."')";
 						  mysql_query($query) or die(mysql_error()." dorepeat#004");
 						  $insertid=mysql_insert_id();
 					  }
-					  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID, RepeatID) VALUES ('$user', '$account', '$time', '".$row['PaymentName']."', '".$row['PaymentDesc']."', '$amount', '".$row['PaymentType']."', '".$row['ToAccount']."', '$insertid', '$repeatid')";
+					  $query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID, RepeatID, LabelID) VALUES ('$user', '$account', '$time', '".$row['PaymentName']."', '".$row['PaymentDesc']."', '$amount', '".$row['PaymentType']."', '".$row['ToAccount']."', '$insertid', '$repeatid', '".$row['LabelID']."')";
 					  mysql_query($query) or die(mysql_error()." dorepeat#005");
 					  
 					  if($insertid!=0){
