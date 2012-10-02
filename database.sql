@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `ReconciledTotal` float NOT NULL,
   `Archived` tinyint(4) NOT NULL,
   PRIMARY KEY (`AccountID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -35,14 +35,14 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 -- Table structure for table `labels`
 --
 
-CREATE TABLE `labels` (
+CREATE TABLE IF NOT EXISTS `labels` (
   `LabelID` int(11) NOT NULL AUTO_INCREMENT,
   `LabelName` varchar(100) NOT NULL,
   `UserID` int(11) NOT NULL,
   `Colour` varchar(7) NOT NULL,
   `Budget` float NOT NULL,
   PRIMARY KEY (`LabelID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `ToAccount` int(11) NOT NULL,
   `PairedID` int(11) NOT NULL,
   PRIMARY KEY (`PaymentID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=464 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `repeats` (
   `ToAccount` int(11) NOT NULL,
   `PairedID` int(11) NOT NULL,
   PRIMARY KEY (`RepeatID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=44 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `SessionTimeout` int(11) NOT NULL,
   `IP` varchar(40) NOT NULL,
   PRIMARY KEY (`SessionID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -124,5 +124,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   `ResetKey` varchar(64) NOT NULL,
   `ResetTimeout` int(11) NOT NULL,
   `PrefCurrency` varchar(10) NOT NULL,
+  `PrefPaymentMethod` varchar(40) NOT NULL,
   PRIMARY KEY (`UserID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
