@@ -103,6 +103,24 @@
 					echo ">".stripslashes($row2['AccountName'])."</option>";
 			  }
 		echo  	"</select>
+			</td><td>
+				<select name='labels' id='labelselect".$row['PaymentID']."'>
+					<option value='0'";
+					if($row['LabelID']==0){
+						echo " selected='selected'";	
+					}
+		echo		">No Label</option>";
+					$query="SELECT * FROM labels WHERE UserID='$user'";
+					$result2=mysql_query($query) or die(mysql_error());
+				
+				while($row2=mysql_fetch_assoc($result2)){
+					echo "<option value='".$row2['LabelID']."' style='color:".$row2['Colour']."'";
+					if($row['LabelID']==$row2['LabelID']){
+						echo " selected='selected'";	
+					}
+		echo		">".stripslashes($row2['LabelName'])."</option>";	
+				}
+	echo		"</select>
 			  </td><td><input type='checkbox' id='reconciled' onclick=\"reconcile(this, ".$row['PaymentID'].")\"";
 			if($row['Reconciled']==1){
 					echo "checked='checked'";

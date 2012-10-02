@@ -45,6 +45,7 @@ function doEdit(id){
 	var month=escape(document.getElementById("month"+id).value);
 	var year=escape(document.getElementById("year"+id).value);
 	var account=escape(document.getElementById("account"+id).value);
+	var label=escape(document.getElementById("labelselect"+id).value);
 
 	var amount=income-out;
 	function a(id){
@@ -56,7 +57,7 @@ function doEdit(id){
 			showWithOffset();
 		}
 	}
-	ajaxRequest("xmlhttp/doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&toaccount="+toaccount, a, id);
+	ajaxRequest("xmlhttp/doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&toaccount="+toaccount+"&label="+label, a, id);
 }
 
 function updateTotal(){
