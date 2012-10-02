@@ -23,7 +23,8 @@
 		$recvalue=sanitise('recvalue');
 		$perpage=sanitise('perpage');
 		$field=sanitise('field');
-		
+		$label=sanitise('label');
+		$label=checklabel($user, $label);
 		
 		$time=strtotime($m."/".$d."/".$y);
 		
@@ -35,7 +36,7 @@
 				if($toaccount!=0){
 					$theotherparty=getaccountname($account);
 					$toamount=-$amount;
-					$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount) VALUES ('$user', '$toaccount', '$time', '$theotherparty', '$desc', '$toamount', '$type', '$account')";
+					$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, LabelID) VALUES ('$user', '$toaccount', '$time', '$theotherparty', '$desc', '$toamount', '$type', '$account', '$label')";
 					mysql_query($query) or die(mysql_error()." addpayment#001");
 					$insertid=mysql_insert_id();
 					$otherparty=getaccountname($toaccount);
@@ -46,7 +47,7 @@
 				$insertid=0;	
 			}
 			
-			$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$insertid')";
+			$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID, LabelID) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$insertid', '$label')";
 			mysql_query($query) or die(mysql_error()." addpayment#002");
 			$paymentid=mysql_insert_id();
 			
@@ -61,14 +62,14 @@
 					$expiretime=$time+($rt*31*86400);
 					
 					if($insertid!=0){ //Repeat Paired Payment
-						$query="INSERT INTO repeats (Frequency, Times, ExpireTime, UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount) VALUES ('$rf', '$rt', '$expiretime', '$user', '$toaccount', '$time', '$theotherparty', '$desc', '$amount', '$type', '$account')";
+						$query="INSERT INTO repeats (Frequency, Times, ExpireTime, UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, LabelID) VALUES ('$rf', '$rt', '$expiretime', '$user', '$toaccount', '$time', '$theotherparty', '$desc', '$amount', '$type', '$account', '$label')";
 						mysql_query($query) or die(mysql_error()." addpayment#004-1");
 						$repeatinsertid=mysql_insert_id();
 						$query="UPDATE payments SET RepeatID='$repeatinsertid' WHERE PaymentID='$insertid'";
 						mysql_query($query) or die(mysql_error()." addpayment#004-2");
 					}
 					
-					$query="INSERT INTO repeats (Frequency, Times, ExpireTime, UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID) VALUES ('$rf', '$rt', '$expiretime', '$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$repeatinsertid')";
+					$query="INSERT INTO repeats (Frequency, Times, ExpireTime, UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID, LabelID) VALUES ('$rf', '$rt', '$expiretime', '$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$repeatinsertid', '$label')";
 					mysql_query($query) or die(mysql_error()." addpayment#004");	
 					$repeatid=mysql_insert_id();
 					$query="UPDATE payments SET RepeatID='$repeatid' WHERE PaymentID='$paymentid'";
@@ -92,11 +93,11 @@
 					
 					while($time<time()+86400 && $i<=$rt){
 						if($insertid!=0){
-							$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, RepeatID) VALUES ('$user', '$toaccount', '$time', '$theotherparty', '$desc', '$toamount', '$type', '$account', '$repeatinsertid')";
+							$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, RepeatID, LabelID) VALUES ('$user', '$toaccount', '$time', '$theotherparty', '$desc', '$toamount', '$type', '$account', '$repeatinsertid', '$label')";
 							mysql_query($query) or die(mysql_error()." addpayment#005");
 							$insertid=mysql_insert_id();
 						}
-						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID, RepeatID) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$insertid', '$repeatid')";
+						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID, RepeatID, LabelID) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$insertid', '$repeatid', '$label')";
 						mysql_query($query) or die(mysql_error()." addpayment#006");
 						
 						if($insertid!=0){
@@ -119,14 +120,14 @@
 					$expiretime=$time+($rt*$rf*86400);
 					if($insertid!=0){ //Repeat Paired Payment
 						
-						$query="INSERT INTO repeats (Frequency, Times, ExpireTime, UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount) VALUES ('$rf', '$rt', '$expiretime', '$user', '$toaccount', '$time', '$theotherparty', '$desc', '$amount', '$type', '$account')";
+						$query="INSERT INTO repeats (Frequency, Times, ExpireTime, UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, LabelID) VALUES ('$rf', '$rt', '$expiretime', '$user', '$toaccount', '$time', '$theotherparty', '$desc', '$amount', '$type', '$account', '$label')";
 						mysql_query($query) or die(mysql_error()." addpayment#008-1");
 						$repeatinsertid=mysql_insert_id();
 						$query="UPDATE payments SET RepeatID='$repeatinsertid' WHERE PaymentID='$insertid'";
 						mysql_query($query) or die(mysql_error()." addpayment#008-2");
 					}
 					
-					$query="INSERT INTO repeats (Frequency, Times, ExpireTime, UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID) VALUES ('$rf', '$rt', '$expiretime', '$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$repeatinsertid')";
+					$query="INSERT INTO repeats (Frequency, Times, ExpireTime, UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID, LabelID) VALUES ('$rf', '$rt', '$expiretime', '$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$repeatinsertid', '$label')";
 					mysql_query($query) or die(mysql_error()." addpayment#008");	
 					$repeatid=mysql_insert_id();
 					$query="UPDATE payments SET RepeatID='$repeatid' WHERE PaymentID='$paymentid'";
@@ -141,11 +142,11 @@
 					$i=2;
 					while($time<time()+604800 && $i<=$rt){
 						if($insertid!=0){
-							$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, RepeatID) VALUES ('$user', '$toaccount', '$time', '$theotherparty', '$desc', '$toamount', '$type', '$account', '$repeatinsertid')";
+							$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, RepeatID, LabelID) VALUES ('$user', '$toaccount', '$time', '$theotherparty', '$desc', '$toamount', '$type', '$account', '$repeatinsertid', '$label')";
 							mysql_query($query) or die(mysql_error()." addpayment#009");
 							$insertid=mysql_insert_id();
 						}
-						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID, RepeatID) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$insertid', '$repeatid')";
+						$query="INSERT INTO payments (UserID, AccountID, Timestamp, PaymentName, PaymentDesc, PaymentAmount, PaymentType, ToAccount, PairedID, RepeatID, LabelID) VALUES ('$user', '$account', '$time', '$otherparty', '$desc', '$amount', '$type', '$toaccount', '$insertid', '$repeatid', '$label')";
 						mysql_query($query) or die(mysql_error()." addpayment#010");
 						
 						if($insertid!=0){

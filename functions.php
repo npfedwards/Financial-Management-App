@@ -237,6 +237,17 @@
 						<option>Yes</option>
 					</select>
 					<span id='repeatoptions'></span>
+					<label for='labelselect'>Label</span>
+					<select name='labels' id='labelselect'>
+						<option value='0'>No Label</option>
+						";
+						$query="SELECT * FROM labels WHERE UserID='$user'";
+						$result=mysql_query($query) or die(mysql_error());
+					
+					while($row=mysql_fetch_assoc($result)){
+						echo "<option value='".$row['LabelID']."' style='color:".$row['Colour']."'>".stripslashes($row['LabelName'])."</option>";	
+					}
+		echo		"</select>
 					<button onclick=\"addPayment()\">Add Payment</button></span>
 				</div>";	
 	}
@@ -406,6 +417,17 @@
 			}
 		}
 		return $account;	
+	}
+	
+	function checklabel($user, $label, $default=0){
+		if($label!=0){
+			$query="SELECT * FROM labels WHERE UserID='$user' AND LabelID='$label'";
+			$result=mysql_query($query) or die(mysql_error());
+			if(mysql_num_rows($result)!=1){ // Check if the account is not connected to this user
+				$label=$default;	
+			}
+		}
+		return $label;	
 	}
 	
 	function currencySymbol($user){

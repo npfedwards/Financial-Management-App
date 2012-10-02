@@ -6,7 +6,7 @@
 	if($loggedin==1){
 		$label=sanitise('label');
 		//Need a long list of colours!
-		$colourarray=array('#A00', '#0A0', '#565600', '#00A', '#0F7GEE');
+		$colourarray=array('#A00', '#0A0', '#565600', '#00A', '#0F7DEE');
 		$query="SELECT * FROM labels WHERE UserID='$user'";
 		$result=mysql_query($query) or die(mysql_error());
 		while($row=mysql_fetch_assoc($result)){
