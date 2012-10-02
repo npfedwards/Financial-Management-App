@@ -856,7 +856,7 @@
 	
 	function labellist($user){
 		$query="SELECT * FROM labels WHERE UserID='$user'";
-		$result=mysql_query($query) or die(mysqlerror(mysql_error(), "L1"));
+		$result=mysql_query($query) or die(mysqlerror("LL1"));
 		
 		echo "<thead>
 				<tr>
@@ -868,9 +868,57 @@
 			}
 	}
 	
-	function mysqlerror($error, $number='0'){
-		return "We've had a problem, here's the error message<br>
-		".$error."<br>
-		It's on ".$_SERVER['REQUEST_URI']." #".$number;
+	function mysqlerror($number='0'){
+		return "<div class='mysqlerror'>We've had a problem, here's the error message<br>
+		".mysql_error()."<br>
+		It's on ".$_SERVER['REQUEST_URI']." #".$number."</div>";
+	}
+	
+	function budgeter($user){
+		$currencysymbol=currencysymbol($user);
+		echo "<h3>Budget</h3>
+		<h4>This Month - ".date("F")."</h4>";
+		$part=date("j")/date("t");
+		$starttime=mktime(0,0,0, date('m'), 1, date('Y'));
+		$query="SELECT * FROM labels WHERE UserID='$user'";
+		$result=mysql_query($query) or die(mysqlerror('BU1'));
+		
+		while($row=mysql_fetch_assoc($result)){
+			$budget=forcedecimals($part*$row['Budget']);
+			$query="SELECT * FROM payments WHERE LabelID='".$row['LabelID']."' AND Timestamp>='$starttime' AND Timestamp<'".time()."'";
+			$result2=mysql_query($query) or die(mysqlerror('BU2'));
+			$spent=0;
+			while($row2=mysql_fetch_assoc($result2)){
+				$spent+=$row2['PaymentAmount'];
+			}
+			$spent=forcedecimals(-$spent);
+			echo "<span style='color:".$row['Colour']."'>".stripslashes($row['LabelName'])."</span> Budget: ".$currencysymbol.$budget." Spent: ".$currencysymbol.$spent."<br>";
+		}
+		
+		if(date('n')==1){
+			$month=12;
+			$year=date("Y")-1;
+		}else{
+			$year=date("Y");
+			$month=date('n')-1;	
+		}
+		
+		$time=mktime(0,0,0, $month, 1, $year);
+		
+		echo "<h4>Last Month - ".date("F", $time)."</h4>";
+		$query="SELECT * FROM labels WHERE UserID='$user'";
+		$result=mysql_query($query) or die(mysqlerror('BU3'));
+		
+		while($row=mysql_fetch_assoc($result)){
+			$budget=forcedecimals($row['Budget']);
+			$query="SELECT * FROM payments WHERE LabelID='".$row['LabelID']."' AND Timestamp>='$time' AND Timestamp<'$starttime'";
+			$result2=mysql_query($query) or die(mysqlerror('BU4'));
+			$spent=0;
+			while($row2=mysql_fetch_assoc($result2)){
+				$spent+=$row2['PaymentAmount'];
+			}
+			$spent=forcedecimals(-$spent);
+			echo "<span style='color:".$row['Colour']."'>".stripslashes($row['LabelName'])."</span> Budget: ".$currencysymbol.$budget." Spent: ".$currencysymbol.$spent."<br>";
+		}
 	}
 ?>

@@ -11,4 +11,5 @@
 	echo "<div id='statementhold'>";
 	statement(20, $user);
 	echo "</div>";
+	budgeter($user);
 ?>
