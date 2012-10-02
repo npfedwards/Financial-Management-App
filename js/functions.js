@@ -45,6 +45,7 @@ function doEdit(id){
 	var month=escape(document.getElementById("month"+id).value);
 	var year=escape(document.getElementById("year"+id).value);
 	var account=escape(document.getElementById("account"+id).value);
+	var label=escape(document.getElementById("labelselect"+id).value);
 
 	var amount=income-out;
 	function a(id){
@@ -56,7 +57,7 @@ function doEdit(id){
 			showWithOffset();
 		}
 	}
-	ajaxRequest("xmlhttp/doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&toaccount="+toaccount, a, id);
+	ajaxRequest("xmlhttp/doedit.php?id="+id+"&o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&toaccount="+toaccount+"&label="+label, a, id);
 }
 
 function updateTotal(){
@@ -162,6 +163,7 @@ function addPayment(){
 	var offset=escape(document.getElementById("page").value);
 	var recvalue=escape(document.getElementById("accbal").value);
 	var perpage=escape(document.getElementById("numperpage").value);
+	var label=escape(document.getElementById("labelselect").value);
 	
 	var repeat=document.getElementById("repeat").value;
 	if(repeat==="Yes"){
@@ -177,7 +179,7 @@ function addPayment(){
 		document.getElementById("repeat").value="No";
 		document.getElementById("repeatoptions").innerHTML="";
 	}
-	ajaxRequest("xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive+"&accsel="+accsel+"&order="+order+"&rf="+rf+"&rt="+rt+"&offset="+offset+"&recvalue="+recvalue+"&perpage="+perpage+"&field="+field, a);
+	ajaxRequest("xmlhttp/addpayment.php?o="+otherparty+"&d="+desc+"&a="+amount+"&t="+type+"&day="+day+"&month="+month+"&year="+year+"&account="+account+"&getorgive="+getorgive+"&accsel="+accsel+"&order="+order+"&rf="+rf+"&rt="+rt+"&offset="+offset+"&recvalue="+recvalue+"&perpage="+perpage+"&field="+field+"&label="+label, a);
 }
 
 function showWithOffset(){
