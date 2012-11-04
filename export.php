@@ -41,12 +41,12 @@
 				$email=$row['Email'];
 			}
 
-			$downloadfilename = date("Y/m/d",time())."-".$email."-"."Finacial_Management_App_export.csv";
+			$downloadfilename = date("Y/m/d",time())." ".$email." "."Finacial_Management_App_export.csv";
 			
 			header("Cache-Control: public");
 			header("Content-Description: File Transfer");
 			//header("Content-Length: ". filesize("$filename").";");
-			header("Content-Disposition: attachment; filename=$downloadfilename");
+			header("Content-Disposition: attachment; filename=\"$downloadfilename\"");
 			header("Content-Type: application/octet-stream; "); 
 			header("Content-Transfer-Encoding: binary");
 			echo $downloadcontent;
