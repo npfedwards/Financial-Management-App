@@ -16,6 +16,8 @@
 			echo "<br>";
 			changePasswordForm();
 			echo "<br>";
+			exportForm();
+			echo "<br>";
 
 			if (isset($msg)) {
 				$safemessage=htmlspecialchars($msg, ENT_QUOTES);
