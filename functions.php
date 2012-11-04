@@ -527,6 +527,14 @@
 				</form>";
 	}
 
+	function makeSafeForCSV($string){
+		/*
+		Makes a string safe to go into a CSV file by wrapping it in quotes, and changing any
+		html chars (e.g. &amp;) to their proper characters.
+		*/
+		return '"'.str_replace('"','""',html_entity_decode(stripslashes($string))).'"';
+	}
+
 	function sanitise($fetch, $g='g'){
 		opendb();
 		if($g=='g'){
