@@ -23,17 +23,17 @@
 		// Builidng the CSV
 		if($format=='csv'){
 			// Set the column titles for the CSV
-			$downloadcontent = "Date,To/From,Description,Amount,Type,Account,Reconciled?\n";
+			$downloadcontent = '"Date","To/From","Description","Amount","Type","Account","Reconciled?"'."\n";
 			//Loop through each payment:
 			while($row=mysql_fetch_assoc($result)){
 				if($row['Timestamp']<time()){
 					// Add each field (comma seperated) to the output
-					$downloadcontent .= date("d/m/y", $row['Timestamp']).",".html_entity_decode(stripslashes($row['PaymentName'])).",".html_entity_decode(stripslashes($row['PaymentDesc'])).",".stripslashes($row['PaymentAmount']).",".stripslashes($row['PaymentType']).",".html_entity_decode(stripslashes($row['AccountName'])).",";
+					$downloadcontent .= makeSafeForCSV(date("d/m/y", $row['Timestamp'])).",".makeSafeForCSV($row['PaymentName']).",".makeSafeForCSV($row['PaymentDesc']).",".makeSafeForCSV($row['PaymentAmount']).",".makeSafeForCSV($row['PaymentType']).",".makeSafeForCSV($row['AccountName']).",";
 					//add details about whether or not it's been reconciled:
 					if($row['Reconciled']==1){
-						$downloadcontent .= "Yes";
+						$downloadcontent .= makeSafeForCSV("Yes");
 					}else{
-						$downloadcontent .= "No";
+						$downloadcontent .= makeSafeForCSV("No");
 					}
 						// add newline character to start next row.
 						$downloadcontent .= "\n";
