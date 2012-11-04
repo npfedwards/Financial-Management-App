@@ -486,8 +486,9 @@
 		echo "	<h3>Download your data:</h3>
 				<p>This will export ALL your data to the format of your choice</p>
 				<form action='export.php' method='post'>
+				Export Format
 				<select name='exportformat' id='format'>
-					<option value='csv' selected='selected'>CSV (For imporitng into Excel)</option>
+					<option value='csv'>CSV (For importing into Excel)</option>
 					<option value='pdf' disabled='disabled'>PDF (For printing)</option>
 				</select>
 				<input type='submit' value='Export Data'></input>
