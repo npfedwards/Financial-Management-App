@@ -514,6 +514,18 @@
 				<input type='submit' value='Change Password'></input>
 				</form>";
 	}
+	function exportForm(){
+		echo "	<h3>Download your data:</h3>
+				<p>This will export ALL your data to the format of your choice</p>
+				<form action='export.php' method='post'>
+				Export Format
+				<select name='exportformat' id='format'>
+					<option value='csv'>CSV (For importing into Excel)</option>
+					<option value='pdf' disabled='disabled'>PDF (For printing)</option>
+				</select>
+				<input type='submit' value='Export Data'></input>
+				</form>";
+	}
 
 	function sanitise($fetch, $g='g'){
 		opendb();
